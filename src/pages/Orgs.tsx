@@ -184,7 +184,7 @@ export default function Orgs() {
                     {showAdvancedFilters && (
                         <div className="mt-4 p-4 border rounded-lg bg-muted/20 animate-in fade-in slide-in-from-top-2 duration-200">
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div className="space-y-2">
+                                <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterType')}</Label>
                                     <Select value={typeFilter} onValueChange={(val) => { setTypeFilter(val); setCurrentPage(1); }}>
                                         <SelectTrigger className="h-9">
@@ -200,7 +200,7 @@ export default function Orgs() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterStatus')}</Label>
                                     <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setCurrentPage(1); }}>
                                         <SelectTrigger className="h-9">
@@ -213,7 +213,7 @@ export default function Orgs() {
                                         </SelectContent>
                                     </Select>
                                 </div>
-                                <div className="space-y-2">
+                                <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterLocation')}</Label>
                                     <Input
                                         placeholder={t('orgs.locationPlaceholder')}

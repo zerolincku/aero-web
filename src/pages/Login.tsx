@@ -57,7 +57,7 @@ export default function Login() {
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-4">
-                        <div className="space-y-2">
+                        <div className="space-y-0">
                             <Label htmlFor="email">{t('login.email')}</Label>
                             <Input
                                 id="email"
@@ -68,7 +68,7 @@ export default function Login() {
                                 required
                             />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-0">
                             <Label htmlFor="password">{t('login.password')}</Label>
                             <Input
                                 id="password"

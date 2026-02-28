@@ -71,7 +71,7 @@ export default function Settings() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-2">
+                            <div className="space-y-0">
                                 <Label htmlFor="name">{t('settings.profile.displayName')}</Label>
                                 <Input
                                     id="name"
@@ -79,7 +79,7 @@ export default function Settings() {
                                     onChange={(e) => setName(e.target.value)}
                                 />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-0">
                                 <Label htmlFor="email">{t('settings.profile.email')}</Label>
                                 <Input
                                     id="email"
@@ -88,7 +88,7 @@ export default function Settings() {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-0">
                                 <Label>{t('settings.profile.role')}</Label>
                                 <Input
                                     disabled
@@ -96,7 +96,7 @@ export default function Settings() {
                                     className="bg-muted text-muted-foreground"
                                 />
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-0">
                                 <Label>{t('settings.profile.id')}</Label>
                                 <Input disabled value={currentUser?.id || ''} className="bg-muted text-muted-foreground" />
                             </div>
@@ -120,13 +120,13 @@ export default function Settings() {
                         <CardDescription>{t('settings.preferences.description')}</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-2 max-w-xs">
+                        <div className="space-y-0 max-w-xs">
                             <Label>{t('settings.preferences.language')}</Label>
                             <Select value={languageValue} onValueChange={(value) => handleLanguageChange(value as 'en' | 'zh-CN')}>
                                 <SelectTrigger>
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent>
+                                <SelectContent side="bottom">
                                     <SelectItem value="en">{t('common.language.english')}</SelectItem>
                                     <SelectItem value="zh-CN">{t('common.language.chineseSimplified')}</SelectItem>
                                 </SelectContent>

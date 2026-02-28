@@ -2,15 +2,17 @@ import React, { useMemo } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { Button } from './ui/button';
-import { PanelLeft, ChevronRight } from 'lucide-react';
+import { PanelLeft, ChevronRight, Globe } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { navRoutes, type RouteConfig } from '../lib/routes';
 import { useTranslation } from 'react-i18next';
+import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 
 export default function Layout() {
     const { toggleSidebar } = useStore();
     const location = useLocation();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const languageValue = i18n.resolvedLanguage === 'zh-CN' ? 'zh-CN' : 'en';
 
     // 深度查找当前路由及其祖先
     const breadcrumbs = useMemo(() => {
@@ -95,6 +97,26 @@ export default function Layout() {
                             </React.Fragment>
                         ))}
                     </nav>
+
+                    <div className="ml-auto w-10">
+                        <Select value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
+                            <SelectTrigger
+                                className="h-8 w-10 px-0 justify-center border-0 bg-transparent shadow-none ring-0 focus:ring-0 focus:ring-offset-0 hover:bg-accent/50 [&>svg:last-child]:hidden"
+                                aria-label={t('settings.preferences.language')}
+                                title={t('settings.preferences.language')}
+                            >
+                                <Globe className="h-5 w-5 text-muted-foreground" />
+                            </SelectTrigger>
+                            <SelectContent
+                                side="bottom"
+                                className="left-auto right-0 min-w-32"
+                                style={{ width: '8rem', left: 'auto', right: 0 }}
+                            >
+                                <SelectItem value="en">{t('common.language.english')}</SelectItem>
+                                <SelectItem value="zh-CN">{t('common.language.chineseSimplified')}</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
                 </header>
 
                 {/* 内容主体 */}

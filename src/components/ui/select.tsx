@@ -19,9 +19,35 @@ function Select({
     onValueChange?: (value: string) => void
 }) {
     const [open, setOpen] = React.useState(false)
+    const rootRef = React.useRef<HTMLDivElement>(null)
+
+    React.useEffect(() => {
+        if (!open) return
+
+        const handlePointerDownOutside = (event: MouseEvent) => {
+            if (!rootRef.current?.contains(event.target as Node)) {
+                setOpen(false)
+            }
+        }
+
+        const handleEscape = (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                setOpen(false)
+            }
+        }
+
+        document.addEventListener('mousedown', handlePointerDownOutside)
+        document.addEventListener('keydown', handleEscape)
+
+        return () => {
+            document.removeEventListener('mousedown', handlePointerDownOutside)
+            document.removeEventListener('keydown', handleEscape)
+        }
+    }, [open])
+
     return (
         <SelectContext.Provider value={{ value, onValueChange, open, setOpen }}>
-            <div className="relative w-full">{children}</div>
+            <div ref={rootRef} className="relative w-full">{children}</div>
         </SelectContext.Provider>
     )
 }
@@ -74,24 +100,18 @@ const SelectContent = React.forwardRef<
     if (!context?.open) return null
 
     return (
-        <>
-            <div
-                className="fixed inset-0 z-50 bg-transparent"
-                onClick={() => context.setOpen(false)}
-            />
-            <div
-                ref={ref}
-                className={cn(
-                    "absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in zoom-in-95 duration-100",
-                    side === "bottom" ? "top-full mt-2" : "bottom-full mb-2",
-                    className
-                )}
-                style={{ width: '100%' }}
-                {...props}
-            >
-                <div className="p-1">{children}</div>
-            </div>
-        </>
+        <div
+            ref={ref}
+            className={cn(
+                "absolute z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md animate-in fade-in zoom-in-95 duration-100",
+                side === "bottom" ? "top-full mt-2" : "bottom-full mb-2",
+                className
+            )}
+            style={{ width: '100%' }}
+            {...props}
+        >
+            <div className="p-1">{children}</div>
+        </div>
     )
 })
 SelectContent.displayName = "SelectContent"
