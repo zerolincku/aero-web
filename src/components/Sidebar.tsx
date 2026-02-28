@@ -5,7 +5,7 @@ import {
     LogOut,
     ChevronsUpDown,
     ChevronDown,
-    Cloud,
+    Rocket,
     Palette,
     Sun,
     Moon,
@@ -173,8 +173,8 @@ export default function Sidebar() {
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" className="h-10 gap-3 px-2">
-                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-sky-500 to-cyan-600 text-white flex items-center justify-center shrink-0">
-                                    <Cloud className="h-4 w-4" />
+                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-sky-500 text-white flex items-center justify-center shrink-0">
+                                    <Rocket className="h-4 w-4" />
                                 </div>
                                 <span className="text-lg font-bold tracking-tight whitespace-nowrap group-data-[collapsible=icon]:hidden">{t('app.brand')}</span>
                             </SidebarMenuButton>
@@ -390,7 +390,7 @@ export default function Sidebar() {
                             onClick={() => setIsUserMenuOpen((prev) => !prev)}
                         >
                             <div className={cn('flex items-center min-w-0', isCollapsed ? 'justify-center' : 'gap-3 flex-1 text-left')}>
-                                <Avatar className={cn('rounded-full shrink-0', isCollapsed ? 'h-8 w-8' : 'h-9 w-9')}>
+                                <Avatar className="rounded-full shrink-0 h-8 w-8">
                                     <AvatarFallback className="rounded-full bg-indigo-500 text-white font-bold text-xs uppercase">{currentUser?.name?.charAt(0) || 'U'}</AvatarFallback>
                                 </Avatar>
                                 {!isCollapsed && (
