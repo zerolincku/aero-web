@@ -1,9 +1,13 @@
+import { useTranslation } from 'react-i18next';
+
 export default function Loading() {
+    const { t } = useTranslation();
+
     return (
         <div className="min-h-screen flex items-center justify-center">
             <div className="flex flex-col items-center gap-4">
                 <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
-                <p className="text-gray-600 dark:text-gray-400">加载中...</p>
+                <p className="text-gray-600 dark:text-gray-400">{t('loading.message')}</p>
             </div>
         </div>
     );

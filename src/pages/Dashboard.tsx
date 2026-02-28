@@ -2,21 +2,38 @@ import { useStore } from '@/store/useStore';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Plus, Minus, RotateCcw, Activity, Users, DollarSign } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 function Dashboard() {
     const { count, increment, decrement, reset } = useStore();
+    const { t } = useTranslation();
 
     const stats = [
-        { title: "Total Revenue", value: "$45,231.89", icon: DollarSign, change: "+20.1% from last month" },
-        { title: "Active Users", value: "+2350", icon: Users, change: "+180.1% from last month" },
-        { title: "Active Sessions", value: "+12,234", icon: Activity, change: "+19% from last month" },
+        {
+            title: t('dashboard.stats.totalRevenue.title'),
+            value: '$45,231.89',
+            icon: DollarSign,
+            change: t('dashboard.stats.totalRevenue.change'),
+        },
+        {
+            title: t('dashboard.stats.activeUsers.title'),
+            value: '+2350',
+            icon: Users,
+            change: t('dashboard.stats.activeUsers.change'),
+        },
+        {
+            title: t('dashboard.stats.activeSessions.title'),
+            value: '+12,234',
+            icon: Activity,
+            change: t('dashboard.stats.activeSessions.change'),
+        },
     ];
 
     return (
         <div className="space-y-8">
             <div>
-                <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-                <p className="text-muted-foreground">Overview of your application state and metrics.</p>
+                <h2 className="text-3xl font-bold tracking-tight">{t('dashboard.title')}</h2>
+                <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
             </div>
 
             {/* Stats Grid */}
@@ -45,9 +62,9 @@ function Dashboard() {
             {/* Interactive State Demo */}
             <Card className="w-full md:w-1/2">
                 <CardHeader>
-                    <CardTitle>Zustand State Demo</CardTitle>
+                    <CardTitle>{t('dashboard.stateDemo.title')}</CardTitle>
                     <CardDescription>
-                        Manage global state effortlessly. Current count is shared across the app.
+                        {t('dashboard.stateDemo.description')}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex items-center justify-center py-10">
@@ -57,14 +74,14 @@ function Dashboard() {
                 </CardContent>
                 <CardFooter className="flex justify-between">
                     <Button variant="outline" onClick={reset}>
-                        <RotateCcw className="mr-2 h-4 w-4" /> Reset
+                        <RotateCcw className="mr-2 h-4 w-4" /> {t('common.actions.reset')}
                     </Button>
                     <div className="flex gap-2">
                         <Button variant="secondary" onClick={decrement} disabled={count <= 0}>
-                            <Minus className="mr-2 h-4 w-4" /> Decrease
+                            <Minus className="mr-2 h-4 w-4" /> {t('common.actions.decrease')}
                         </Button>
                         <Button onClick={increment}>
-                            <Plus className="mr-2 h-4 w-4" /> Increase
+                            <Plus className="mr-2 h-4 w-4" /> {t('common.actions.increase')}
                         </Button>
                     </div>
                 </CardFooter>

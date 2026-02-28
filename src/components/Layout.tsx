@@ -5,10 +5,12 @@ import { Button } from './ui/button';
 import { PanelLeft, ChevronRight } from 'lucide-react';
 import { useStore } from '../store/useStore';
 import { navRoutes, type RouteConfig } from '../lib/routes';
+import { useTranslation } from 'react-i18next';
 
 export default function Layout() {
     const { toggleSidebar } = useStore();
     const location = useLocation();
+    const { t } = useTranslation();
 
     // 深度查找当前路由及其祖先
     const breadcrumbs = useMemo(() => {
@@ -32,11 +34,12 @@ export default function Layout() {
         const matchResult = findRouteWithParents(navRoutes, location.pathname);
 
         if (!matchResult) {
-            return [{ label: 'Dashboard', path: '/', isLink: false }];
+            return [{ label: 'Dashboard', labelKey: 'nav.dashboard', path: '/', isLink: false }];
         }
 
         const crumbs = matchResult.ancestors.map(a => ({
             label: a.label,
+            labelKey: a.labelKey,
             path: a.path,
             // 只有定义了组件的路由才是有效链接
             isLink: !!a.component && a.path !== location.pathname
@@ -44,6 +47,7 @@ export default function Layout() {
 
         crumbs.push({
             label: matchResult.route.label,
+            labelKey: matchResult.route.labelKey,
             path: matchResult.route.path,
             isLink: false // 当前页面不作为链接
         });
@@ -81,11 +85,11 @@ export default function Layout() {
                                         to={crumb.path}
                                         className="text-muted-foreground hover:text-foreground transition-colors truncate"
                                     >
-                                        {crumb.label}
+                                        {t(crumb.labelKey, { defaultValue: crumb.label })}
                                     </Link>
                                 ) : (
                                     <span className={i === breadcrumbs.length - 1 ? "text-foreground truncate" : "text-muted-foreground cursor-default truncate"}>
-                    {crumb.label}
+                    {t(crumb.labelKey, { defaultValue: crumb.label })}
                   </span>
                                 )}
                             </React.Fragment>

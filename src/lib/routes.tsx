@@ -18,6 +18,7 @@ const SettingsPage = lazy(() => import('../pages/Settings'));
 export type RouteConfig = {
     path: string;
     label: string;
+    labelKey: string;
     icon?: LucideIcon;
     component?: React.ComponentType; // component to render
     children?: RouteConfig[];
@@ -28,29 +29,34 @@ export const navRoutes: RouteConfig[] = [
     {
         path: '/',
         label: 'Dashboard',
+        labelKey: 'nav.dashboard',
         icon: LayoutDashboard,
         component: Dashboard,
     },
     {
         path: '/management', // Unique parent path
         label: 'Management',
+        labelKey: 'nav.management',
         icon: Users,
         children: [
             {
                 path: '/management/users',
                 label: 'User List',
+                labelKey: 'nav.userList',
                 icon: Circle,
                 component: UsersPage
             },
             {
                 path: '/management/orgs',
                 label: 'Org List',
+                labelKey: 'nav.orgList',
                 icon: Circle,
                 component: OrgsPage
             },
             {
                 path: '/management/groups',
                 label: 'User Groups',
+                labelKey: 'nav.userGroups',
                 icon: Circle,
                 component: NotFound
             },
@@ -59,17 +65,20 @@ export const navRoutes: RouteConfig[] = [
     {
         path: '/system', // Unique parent path
         label: 'System',
+        labelKey: 'nav.system',
         icon: Settings,
         children: [
             {
                 path: '/system/settings',
                 label: 'General Settings',
+                labelKey: 'nav.generalSettings',
                 icon: Circle,
                 component: SettingsPage
             },
             {
                 path: '/system/security',
                 label: 'Security',
+                labelKey: 'nav.security',
                 icon: Circle,
                 component: NotFound
             }

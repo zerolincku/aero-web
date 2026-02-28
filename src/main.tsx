@@ -10,6 +10,7 @@ import { useStore } from './store/useStore';
 import { navRoutes, type RouteConfig } from '@/lib/routes';
 import { Toaster } from "@/components/ui/sonner"
 import './index.css'
+import './i18n';
 
 // Simple Auth Guard
 function ProtectedRoute({ children }: { children?: React.ReactNode }) {

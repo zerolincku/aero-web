@@ -6,10 +6,12 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Lock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Login() {
     const navigate = useNavigate();
     const { login, addToast } = useStore();
+    const { t } = useTranslation();
     const [email, setEmail] = useState('admin@example.com');
     const [password, setPassword] = useState('password');
     const [loading, setLoading] = useState(false);
@@ -23,15 +25,15 @@ export default function Login() {
             if (email && password) {
                 login(email);
                 addToast({
-                    title: "Success",
-                    description: "You have successfully logged in.",
+                    title: t('login.successTitle'),
+                    description: t('login.successDescription'),
                     variant: "success"
                 });
                 navigate('/');
             } else {
                 addToast({
-                    title: "Error",
-                    description: "Please enter both email and password.",
+                    title: t('login.errorTitle'),
+                    description: t('login.errorDescription'),
                     variant: "destructive"
                 });
             }
@@ -48,26 +50,26 @@ export default function Login() {
                             <Lock className="h-6 w-6 text-primary-foreground" />
                         </div>
                     </div>
-                    <CardTitle className="text-2xl text-center">Welcome back</CardTitle>
+                    <CardTitle className="text-2xl text-center">{t('login.title')}</CardTitle>
                     <CardDescription className="text-center">
-                        Enter your email to sign in to your account
+                        {t('login.description')}
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleSubmit}>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
+                            <Label htmlFor="email">{t('login.email')}</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="m@example.com"
+                                placeholder={t('login.emailPlaceholder')}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
+                            <Label htmlFor="password">{t('login.password')}</Label>
                             <Input
                                 id="password"
                                 type="password"
@@ -79,7 +81,7 @@ export default function Login() {
                     </CardContent>
                     <CardFooter>
                         <Button className="w-full" type="submit" disabled={loading}>
-                            {loading ? "Signing in..." : "Sign in"}
+                            {loading ? t('common.actions.signingIn') : t('common.actions.signIn')}
                         </Button>
                     </CardFooter>
                 </form>
