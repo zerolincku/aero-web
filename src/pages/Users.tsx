@@ -151,7 +151,7 @@ export default function Users() {
                 </Button>
             </div>
 
-            <Card>
+            <Card className="shadow-none">
                 <CardHeader>
                     <div className="flex items-center justify-between">
                         <div>

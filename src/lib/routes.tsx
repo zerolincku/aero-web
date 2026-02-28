@@ -12,6 +12,7 @@ import NotFound from "@/pages/NotFound.tsx";
 // Lazy load pages
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const HostsPage = lazy(() => import('../pages/Hosts'));
+const RegionsAzPage = lazy(() => import('../pages/RegionsAz'));
 const UsersPage = lazy(() => import('../pages/Users'));
 const OrgsPage = lazy(() => import('../pages/Orgs'));
 const SettingsPage = lazy(() => import('../pages/Settings'));
@@ -47,6 +48,13 @@ export const navRoutes: RouteConfig[] = [
                 labelKey: 'nav.hostList',
                 icon: Circle,
                 component: HostsPage
+            },
+            {
+                path: '/infrastructure/regions-azs',
+                label: 'Regions & AZs',
+                labelKey: 'nav.regionsAzs',
+                icon: Circle,
+                component: RegionsAzPage,
             },
             {
                 path: '/infrastructure/vms',

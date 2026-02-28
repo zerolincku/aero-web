@@ -113,7 +113,7 @@ export default function Layout() {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto p-6 bg-muted/5">
+                <main className="flex-1 overflow-y-auto bg-[#f4f6fa] p-6 dark:bg-muted/20">
                     <Outlet />
                 </main>
             </SidebarInset>

@@ -152,7 +152,7 @@ export default function Orgs() {
                 </Button>
             </div>
 
-            <Card>
+            <Card className="shadow-none">
                 <CardHeader className="pb-3">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex items-center gap-3 flex-1">

@@ -350,7 +350,7 @@ export default function Hosts() {
         </div>
       </div>
 
-      <Card>
+      <Card className="shadow-none">
         <CardHeader className="pb-3">
           <CardTitle className="text-xl">{t('hosts.filter.title')}</CardTitle>
         </CardHeader>
@@ -462,7 +462,7 @@ export default function Hosts() {
         </CardContent>
       </Card>
 
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden shadow-none">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/30">
