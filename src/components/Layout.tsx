@@ -1,15 +1,13 @@
 import React, { useMemo } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { Button } from './ui/button';
-import { PanelLeft, ChevronRight, Globe } from 'lucide-react';
-import { useStore } from '../store/useStore';
+import { ChevronRight, Globe } from 'lucide-react';
 import { navRoutes, type RouteConfig } from '../lib/routes';
 import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
+import { SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
 
 export default function Layout() {
-    const { toggleSidebar } = useStore();
     const location = useLocation();
     const { t, i18n } = useTranslation();
     const languageValue = i18n.resolvedLanguage === 'zh-CN' ? 'zh-CN' : 'en';
@@ -58,26 +56,22 @@ export default function Layout() {
     }, [location.pathname]);
 
     return (
-        <div className="flex h-screen w-full bg-background overflow-hidden">
-            {/* 侧边栏 */}
+        <SidebarProvider
+            style={
+                {
+                    '--sidebar-width': '16rem',
+                    '--sidebar-width-icon': '72px',
+                } as React.CSSProperties
+            }
+        >
             <Sidebar />
 
-            {/* 主内容区域 */}
-            <div className="flex-1 flex flex-col min-w-0">
-                {/* 右侧 Header */}
+            <SidebarInset className="min-w-0">
                 <header className="h-14 border-b flex items-center px-4 gap-4 bg-background/95 backdrop-blur shrink-0 z-10">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
-                        onClick={toggleSidebar}
-                    >
-                        <PanelLeft className="h-5 w-5" />
-                    </Button>
+                    <SidebarTrigger className="h-8 w-8 text-muted-foreground hover:text-foreground" />
 
                     <div className="h-4 w-[1px] bg-border mx-1" />
 
-                    {/* 面包屑导航 */}
                     <nav className="flex items-center text-sm font-medium overflow-hidden">
                         {breadcrumbs.map((crumb, i) => (
                             <React.Fragment key={crumb.path + i}>
@@ -119,11 +113,10 @@ export default function Layout() {
                     </div>
                 </header>
 
-                {/* 内容主体 */}
                 <main className="flex-1 overflow-y-auto p-6 bg-muted/5">
                     <Outlet />
                 </main>
-            </div>
-        </div>
+            </SidebarInset>
+        </SidebarProvider>
     );
 }
