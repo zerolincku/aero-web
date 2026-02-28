@@ -9,7 +9,7 @@ import {
   ChevronUp,
   Code2,
   CirclePlus,
-  Globe,
+  Globe2,
   Pencil,
   Plus,
   RefreshCcw,
@@ -229,14 +229,14 @@ export default function RegionsAz() {
           <Card key={region.id} className="overflow-hidden border-border/90 shadow-none">
             <div className={cn('px-4 py-3.5', isExpanded && 'border-b')}>
               <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-                <div className="flex items-start gap-3">
+                <div className="flex items-center gap-3">
                   <div
                     className={cn(
-                      'flex h-9 w-9 shrink-0 items-center justify-center rounded-full',
+                      'grid h-9 w-9 shrink-0 place-items-center rounded-full',
                       REGION_TONE_CLASS[region.tone]
                     )}
                   >
-                    <Globe className="h-4 w-4" />
+                    <Globe2 className="h-4 w-4" />
                   </div>
                   <div>
                     <h3 className="text-4xl font-semibold leading-tight tracking-tight">{t(region.nameKey)}</h3>
@@ -368,7 +368,7 @@ export default function RegionsAz() {
                   </Table>
                 </div>
 
-                <div className="flex justify-center border-t py-2">
+                <div className="flex justify-center border-t bg-muted/35 py-2">
                   <Button variant="ghost" className="h-8 gap-2 text-muted-foreground hover:text-foreground">
                     <CirclePlus className="h-4 w-4" />
                     {t('regionsAz.actions.addAvailabilityZone')}
