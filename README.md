@@ -2,7 +2,7 @@
 
   ![React Admin](/doc/img.png)
 
-  # Acme Dashboard
+  # Aero Cloud Admin Template
 
   一个基于 React 19 + TypeScript + Vite 的现代化管理系统模板
 
@@ -17,7 +17,7 @@
 
 ## 📖 项目简介
 
-  **Acme Dashboard** 是一个功能完整、界面美观的现代化管理系统模板。它采用了最新的 React 19 技术栈，结合 TypeScript、Vite 和 Tailwind CSS，为开发者提供了一个开箱即用的后台管理系统解决方案。
+  **Aero Cloud Admin Template** 是一个功能完整、界面美观的现代化管理系统模板。它采用 React 19 + TypeScript + Vite + Tailwind CSS，为开发者提供了一个开箱即用的后台管理系统基础工程。
 
 ### ✨ 核心特性
 
@@ -27,7 +27,7 @@
 - 🔍 **快捷搜索** - 支持 ⌘K (Windows: Ctrl+K) 快捷键全局搜索
 - 📱 **完全响应式** - 适配桌面端、平板和移动设备
 - 🔐 **权限管理** - 路由级别的权限控制
-- 🌐 **国际化路由** - 使用 HashRouter 支持静态部署
+- 🌐 **国际化支持** - 内置 react-i18next，支持中英文切换
 - 📊 **数据可视化** - 丰富的仪表板和数据展示组件
 - 🎯 **状态管理** - 基于 Zustand 的轻量级状态管理
 
@@ -145,6 +145,9 @@ pnpm run lint
 
 # TypeScript 类型检查
 tsc --noEmit
+
+# 单元测试
+pnpm run test
 ```
 
 ---
@@ -172,17 +175,21 @@ react-admin/
 │   │   ├── Toaster.tsx        # Toast 通知组件
 │   │   └── Loading.tsx         # 加载组件
 │   ├── lib/            # 工具函数
+│   │   ├── routes.tsx  # 路由定义
 │   │   └── utils.ts    # 通用工具函数
+│   ├── config/         # 模板配置中心（品牌名、默认配置）
+│   │   └── app.ts
+│   ├── i18n/           # 国际化资源与初始化
+│   │   └── index.ts
 │   ├── pages/          # 页面组件
 │   │   ├── Dashboard.tsx    # 仪表板
 │   │   ├── Users.tsx        # 用户管理
 │   │   ├── Settings.tsx      # 系统设置
 │   │   ├── Login.tsx         # 登录页
 │   │   └── NotFound.tsx      # 404 页面
-│   ├── router/         # 路由配置
-│   │   └── index.tsx   # 路由定义
 │   ├── store/          # 状态管理
 │   │   └── useStore.ts # Zustand store
+│   ├── test/           # 测试文件
 │   ├── index.css       # 全局样式
 │   └── main.tsx        # 应用入口
 ├── doc/                # 文档和截图
@@ -283,6 +290,12 @@ react-admin/
 VITE_API_BASE_URL=http://localhost:3000/api
 ```
 
+也可以直接从模板复制：
+
+```bash
+cp .env.example .env
+```
+
 ### API 代理配置
 
 修改 `vite.config.ts` 添加代理：
@@ -306,6 +319,14 @@ export default defineConfig({
 - `tsconfig.app.json` - 应用代码配置
 - `tsconfig.node.json` - 构建工具配置
 
+### 模板配置中心
+
+模板品牌与默认设置集中在：
+
+`src/config/app.ts`
+
+可在这里统一修改品牌名、默认主题色、登录路由等模板级配置。
+
 ---
 
 ## 🎯 开发路线图
@@ -319,6 +340,8 @@ export default defineConfig({
 - [x] 仪表板
 - [x] 系统设置
 - [x] 响应式布局
+- [x] 国际化支持 (i18n)
+- [x] 单元测试基线（路由守卫 / i18n / Sidebar 交互）
 
 ### 🚧 计划中
 - [ ] 真实 API 集成
@@ -326,8 +349,6 @@ export default defineConfig({
 - [ ] 数据可视化图表
 - [ ] 表单验证
 - [ ] 权限管理系统
-- [ ] 国际化支持 (i18n)
-- [ ] 单元测试
 - [ ] E2E 测试
 - [ ] 性能优化
 
@@ -347,7 +368,6 @@ export default defineConfig({
 
 - 使用 TypeScript 编写代码
 - 遵循 ESLint 规则
-- 使用 Prettier 格式化代码
 - 编写有意义的提交信息
 
 ---
@@ -374,8 +394,8 @@ export default defineConfig({
 ## 📞 联系方式
 
 - 作者: Lin Changkun
-  - 项目链接: [https://github.com/yourusername/acme](https://github.com/yourusername/acme)
-  - 问题反馈: [Issues](https://github.com/yourusername/acme/issues)
+  - 项目链接: [https://github.com/yourusername/aero-cloud-admin-template](https://github.com/yourusername/aero-cloud-admin-template)
+  - 问题反馈: [Issues](https://github.com/yourusername/aero-cloud-admin-template/issues)
 
 ---
 

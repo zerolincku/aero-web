@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { APP_CONFIG } from '@/config/app';
 
 const LANGUAGE_STORAGE_KEY = 'app_language';
 export const SUPPORTED_LANGUAGES = ['en', 'zh-CN'] as const;
@@ -9,8 +10,8 @@ const resources = {
     en: {
         translation: {
             app: {
-                brand: 'Aero Cloud',
-                commandCenter: 'Aero Command Center',
+                brand: APP_CONFIG.brand,
+                commandCenter: APP_CONFIG.commandCenter.en,
             },
             nav: {
                 dashboard: 'Dashboard',
@@ -201,8 +202,8 @@ const resources = {
     'zh-CN': {
         translation: {
             app: {
-                brand: 'Aero Cloud',
-                commandCenter: 'Aero 指令中心',
+                brand: APP_CONFIG.brand,
+                commandCenter: APP_CONFIG.commandCenter.zhCN,
             },
             nav: {
                 dashboard: '仪表盘',

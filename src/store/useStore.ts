@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { toast } from 'sonner';
+import { APP_CONFIG } from '@/config/app';
 
 export interface User {
   id: string;
@@ -19,10 +20,6 @@ export type Theme = 'light' | 'dark' | 'system';
 export type ThemeColor = 'zinc' | 'red' | 'blue' | 'green' | 'orange';
 
 interface AppState {
-  // UI State
-  isSidebarCollapsed: boolean;
-  toggleSidebar: () => void;
-
   // Counter State (Legacy)
   count: number;
   increment: () => void;
@@ -47,10 +44,6 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set) => ({
-  // UI
-  isSidebarCollapsed: false,
-  toggleSidebar: () => set((state) => ({ isSidebarCollapsed: !state.isSidebarCollapsed })),
-
   // Counter
   count: 0,
   increment: () => set((state) => ({ count: state.count + 1 })),
@@ -89,7 +82,7 @@ export const useStore = create<AppState>((set) => ({
 
   // Theme
   theme: 'system',
-  themeColor: 'blue',
+  themeColor: APP_CONFIG.defaultThemeColor,
   setTheme: (theme) => set({ theme }),
   setThemeColor: (themeColor) => set({ themeColor }),
 }));
