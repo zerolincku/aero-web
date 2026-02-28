@@ -1,0 +1,594 @@
+import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@/components/ui/pagination';
+import { cn } from '@/lib/utils';
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Download,
+  MoreHorizontal,
+  Plus,
+  Search,
+  Server,
+  XCircle,
+} from 'lucide-react';
+
+type HostStatus = 'Online' | 'Maintenance' | 'Offline';
+type KvmStatus = 'Healthy' | 'Warning' | 'Down';
+
+type Host = {
+  id: number;
+  hostname: string;
+  location: string;
+  region: string;
+  zone: string;
+  ipAddress: string;
+  status: HostStatus;
+  cpuUsage: number | null;
+  memoryUsage: number | null;
+  memoryText: string;
+  storageUsage: number | null;
+  storageText: string;
+  kvmStatus: KvmStatus;
+};
+
+const HOSTS: Host[] = [
+  {
+    id: 1,
+    hostname: 'host-sfo-01',
+    location: 'US West (San Francisco)',
+    region: 'us-west',
+    zone: 'us-west-1a',
+    ipAddress: '192.168.10.12',
+    status: 'Online',
+    cpuUsage: 45,
+    memoryUsage: 62,
+    memoryText: '32GB / 64GB',
+    storageUsage: 28,
+    storageText: '1.2TB free',
+    kvmStatus: 'Healthy',
+  },
+  {
+    id: 2,
+    hostname: 'host-nyc-04',
+    location: 'US East (New York)',
+    region: 'us-east',
+    zone: 'us-east-1b',
+    ipAddress: '10.0.4.155',
+    status: 'Maintenance',
+    cpuUsage: 5,
+    memoryUsage: 12,
+    memoryText: '16GB / 128GB',
+    storageUsage: 90,
+    storageText: '10GB free (Low)',
+    kvmStatus: 'Warning',
+  },
+  {
+    id: 3,
+    hostname: 'host-lon-02',
+    location: 'EU West (London)',
+    region: 'eu-west',
+    zone: 'eu-west-2a',
+    ipAddress: '172.16.20.55',
+    status: 'Offline',
+    cpuUsage: null,
+    memoryUsage: null,
+    memoryText: 'Unknown',
+    storageUsage: null,
+    storageText: 'Unknown',
+    kvmStatus: 'Down',
+  },
+  {
+    id: 4,
+    hostname: 'host-sfo-02',
+    location: 'US West (San Francisco)',
+    region: 'us-west',
+    zone: 'us-west-1a',
+    ipAddress: '192.168.10.13',
+    status: 'Online',
+    cpuUsage: 82,
+    memoryUsage: 78,
+    memoryText: '50GB / 64GB',
+    storageUsage: 41,
+    storageText: '800GB free',
+    kvmStatus: 'Healthy',
+  },
+  {
+    id: 5,
+    hostname: 'host-sfo-03',
+    location: 'US West (San Francisco)',
+    region: 'us-west',
+    zone: 'us-west-1b',
+    ipAddress: '192.168.10.14',
+    status: 'Online',
+    cpuUsage: 12,
+    memoryUsage: 35,
+    memoryText: '22GB / 64GB',
+    storageUsage: 65,
+    storageText: '450GB free',
+    kvmStatus: 'Healthy',
+  },
+  {
+    id: 6,
+    hostname: 'host-fra-01',
+    location: 'EU Central (Frankfurt)',
+    region: 'eu-central',
+    zone: 'eu-central-1a',
+    ipAddress: '172.18.1.42',
+    status: 'Online',
+    cpuUsage: 56,
+    memoryUsage: 44,
+    memoryText: '28GB / 64GB',
+    storageUsage: 36,
+    storageText: '920GB free',
+    kvmStatus: 'Healthy',
+  },
+  {
+    id: 7,
+    hostname: 'host-sin-03',
+    location: 'AP Southeast (Singapore)',
+    region: 'ap-southeast',
+    zone: 'ap-southeast-1a',
+    ipAddress: '10.2.31.77',
+    status: 'Maintenance',
+    cpuUsage: 21,
+    memoryUsage: 48,
+    memoryText: '31GB / 64GB',
+    storageUsage: 73,
+    storageText: '280GB free',
+    kvmStatus: 'Warning',
+  },
+  {
+    id: 8,
+    hostname: 'host-nyc-07',
+    location: 'US East (New York)',
+    region: 'us-east',
+    zone: 'us-east-1a',
+    ipAddress: '10.0.9.101',
+    status: 'Offline',
+    cpuUsage: null,
+    memoryUsage: null,
+    memoryText: 'Unknown',
+    storageUsage: null,
+    storageText: 'Unknown',
+    kvmStatus: 'Down',
+  },
+];
+
+function UsageCell({
+  value,
+  colorClass,
+  subText,
+  unknownText,
+}: {
+  value: number | null;
+  colorClass: string;
+  subText: string;
+  unknownText: string;
+}) {
+  if (value === null) {
+    return (
+      <div className="space-y-1">
+        <div className="text-xs font-semibold text-muted-foreground">--</div>
+        <div className="h-1.5 w-16 rounded-full bg-muted" />
+        <div className="text-[11px] text-muted-foreground">{unknownText}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-1">
+      <div className="text-xs font-semibold text-foreground">{value}%</div>
+      <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">
+        <div className={cn('h-full rounded-full', colorClass)} style={{ width: `${value}%` }} />
+      </div>
+      <div className="text-[11px] text-muted-foreground">{subText}</div>
+    </div>
+  );
+}
+
+function KvmStatusIcon({ status }: { status: KvmStatus }) {
+  if (status === 'Healthy') {
+    return <CheckCircle2 className="h-4 w-4 text-emerald-500" />;
+  }
+  if (status === 'Warning') {
+    return <AlertTriangle className="h-4 w-4 text-amber-500" />;
+  }
+  return <XCircle className="h-4 w-4 text-red-500" />;
+}
+
+export default function Hosts() {
+  const { t } = useTranslation();
+  const [searchTerm, setSearchTerm] = useState('');
+  const [regionFilter, setRegionFilter] = useState('all');
+  const [zoneFilter, setZoneFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const pageSize = 5;
+
+  const regionOptions = useMemo(
+    () => Array.from(new Set(HOSTS.map((host) => host.region))),
+    []
+  );
+  const zoneOptions = useMemo(
+    () => Array.from(new Set(HOSTS.map((host) => host.zone))),
+    []
+  );
+
+  const filteredHosts = HOSTS.filter((host) => {
+    const matchSearch =
+      host.hostname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      host.ipAddress.includes(searchTerm);
+    const matchRegion = regionFilter === 'all' || host.region === regionFilter;
+    const matchZone = zoneFilter === 'all' || host.zone === zoneFilter;
+    const matchStatus = statusFilter === 'all' || host.status === statusFilter;
+
+    return matchSearch && matchRegion && matchZone && matchStatus;
+  });
+
+  const totalPages = Math.max(1, Math.ceil(filteredHosts.length / pageSize));
+  const safePage = Math.min(currentPage, totalPages);
+  const startIndex = (safePage - 1) * pageSize;
+  const pagedHosts = filteredHosts.slice(startIndex, startIndex + pageSize);
+
+  const statusStats = useMemo(
+    () => ({
+      online: HOSTS.filter((host) => host.status === 'Online').length,
+      maintenance: HOSTS.filter((host) => host.status === 'Maintenance').length,
+      offline: HOSTS.filter((host) => host.status === 'Offline').length,
+    }),
+    []
+  );
+
+  const clearFilters = () => {
+    setSearchTerm('');
+    setRegionFilter('all');
+    setZoneFilter('all');
+    setStatusFilter('all');
+    setCurrentPage(1);
+  };
+
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const renderPageItems = () => {
+    if (totalPages <= 7) {
+      return Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
+        <PaginationItem key={page}>
+          <PaginationLink isActive={safePage === page} onClick={() => goToPage(page)}>
+            {page}
+          </PaginationLink>
+        </PaginationItem>
+      ));
+    }
+
+    const items = [];
+    items.push(
+      <PaginationItem key={1}>
+        <PaginationLink isActive={safePage === 1} onClick={() => goToPage(1)}>
+          1
+        </PaginationLink>
+      </PaginationItem>
+    );
+
+    if (safePage > 3) {
+      items.push(
+        <PaginationItem key="ellipsis-start">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+    }
+
+    const start = Math.max(2, safePage - 1);
+    const end = Math.min(totalPages - 1, safePage + 1);
+    const middlePages = Array.from(
+      { length: Math.max(0, end - start + 1) },
+      (_, index) => start + index
+    );
+    items.push(
+      ...middlePages.map((page) => (
+        <PaginationItem key={page}>
+          <PaginationLink isActive={safePage === page} onClick={() => goToPage(page)}>
+            {page}
+          </PaginationLink>
+        </PaginationItem>
+      ))
+    );
+
+    if (safePage < totalPages - 2) {
+      items.push(
+        <PaginationItem key="ellipsis-end">
+          <PaginationEllipsis />
+        </PaginationItem>
+      );
+    }
+
+    items.push(
+      <PaginationItem key={totalPages}>
+        <PaginationLink isActive={safePage === totalPages} onClick={() => goToPage(totalPages)}>
+          {totalPages}
+        </PaginationLink>
+      </PaginationItem>
+    );
+
+    return items;
+  };
+
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-3xl font-bold tracking-tight">{t('hosts.title')}</h2>
+          <p className="text-muted-foreground">{t('hosts.subtitle')}</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline">
+            <Download className="mr-2 h-4 w-4" />
+            {t('hosts.actions.export')}
+          </Button>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" />
+            {t('hosts.actions.addHost')}
+          </Button>
+        </div>
+      </div>
+
+      <Card>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-xl">{t('hosts.filter.title')}</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-3 md:grid-cols-4">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={searchTerm}
+                onChange={(event) => {
+                  setSearchTerm(event.target.value);
+                  setCurrentPage(1);
+                }}
+                placeholder={t('hosts.filter.searchPlaceholder')}
+                className="pl-9"
+              />
+            </div>
+
+            <Select
+              value={regionFilter}
+              onValueChange={(value) => {
+                setRegionFilter(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t('hosts.filter.allRegions')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('hosts.filter.allRegions')}</SelectItem>
+                {regionOptions.map((region) => (
+                  <SelectItem key={region} value={region}>
+                    {region}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={zoneFilter}
+              onValueChange={(value) => {
+                setZoneFilter(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t('hosts.filter.allZones')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('hosts.filter.allZones')}</SelectItem>
+                {zoneOptions.map((zone) => (
+                  <SelectItem key={zone} value={zone}>
+                    {zone}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={statusFilter}
+              onValueChange={(value) => {
+                setStatusFilter(value);
+                setCurrentPage(1);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder={t('hosts.filter.allStatus')} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">{t('hosts.filter.allStatus')}</SelectItem>
+                <SelectItem value="Online">{t('hosts.status.online')}</SelectItem>
+                <SelectItem value="Maintenance">{t('hosts.status.maintenance')}</SelectItem>
+                <SelectItem value="Offline">{t('hosts.status.offline')}</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="flex flex-col gap-2 border-t pt-3 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <span>
+                {t('hosts.filter.summary', {
+                  shown: filteredHosts.length,
+                  total: HOSTS.length,
+                })}
+              </span>
+              <button
+                type="button"
+                className="text-primary hover:underline"
+                onClick={clearFilters}
+              >
+                {t('hosts.filter.clearAllFilters')}
+              </button>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                {t('hosts.filter.counts.online', { count: statusStats.online })}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-amber-500" />
+                {t('hosts.filter.counts.maintenance', { count: statusStats.maintenance })}
+              </span>
+              <span className="inline-flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-red-500" />
+                {t('hosts.filter.counts.offline', { count: statusStats.offline })}
+              </span>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-muted/30">
+              <TableHead>{t('hosts.table.hostname')}</TableHead>
+              <TableHead>{t('hosts.table.ipAddress')}</TableHead>
+              <TableHead>{t('hosts.table.status')}</TableHead>
+              <TableHead>{t('hosts.table.cpuUsage')}</TableHead>
+              <TableHead>{t('hosts.table.memory')}</TableHead>
+              <TableHead>{t('hosts.table.storage')}</TableHead>
+              <TableHead>{t('hosts.table.kvm')}</TableHead>
+              <TableHead className="text-right">{t('hosts.table.actions')}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {pagedHosts.map((host) => {
+              const cpuColor = (host.cpuUsage ?? 0) >= 80 ? 'bg-amber-500' : 'bg-blue-500';
+              const storageColor =
+                host.storageUsage === null
+                  ? 'bg-muted'
+                  : host.storageUsage >= 85
+                    ? 'bg-red-500'
+                    : host.storageUsage >= 70
+                      ? 'bg-amber-500'
+                      : 'bg-cyan-500';
+
+              return (
+                <TableRow key={host.id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-md bg-muted">
+                        <Server className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <div>
+                        <div className="font-semibold">{host.hostname}</div>
+                        <div className="text-xs text-muted-foreground">{host.location}</div>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="font-mono text-sm">{host.ipAddress}</TableCell>
+                  <TableCell>
+                    <span
+                      className={cn(
+                        'inline-flex items-center rounded-full px-2.5 py-1 text-xs font-semibold',
+                        host.status === 'Online' && 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400',
+                        host.status === 'Maintenance' && 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400',
+                        host.status === 'Offline' && 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400'
+                      )}
+                    >
+                      {host.status === 'Online' && t('hosts.status.online')}
+                      {host.status === 'Maintenance' && t('hosts.status.maintenance')}
+                      {host.status === 'Offline' && t('hosts.status.offline')}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <UsageCell
+                      value={host.cpuUsage}
+                      colorClass={cpuColor}
+                      subText=""
+                      unknownText={t('hosts.table.unknown')}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <UsageCell
+                      value={host.memoryUsage}
+                      colorClass="bg-purple-500"
+                      subText={host.memoryText}
+                      unknownText={t('hosts.table.unknown')}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <UsageCell
+                      value={host.storageUsage}
+                      colorClass={storageColor}
+                      subText={host.storageText}
+                      unknownText={t('hosts.table.unknown')}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <KvmStatusIcon status={host.kvmStatus} />
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="ghost" size="icon">
+                      <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+
+            {pagedHosts.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
+                  {t('hosts.empty')}
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+
+        <CardFooter className="flex flex-col gap-3 border-t bg-background px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="text-sm text-muted-foreground">
+            {t('hosts.pagination.showing', {
+              start: filteredHosts.length === 0 ? 0 : startIndex + 1,
+              end: Math.min(startIndex + pageSize, filteredHosts.length),
+              total: filteredHosts.length,
+            })}
+          </div>
+          <Pagination className="mx-0 w-auto justify-end">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  onClick={() => goToPage(safePage - 1)}
+                  className={safePage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                />
+              </PaginationItem>
+              {renderPageItems()}
+              <PaginationItem>
+                <PaginationNext
+                  onClick={() => goToPage(safePage + 1)}
+                  className={safePage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </CardFooter>
+      </Card>
+    </div>
+  );
+}

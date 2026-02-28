@@ -46,9 +46,9 @@ describe('Sidebar interactions', () => {
     fireEvent.click(screen.getByRole('button', { name: /toggle sidebar/i }));
     expect(screen.getByTestId('sidebar-state')).toHaveTextContent('collapsed');
 
-    const beforeOpen = screen.queryAllByText('User List').length;
-    fireEvent.click(screen.getByRole('button', { name: 'Management' }));
-    const afterOpen = screen.getAllByText('User List').length;
+    const beforeOpen = screen.queryAllByText('Host List').length;
+    fireEvent.click(screen.getByRole('button', { name: 'Infrastructure' }));
+    const afterOpen = screen.getAllByText('Host List').length;
     expect(afterOpen).toBeGreaterThan(beforeOpen);
   });
 });

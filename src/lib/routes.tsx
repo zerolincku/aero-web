@@ -1,7 +1,7 @@
 import React, { lazy } from 'react';
 import {
     LayoutDashboard,
-    Users,
+    Server,
     Settings,
     Circle,
     type LucideIcon
@@ -10,8 +10,7 @@ import NotFound from "@/pages/NotFound.tsx";
 
 // Lazy load pages
 const Dashboard = lazy(() => import('../pages/Dashboard'));
-const UsersPage = lazy(() => import('../pages/Users'));
-const OrgsPage = lazy(() => import('../pages/Orgs'));
+const HostsPage = lazy(() => import('../pages/Hosts'));
 const SettingsPage = lazy(() => import('../pages/Settings'));
 
 // Type definition for route configuration
@@ -34,29 +33,29 @@ export const navRoutes: RouteConfig[] = [
         component: Dashboard,
     },
     {
-        path: '/management', // Unique parent path
-        label: 'Management',
-        labelKey: 'nav.management',
-        icon: Users,
+        path: '/infrastructure',
+        label: 'Infrastructure',
+        labelKey: 'nav.infrastructure',
+        icon: Server,
         children: [
             {
-                path: '/management/users',
-                label: 'User List',
-                labelKey: 'nav.userList',
+                path: '/infrastructure/hosts',
+                label: 'Host List',
+                labelKey: 'nav.hostList',
                 icon: Circle,
-                component: UsersPage
+                component: HostsPage
             },
             {
-                path: '/management/orgs',
-                label: 'Org List',
-                labelKey: 'nav.orgList',
+                path: '/infrastructure/vms',
+                label: 'Virtual Machines',
+                labelKey: 'nav.virtualMachines',
                 icon: Circle,
-                component: OrgsPage
+                component: NotFound
             },
             {
-                path: '/management/groups',
-                label: 'User Groups',
-                labelKey: 'nav.userGroups',
+                path: '/infrastructure/storage-pools',
+                label: 'Storage Pools',
+                labelKey: 'nav.storagePools',
                 icon: Circle,
                 component: NotFound
             },
