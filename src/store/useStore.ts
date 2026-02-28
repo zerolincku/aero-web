@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 import { toast } from 'sonner';
 import { APP_CONFIG } from '@/config/app';
 
@@ -20,7 +21,7 @@ export type Theme = 'light' | 'dark' | 'system';
 export type ThemeColor = 'zinc' | 'red' | 'blue' | 'green' | 'orange';
 
 interface AppState {
-  // Counter State (Legacy)
+  // Counter State
   count: number;
   increment: () => void;
   decrement: () => void;
@@ -43,7 +44,8 @@ interface AppState {
   setThemeColor: (color: ThemeColor) => void;
 }
 
-export const useStore = create<AppState>((set) => ({
+export const useStore = create<AppState>()(
+  persist((set) => ({
   // Counter
   count: 0,
   increment: () => set((state) => ({ count: state.count + 1 })),
@@ -63,7 +65,10 @@ export const useStore = create<AppState>((set) => ({
       status: 'Active'
     }
   }),
-  logout: () => set({ isAuthenticated: false, currentUser: null }),
+  logout: () => {
+    localStorage.removeItem('token');
+    set({ isAuthenticated: false, currentUser: null });
+  },
   updateUser: (data) => set((state) => ({
     currentUser: state.currentUser ? { ...state.currentUser, ...data } : null
   })),
@@ -85,4 +90,14 @@ export const useStore = create<AppState>((set) => ({
   themeColor: APP_CONFIG.defaultThemeColor,
   setTheme: (theme) => set({ theme }),
   setThemeColor: (themeColor) => set({ themeColor }),
-}));
+}), {
+  name: 'aero-cloud-admin-store',
+  storage: createJSONStorage(() => localStorage),
+  partialize: (state) => ({
+    isAuthenticated: state.isAuthenticated,
+    currentUser: state.currentUser,
+    theme: state.theme,
+    themeColor: state.themeColor,
+  }),
+})
+);

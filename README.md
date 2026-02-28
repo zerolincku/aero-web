@@ -1,6 +1,6 @@
 <div align="center">
 
-  ![React Admin](/doc/img.png)
+  ![Aero Cloud Admin Template](/doc/img.png)
 
   # Aero Cloud Admin Template
 
@@ -95,27 +95,20 @@
 
 ### 环境要求
 
-- Node.js >= 18.0.0
-- pnpm >= 8.0.0 (推荐) 或 npm/yarn
+- Node.js >= 20.0.0
+- pnpm >= 8.0.0
 
 ### 安装步骤
 
 1. **克隆项目**
 ```bash
 git clone <your-repo-url>
-cd react-admin
+cd aero-cloud-admin-template
 ```
 
-2. **安装依赖**
+2. **安装依赖（pnpm）**
 ```bash
-# 使用 pnpm (推荐)
 pnpm install
-
-# 或使用 npm
-npm install
-
-# 或使用 yarn
-yarn install
 ```
 
 3. **启动开发服务器**
@@ -148,6 +141,9 @@ tsc --noEmit
 
 # 单元测试
 pnpm run test
+
+# 测试监听模式
+pnpm run test:watch
 ```
 
 ---
@@ -155,7 +151,7 @@ pnpm run test
 ## 📁 项目结构
 
 ```
-react-admin/
+aero-cloud-admin-template/
 ├── public/              # 静态资源
 ├── src/
 │   ├── api/            # API 配置和请求封装
@@ -172,7 +168,6 @@ react-admin/
 │   │   ├── Layout.tsx          # 主布局组件
 │   │   ├── Sidebar.tsx         # 侧边栏导航
 │   │   ├── ThemeController.tsx # 主题控制器
-│   │   ├── Toaster.tsx        # Toast 通知组件
 │   │   └── Loading.tsx         # 加载组件
 │   ├── lib/            # 工具函数
 │   │   ├── routes.tsx  # 路由定义
@@ -180,6 +175,10 @@ react-admin/
 │   ├── config/         # 模板配置中心（品牌名、默认配置）
 │   │   └── app.ts
 │   ├── i18n/           # 国际化资源与初始化
+│   │   ├── locales/
+│   │   │   ├── en.ts
+│   │   │   └── zh-CN.ts
+│   │   ├── resources.ts
 │   │   └── index.ts
 │   ├── pages/          # 页面组件
 │   │   ├── Dashboard.tsx    # 仪表板
@@ -190,6 +189,7 @@ react-admin/
 │   ├── store/          # 状态管理
 │   │   └── useStore.ts # Zustand store
 │   ├── test/           # 测试文件
+│   ├── App.tsx         # 应用路由入口
 │   ├── index.css       # 全局样式
 │   └── main.tsx        # 应用入口
 ├── doc/                # 文档和截图
@@ -198,9 +198,12 @@ react-admin/
 │   └── img_2.png
 ├── .gitignore
 ├── .editorconfig
+├── .env.example        # 环境变量模板
+├── .nvmrc              # Node 版本约束
 ├── components.json     # shadcn/ui 配置
 ├── eslint.config.js    # ESLint 配置
 ├── index.html          # HTML 模板
+├── LICENSE             # 许可证
 ├── package.json        # 项目配置
 ├── pnpm-lock.yaml      # 依赖锁定文件
 ├── tsconfig.json       # TypeScript 配置
