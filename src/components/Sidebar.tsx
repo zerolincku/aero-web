@@ -209,9 +209,9 @@ export default function Sidebar() {
                                             onClick={() => toggleMenu(item.path)}
                                             isActive={isActiveParent}
                                             tooltip={itemLabel}
-                                            className="h-10 px-2"
+                                            className="h-10 px-2 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
                                         >
-                                            <Icon className="h-5 w-5" />
+                                            <Icon className={cn('h-5 w-5', isActiveParent && 'text-primary')} />
                                             <span>{itemLabel}</span>
                                             <ChevronDown className={cn('ml-auto h-4 w-4 transition-transform group-data-[collapsible=icon]:hidden', !isExpanded && '-rotate-90')} />
                                         </SidebarMenuButton>
@@ -223,9 +223,13 @@ export default function Sidebar() {
                                                 const isChildActive = location.pathname === child.path;
                                                 return (
                                                     <SidebarMenuSubItem key={child.path}>
-                                                        <SidebarMenuSubButton asChild isActive={isChildActive}>
+                                                        <SidebarMenuSubButton
+                                                            asChild
+                                                            isActive={isChildActive}
+                                                            className="[&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-current data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                                        >
                                                             <Link to={child.path}>
-                                                                <ChildIcon className="h-4 w-4" />
+                                                                <ChildIcon />
                                                                 <span>{childLabel}</span>
                                                             </Link>
                                                         </SidebarMenuSubButton>
@@ -250,7 +254,7 @@ export default function Sidebar() {
                                                                 onClick={() => setCollapsedMenuPath(null)}
                                                                 className={cn(
                                                                     'flex items-center px-3 py-2 text-sm rounded-md transition-colors',
-                                                                    isChildActive ? 'bg-accent text-accent-foreground font-semibold' : 'hover:bg-accent/50',
+                                                                    isChildActive ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-accent/50',
                                                                 )}
                                                             >
                                                                 <span className="flex-1">{childLabel}</span>
@@ -271,10 +275,10 @@ export default function Sidebar() {
                                         asChild
                                         isActive={location.pathname === item.path}
                                         tooltip={itemLabel}
-                                        className="h-10 px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                                        className="h-10 px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
                                     >
                                         <Link to={item.path} onClick={() => setCollapsedMenuPath(null)}>
-                                            <Icon className="h-5 w-5" />
+                                            <Icon className={cn('h-5 w-5', location.pathname === item.path && 'text-primary')} />
                                             <span>{itemLabel}</span>
                                         </Link>
                                     </SidebarMenuButton>
