@@ -212,7 +212,7 @@ export default function Sidebar() {
                                             onClick={() => toggleMenu(item.path)}
                                             isActive={isActiveParent}
                                             tooltip={itemLabel}
-                                            className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                            className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
                                         >
                                             <Icon className={cn('h-[18px] w-[18px] shrink-0', isActiveParent && 'text-primary')} />
                                             <span>{itemLabel}</span>
@@ -292,7 +292,7 @@ export default function Sidebar() {
                                         asChild
                                         isActive={location.pathname === item.path}
                                         tooltip={itemLabel}
-                                        className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                        className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
                                     >
                                         <Link to={item.path} onClick={() => setCollapsedMenuPath(null)}>
                                             <Icon className={cn('h-[18px] w-[18px] shrink-0', location.pathname === item.path && 'text-primary')} />
