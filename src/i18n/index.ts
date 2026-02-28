@@ -9,8 +9,8 @@ const resources = {
     en: {
         translation: {
             app: {
-                brand: 'Acme Corp',
-                commandCenter: 'Acme Command Center',
+                brand: 'Aero Cloud',
+                commandCenter: 'Aero Command Center',
             },
             nav: {
                 dashboard: 'Dashboard',
@@ -201,8 +201,8 @@ const resources = {
     'zh-CN': {
         translation: {
             app: {
-                brand: 'Acme Corp',
-                commandCenter: 'Acme 指令中心',
+                brand: 'Aero Cloud',
+                commandCenter: 'Aero 指令中心',
             },
             nav: {
                 dashboard: '仪表盘',

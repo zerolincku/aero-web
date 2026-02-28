@@ -5,6 +5,7 @@ import {
     LogOut,
     ChevronsUpDown,
     ChevronDown,
+    Cloud,
     Palette,
     Sun,
     Moon,
@@ -172,8 +173,8 @@ export default function Sidebar() {
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" className="h-10 gap-3 px-2">
-                                <div className="h-8 w-8 bg-blue-600 rounded-full flex items-center justify-center shrink-0">
-                                    <div className="h-3 w-3 bg-white/30 rounded-full" />
+                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-sky-500 to-cyan-600 text-white flex items-center justify-center shrink-0">
+                                    <Cloud className="h-4 w-4" />
                                 </div>
                                 <span className="text-lg font-bold tracking-tight whitespace-nowrap group-data-[collapsible=icon]:hidden">{t('app.brand')}</span>
                             </SidebarMenuButton>
