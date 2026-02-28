@@ -226,7 +226,7 @@ export default function Sidebar() {
                                                         <SidebarMenuSubButton
                                                             asChild
                                                             isActive={isChildActive}
-                                                            className="[&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-current data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                                            className="!h-8 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-current data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
                                                         >
                                                             <Link to={child.path}>
                                                                 <ChildIcon />
