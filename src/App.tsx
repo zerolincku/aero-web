@@ -11,6 +11,8 @@ import { Toaster } from '@/components/ui/sonner';
 import { APP_CONFIG } from '@/config/app';
 import './i18n';
 
+const HostDetailPage = React.lazy(() => import('./pages/HostDetail'));
+
 function ProtectedRoute({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated } = useStore();
   if (!isAuthenticated) {
@@ -66,6 +68,14 @@ export default function App() {
           }
         >
           {renderRoutes(navRoutes)}
+          <Route
+            path="/infrastructure/hosts/:hostId"
+            element={
+              <Suspense fallback={<Loading />}>
+                <HostDetailPage />
+              </Suspense>
+            }
+          />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
@@ -73,4 +83,3 @@ export default function App() {
     </Router>
   );
 }
-

@@ -14,6 +14,31 @@ export default function Layout() {
 
     // 深度查找当前路由及其祖先
     const breadcrumbs = useMemo(() => {
+        if (location.pathname.startsWith('/infrastructure/hosts/')) {
+            const rawHostId = location.pathname.replace('/infrastructure/hosts/', '').split('/')[0];
+            const hostId = decodeURIComponent(rawHostId || '');
+            return [
+                {
+                    label: 'Infrastructure',
+                    labelKey: 'nav.infrastructure',
+                    path: '/infrastructure',
+                    isLink: false
+                },
+                {
+                    label: 'Host List',
+                    labelKey: 'nav.hostList',
+                    path: '/infrastructure/hosts',
+                    isLink: true
+                },
+                {
+                    label: hostId || 'Host Detail',
+                    labelKey: hostId || 'hostDetail.title',
+                    path: location.pathname,
+                    isLink: false
+                },
+            ];
+        }
+
         const findRouteWithParents = (
             routes: RouteConfig[],
             targetPath: string,

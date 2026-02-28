@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -496,7 +497,12 @@ export default function Hosts() {
                         <Server className="h-4 w-4 text-muted-foreground" />
                       </div>
                       <div>
-                        <div className="font-semibold">{host.hostname}</div>
+                        <Link
+                          to={`/infrastructure/hosts/${encodeURIComponent(host.hostname)}`}
+                          className="font-semibold transition-colors hover:text-primary"
+                        >
+                          {host.hostname}
+                        </Link>
                         <div className="text-xs text-muted-foreground">{host.location}</div>
                       </div>
                     </div>
