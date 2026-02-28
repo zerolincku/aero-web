@@ -180,11 +180,11 @@ export default function Sidebar() {
                             </SidebarMenuButton>
                         </SidebarMenuItem>
 
-                        <SidebarMenuItem>
+                        <SidebarMenuItem className="mt-2 group-data-[collapsible=icon]:mt-0">
                             <SidebarMenuButton
                                 onClick={openSearch}
                                 tooltip={t('sidebar.quickSearch')}
-                                className="h-10 gap-2 px-2 justify-start border border-sidebar-border/70 bg-sidebar-accent/35 text-sidebar-foreground/75 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:px-0"
+                                className="h-10 gap-2 px-2 justify-start border border-sidebar-border/70 bg-white text-sidebar-foreground/75 hover:bg-white hover:text-sidebar-foreground dark:bg-sidebar-accent/35 dark:hover:bg-sidebar-accent/60 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:px-0"
                             >
                                 <Search className="h-4 w-4 shrink-0" />
                                 <span className="whitespace-nowrap truncate group-data-[collapsible=icon]:hidden">{t('sidebar.quickSearchPlaceholder')}</span>
