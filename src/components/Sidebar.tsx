@@ -228,7 +228,7 @@ export default function Sidebar() {
                                                         <SidebarMenuSubButton
                                                             asChild
                                                             isActive={isChildActive}
-                                                            className="!h-9 rounded-md px-2 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                                            className="!h-9 rounded-md px-2 data-[active=true]:bg-transparent data-[active=true]:text-primary data-[active=true]:hover:bg-transparent"
                                                         >
                                                             <Link to={child.path}>
                                                                 <span
@@ -263,7 +263,7 @@ export default function Sidebar() {
                                                                 onClick={() => setCollapsedMenuPath(null)}
                                                                 className={cn(
                                                                     'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors',
-                                                                    isChildActive ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-accent/50',
+                                                                    isChildActive ? 'text-primary' : 'hover:bg-accent/50',
                                                                 )}
                                                             >
                                                                 <span
