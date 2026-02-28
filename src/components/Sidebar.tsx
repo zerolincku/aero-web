@@ -176,7 +176,9 @@ export default function Sidebar() {
                                 size="lg"
                                 className="h-10 gap-2.5 px-2 text-sidebar-foreground hover:bg-transparent active:bg-transparent group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
                             >
-                                <Cloud className="h-5 w-5 shrink-0 text-primary" />
+                                <div className="h-8 w-8 shrink-0 group-data-[collapsible=icon]:h-5 group-data-[collapsible=icon]:w-5">
+                                    <Cloud className="h-full w-full text-primary" />
+                                </div>
                                 <span className="text-[18px] font-semibold tracking-tight whitespace-nowrap group-data-[collapsible=icon]:hidden">{t('app.brand')}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
