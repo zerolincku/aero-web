@@ -32,11 +32,11 @@ function Toaster({ ...props }: ToasterProps) {
                 },
             }}
             icons={{
-                success: <CircleCheck className="h-4 w-4" />,
-                info: <Info className="h-4 w-4" />,
-                warning: <TriangleAlert className="h-4 w-4" />,
-                error: <OctagonX className="h-4 w-4" />,
-                loading: <Loader2 className="h-4 w-4 animate-spin" />,
+                success: <CircleCheck className="h-4 w-4 text-emerald-500" />,
+                info: <Info className="h-4 w-4 text-blue-500" />,
+                warning: <TriangleAlert className="h-4 w-4 text-amber-500" />,
+                error: <OctagonX className="h-4 w-4 text-destructive" />,
+                loading: <Loader2 className="h-4 w-4 animate-spin text-primary" />,
             }}
             {...props}
         />
