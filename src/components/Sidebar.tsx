@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import {
     LogOut,
     ChevronsUpDown,
-    ChevronDown,
-    Rocket,
+    ChevronRight,
+    Cloud,
     Palette,
     Sun,
     Moon,
@@ -169,32 +169,33 @@ export default function Sidebar() {
     return (
         <>
             <SidebarRoot collapsible="icon" variant="sidebar" className="border-r">
-                <SidebarHeader className="p-2">
+                <SidebarHeader className="px-3 pt-3 pb-2 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:pt-3">
                     <SidebarMenu>
                         <SidebarMenuItem>
-                            <SidebarMenuButton size="lg" className="h-10 gap-3 px-2">
-                                <div className="h-8 w-8 rounded-full bg-gradient-to-br from-indigo-500 to-sky-500 text-white flex items-center justify-center shrink-0">
-                                    <Rocket className="h-4 w-4" />
-                                </div>
-                                <span className="text-lg font-bold tracking-tight whitespace-nowrap group-data-[collapsible=icon]:hidden">{t('app.brand')}</span>
+                            <SidebarMenuButton
+                                size="lg"
+                                className="h-10 gap-2.5 px-2 text-sidebar-foreground hover:bg-transparent active:bg-transparent group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                            >
+                                <Cloud className="h-5 w-5 shrink-0 text-primary" />
+                                <span className="text-[18px] font-semibold tracking-tight whitespace-nowrap group-data-[collapsible=icon]:hidden">{t('app.brand')}</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
 
-                        <SidebarMenuItem className="mt-2 group-data-[collapsible=icon]:mt-0">
+                        <SidebarMenuItem className="mt-3 group-data-[collapsible=icon]:mt-2">
                             <SidebarMenuButton
                                 onClick={openSearch}
                                 tooltip={t('sidebar.quickSearch')}
-                                className="h-10 gap-2 px-2 justify-start border border-sidebar-border/70 bg-white text-sidebar-foreground/75 hover:bg-white hover:text-sidebar-foreground dark:bg-sidebar-accent/35 dark:hover:bg-sidebar-accent/60 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:px-0"
+                                className="h-10 gap-2.5 rounded-lg border border-sidebar-border/80 bg-background px-3 text-sidebar-foreground/75 shadow-none hover:bg-background hover:text-sidebar-foreground dark:bg-sidebar-accent/35 dark:hover:bg-sidebar-accent/60 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:border-transparent group-data-[collapsible=icon]:bg-transparent group-data-[collapsible=icon]:px-0"
                             >
-                                <Search className="h-4 w-4 shrink-0" />
-                                <span className="whitespace-nowrap truncate group-data-[collapsible=icon]:hidden">{t('sidebar.quickSearchPlaceholder')}</span>
-                                <span className="ml-auto border rounded px-1.5 py-0.5 bg-sidebar-accent text-[10px] text-sidebar-foreground/60 font-mono group-data-[collapsible=icon]:hidden">⌘K</span>
+                                <Search className="h-5 w-5 shrink-0 text-sidebar-foreground/70" />
+                                <span className="whitespace-nowrap truncate font-medium group-data-[collapsible=icon]:hidden">{t('sidebar.quickSearchPlaceholder')}</span>
+                                <span className="ml-auto rounded-md border border-sidebar-border bg-sidebar px-1.5 py-0.5 text-[10px] text-sidebar-foreground/60 font-mono group-data-[collapsible=icon]:hidden">⌘K</span>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
                 </SidebarHeader>
 
-                <SidebarContent className="px-2">
+                <SidebarContent className="px-2.5 pb-2 group-data-[collapsible=icon]:px-2">
                     <SidebarMenu>
                         {navRoutes.map((item) => {
                             const Icon = item.icon || Box;
@@ -209,16 +210,15 @@ export default function Sidebar() {
                                             onClick={() => toggleMenu(item.path)}
                                             isActive={isActiveParent}
                                             tooltip={itemLabel}
-                                            className="h-10 px-2 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                            className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
                                         >
-                                            <Icon className={cn('h-5 w-5', isActiveParent && 'text-primary')} />
+                                            <Icon className={cn('h-[18px] w-[18px] shrink-0', isActiveParent && 'text-primary')} />
                                             <span>{itemLabel}</span>
-                                            <ChevronDown className={cn('ml-auto h-4 w-4 transition-transform group-data-[collapsible=icon]:hidden', !isExpanded && '-rotate-90')} />
+                                            <ChevronRight className={cn('ml-auto h-4 w-4 transition-transform group-data-[collapsible=icon]:hidden', isExpanded && 'rotate-90', isActiveParent && 'text-primary')} />
                                         </SidebarMenuButton>
 
-                                        <SidebarMenuSub className={cn(!isExpanded && 'hidden')}>
+                                        <SidebarMenuSub className={cn('mx-4 my-1 border-l border-sidebar-border/80 px-2.5 py-1', !isExpanded && 'hidden')}>
                                             {item.children.map((child) => {
-                                                const ChildIcon = child.icon || Box;
                                                 const childLabel = getRouteLabel(child);
                                                 const isChildActive = location.pathname === child.path;
                                                 return (
@@ -226,10 +226,17 @@ export default function Sidebar() {
                                                         <SidebarMenuSubButton
                                                             asChild
                                                             isActive={isChildActive}
-                                                            className="!h-8 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-current data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                                            className="!h-9 rounded-md px-2 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
                                                         >
                                                             <Link to={child.path}>
-                                                                <ChildIcon />
+                                                                <span
+                                                                    className={cn(
+                                                                        'h-2.5 w-2.5 shrink-0 rounded-full border',
+                                                                        isChildActive
+                                                                            ? 'border-primary bg-primary/20'
+                                                                            : 'border-sidebar-foreground/45 bg-transparent',
+                                                                    )}
+                                                                />
                                                                 <span>{childLabel}</span>
                                                             </Link>
                                                         </SidebarMenuSubButton>
@@ -239,11 +246,11 @@ export default function Sidebar() {
                                         </SidebarMenuSub>
 
                                         {isCollapsed && collapsedMenuPath === item.path && (
-                                            <div className="absolute left-full top-0 ml-2 w-52 rounded-xl border bg-popover shadow-xl z-50 overflow-hidden">
+                                            <div className="absolute left-full top-0 ml-2 w-56 rounded-xl border bg-popover shadow-xl z-50 overflow-hidden">
                                                 <div className="px-3 py-2 text-xs font-bold text-muted-foreground border-b bg-muted/20 uppercase tracking-tight">
                                                     {itemLabel}
                                                 </div>
-                                                <div className="p-1">
+                                                <div className="p-2">
                                                     {item.children.map((child) => {
                                                         const isChildActive = location.pathname === child.path;
                                                         const childLabel = getRouteLabel(child);
@@ -253,10 +260,18 @@ export default function Sidebar() {
                                                                 to={child.path}
                                                                 onClick={() => setCollapsedMenuPath(null)}
                                                                 className={cn(
-                                                                    'flex items-center px-3 py-2 text-sm rounded-md transition-colors',
+                                                                    'flex items-center gap-2 rounded-md px-3 py-2 text-sm transition-colors',
                                                                     isChildActive ? 'bg-primary/10 text-primary font-semibold' : 'hover:bg-accent/50',
                                                                 )}
                                                             >
+                                                                <span
+                                                                    className={cn(
+                                                                        'h-2.5 w-2.5 shrink-0 rounded-full border',
+                                                                        isChildActive
+                                                                            ? 'border-primary bg-primary/20'
+                                                                            : 'border-muted-foreground/40 bg-transparent',
+                                                                    )}
+                                                                />
                                                                 <span className="flex-1">{childLabel}</span>
                                                                 {isChildActive && <Check className="h-3 w-3 text-primary" />}
                                                             </Link>
@@ -275,10 +290,10 @@ export default function Sidebar() {
                                         asChild
                                         isActive={location.pathname === item.path}
                                         tooltip={itemLabel}
-                                        className="h-10 px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
+                                        className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-semibold"
                                     >
                                         <Link to={item.path} onClick={() => setCollapsedMenuPath(null)}>
-                                            <Icon className={cn('h-5 w-5', location.pathname === item.path && 'text-primary')} />
+                                            <Icon className={cn('h-[18px] w-[18px] shrink-0', location.pathname === item.path && 'text-primary')} />
                                             <span>{itemLabel}</span>
                                         </Link>
                                     </SidebarMenuButton>
@@ -288,7 +303,7 @@ export default function Sidebar() {
                     </SidebarMenu>
                 </SidebarContent>
 
-                <SidebarFooter className="border-t p-2">
+                <SidebarFooter className="border-t px-2.5 py-2 group-data-[collapsible=icon]:px-2">
                     <div className="relative w-full" ref={themeMenuRef}>
                         {isThemeMenuOpen && (
                             <div
@@ -349,10 +364,10 @@ export default function Sidebar() {
                                 <SidebarMenuButton
                                     onClick={() => setIsThemeMenuOpen((prev) => !prev)}
                                     tooltip={t('sidebar.appearance')}
-                                    className="h-10 px-2 justify-start group-data-[collapsible=icon]:justify-center"
+                                    className="h-10 rounded-lg px-2.5 justify-start gap-3 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:gap-0 group-data-[collapsible=icon]:px-0"
                                 >
-                                    <div className="flex h-9 w-9 items-center justify-center shrink-0 group-data-[collapsible=icon]:h-4 group-data-[collapsible=icon]:w-4">
-                                        <Palette className="h-4 w-4" />
+                                    <div className="flex h-7 w-7 shrink-0 items-center justify-center group-data-[collapsible=icon]:h-[18px] group-data-[collapsible=icon]:w-[18px]">
+                                        <Palette className="h-[18px] w-[18px] shrink-0" />
                                     </div>
                                     <span className="truncate group-data-[collapsible=icon]:hidden">{t('sidebar.appearance')}</span>
                                 </SidebarMenuButton>
@@ -388,13 +403,13 @@ export default function Sidebar() {
                             className={cn(
                                 'w-full rounded-xl',
                                 isCollapsed
-                                    ? 'h-11 px-0 justify-center'
-                                    : 'h-14 px-2 justify-between',
+                                    ? 'h-10 px-0 justify-center'
+                                    : 'h-12 px-2.5 justify-between',
                             )}
                             onClick={() => setIsUserMenuOpen((prev) => !prev)}
                         >
                             <div className={cn('flex items-center min-w-0', isCollapsed ? 'justify-center' : 'gap-3 flex-1 text-left')}>
-                                <Avatar className="rounded-full shrink-0 h-8 w-8">
+                                <Avatar className="rounded-full shrink-0 h-7 w-7">
                                     <AvatarFallback className="rounded-full bg-primary text-primary-foreground font-bold text-xs uppercase">{currentUser?.name?.charAt(0) || 'U'}</AvatarFallback>
                                 </Avatar>
                                 {!isCollapsed && (

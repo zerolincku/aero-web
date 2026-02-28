@@ -59,8 +59,8 @@ export default function Layout() {
         <SidebarProvider
             style={
                 {
-                    '--sidebar-width': '16rem',
-                    '--sidebar-width-icon': '72px',
+                    '--sidebar-width': '13.5rem',
+                    '--sidebar-width-icon': '64px',
                 } as React.CSSProperties
             }
         >

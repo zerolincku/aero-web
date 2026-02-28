@@ -2,6 +2,7 @@ import React, { lazy } from 'react';
 import {
     LayoutDashboard,
     Server,
+    Users,
     Settings,
     Circle,
     type LucideIcon
@@ -11,6 +12,8 @@ import NotFound from "@/pages/NotFound.tsx";
 // Lazy load pages
 const Dashboard = lazy(() => import('../pages/Dashboard'));
 const HostsPage = lazy(() => import('../pages/Hosts'));
+const UsersPage = lazy(() => import('../pages/Users'));
+const OrgsPage = lazy(() => import('../pages/Orgs'));
 const SettingsPage = lazy(() => import('../pages/Settings'));
 
 // Type definition for route configuration
@@ -60,6 +63,35 @@ export const navRoutes: RouteConfig[] = [
                 component: NotFound
             },
         ]
+    },
+    {
+        path: '/management',
+        label: 'Management',
+        labelKey: 'nav.management',
+        icon: Users,
+        children: [
+            {
+                path: '/management/users',
+                label: 'User List',
+                labelKey: 'nav.userList',
+                icon: Circle,
+                component: UsersPage,
+            },
+            {
+                path: '/management/orgs',
+                label: 'Org List',
+                labelKey: 'nav.orgList',
+                icon: Circle,
+                component: OrgsPage,
+            },
+            {
+                path: '/management/groups',
+                label: 'User Groups',
+                labelKey: 'nav.userGroups',
+                icon: Circle,
+                component: NotFound,
+            },
+        ],
     },
     {
         path: '/system', // Unique parent path
