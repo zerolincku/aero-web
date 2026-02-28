@@ -395,7 +395,7 @@ export default function Sidebar() {
                         >
                             <div className={cn('flex items-center min-w-0', isCollapsed ? 'justify-center' : 'gap-3 flex-1 text-left')}>
                                 <Avatar className="rounded-full shrink-0 h-8 w-8">
-                                    <AvatarFallback className="rounded-full bg-indigo-500 text-white font-bold text-xs uppercase">{currentUser?.name?.charAt(0) || 'U'}</AvatarFallback>
+                                    <AvatarFallback className="rounded-full bg-primary text-primary-foreground font-bold text-xs uppercase">{currentUser?.name?.charAt(0) || 'U'}</AvatarFallback>
                                 </Avatar>
                                 {!isCollapsed && (
                                     <div className="min-w-0">
