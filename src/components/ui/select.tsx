@@ -1,5 +1,5 @@
 import * as React from "react"
-import { Check, ChevronDown } from "lucide-react"
+import { Check, ChevronDown, X } from "lucide-react"
 import { cn } from "@/lib/utils.ts"
 
 const SelectContext = React.createContext<{
@@ -7,16 +7,25 @@ const SelectContext = React.createContext<{
     onValueChange?: (value: string) => void
     open: boolean
     setOpen: (open: boolean) => void
+    clearable?: boolean
+    onClear?: () => void
+    clearAriaLabel?: string
 } | null>(null)
 
 function Select({
                     children,
                     value,
                     onValueChange,
+                    clearable,
+                    onClear,
+                    clearAriaLabel,
                 }: {
     children: React.ReactNode
     value?: string
     onValueChange?: (value: string) => void
+    clearable?: boolean
+    onClear?: () => void
+    clearAriaLabel?: string
 }) {
     const [open, setOpen] = React.useState(false)
     const rootRef = React.useRef<HTMLDivElement>(null)
@@ -46,7 +55,7 @@ function Select({
     }, [open])
 
     return (
-        <SelectContext.Provider value={{ value, onValueChange, open, setOpen }}>
+        <SelectContext.Provider value={{ value, onValueChange, open, setOpen, clearable, onClear, clearAriaLabel }}>
             <div ref={rootRef} className="relative w-full">{children}</div>
         </SelectContext.Provider>
     )
@@ -72,6 +81,7 @@ const SelectTrigger = React.forwardRef<
     }
 >(({ className, children, trailing, ...props }, ref) => {
     const context = React.useContext(SelectContext)
+    const shouldShowClear = Boolean(context?.clearable && context?.value && context?.onClear)
     return (
         <button
             ref={ref}
@@ -84,7 +94,26 @@ const SelectTrigger = React.forwardRef<
             {...props}
         >
             {children}
-            {trailing ?? <ChevronDown className="h-4 w-4 opacity-50" />}
+            {shouldShowClear ? (
+                <span
+                    role="button"
+                    aria-label={context?.clearAriaLabel || "Clear selection"}
+                    className="text-muted-foreground hover:text-foreground"
+                    onMouseDown={(event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }}
+                    onClick={(event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                        context?.onClear?.()
+                    }}
+                >
+                    <X className="h-4 w-4" />
+                </span>
+            ) : (
+                trailing ?? <ChevronDown className="h-4 w-4 opacity-50" />
+            )}
         </button>
     )
 })

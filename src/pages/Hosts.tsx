@@ -25,7 +25,6 @@ import {
   Plus,
   Search,
   Server,
-  X,
   XCircle,
 } from 'lucide-react';
 
@@ -299,30 +298,14 @@ export default function Hosts() {
                 setRegionFilter(value);
                 table.resetPage();
               }}
+              clearable
+              onClear={() => {
+                setRegionFilter(undefined);
+                table.resetPage();
+              }}
+              clearAriaLabel={t('hosts.filter.clearAllFilters')}
             >
-              <SelectTrigger
-                trailing={
-                  regionFilter ? (
-                    <span
-                      role="button"
-                      className="text-muted-foreground hover:text-foreground"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                      }}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        setRegionFilter(undefined);
-                        table.resetPage();
-                      }}
-                      aria-label={t('hosts.filter.clearAllFilters')}
-                    >
-                      <X className="h-4 w-4" />
-                    </span>
-                  ) : undefined
-                }
-              >
+              <SelectTrigger>
                 <SelectValue placeholder={t('hosts.filter.allRegions')} />
               </SelectTrigger>
               <SelectContent>
@@ -340,30 +323,14 @@ export default function Hosts() {
                 setZoneFilter(value);
                 table.resetPage();
               }}
+              clearable
+              onClear={() => {
+                setZoneFilter(undefined);
+                table.resetPage();
+              }}
+              clearAriaLabel={t('hosts.filter.clearAllFilters')}
             >
-              <SelectTrigger
-                trailing={
-                  zoneFilter ? (
-                    <span
-                      role="button"
-                      className="text-muted-foreground hover:text-foreground"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                      }}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        setZoneFilter(undefined);
-                        table.resetPage();
-                      }}
-                      aria-label={t('hosts.filter.clearAllFilters')}
-                    >
-                      <X className="h-4 w-4" />
-                    </span>
-                  ) : undefined
-                }
-              >
+              <SelectTrigger>
                 <SelectValue placeholder={t('hosts.filter.allZones')} />
               </SelectTrigger>
               <SelectContent>
@@ -381,30 +348,14 @@ export default function Hosts() {
                 setStatusFilter(value as HostStatus);
                 table.resetPage();
               }}
+              clearable
+              onClear={() => {
+                setStatusFilter(undefined);
+                table.resetPage();
+              }}
+              clearAriaLabel={t('hosts.filter.clearAllFilters')}
             >
-              <SelectTrigger
-                trailing={
-                  statusFilter ? (
-                    <span
-                      role="button"
-                      className="text-muted-foreground hover:text-foreground"
-                      onMouseDown={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                      }}
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        setStatusFilter(undefined);
-                        table.resetPage();
-                      }}
-                      aria-label={t('hosts.filter.clearAllFilters')}
-                    >
-                      <X className="h-4 w-4" />
-                    </span>
-                  ) : undefined
-                }
-              >
+              <SelectTrigger>
                 <SelectValue placeholder={t('hosts.filter.allStatus')} />
               </SelectTrigger>
               <SelectContent>

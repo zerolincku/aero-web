@@ -62,8 +62,8 @@ export default function Orgs() {
 
     // Filter States
     const [search, setSearch] = useState('');
-    const [typeFilter, setTypeFilter] = useState('All');
-    const [statusFilter, setStatusFilter] = useState('All');
+    const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
+    const [statusFilter, setStatusFilter] = useState<'Active' | 'Inactive' | undefined>(undefined);
     const [locationFilter, setLocationFilter] = useState('');
 
     const handleAddOrg = () => {
@@ -75,8 +75,8 @@ export default function Orgs() {
 
     const resetFilters = () => {
         setSearch('');
-        setTypeFilter('All');
-        setStatusFilter('All');
+        setTypeFilter(undefined);
+        setStatusFilter(undefined);
         setLocationFilter('');
         table.resetPage();
     };
@@ -85,8 +85,8 @@ export default function Orgs() {
         const matchesSearch =
             item.name.toLowerCase().includes(search.toLowerCase()) ||
             item.head.toLowerCase().includes(search.toLowerCase());
-        const matchesType = typeFilter === 'All' || item.type === typeFilter;
-        const matchesStatus = statusFilter === 'All' || item.status === statusFilter;
+        const matchesType = !typeFilter || item.type === typeFilter;
+        const matchesStatus = !statusFilter || item.status === statusFilter;
         const matchesLocation = item.location.toLowerCase().includes(locationFilter.toLowerCase());
 
         return matchesSearch && matchesType && matchesStatus && matchesLocation;
@@ -144,12 +144,20 @@ export default function Orgs() {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterType')}</Label>
-                                    <Select value={typeFilter} onValueChange={(val) => { setTypeFilter(val); table.resetPage(); }}>
+                                    <Select
+                                        value={typeFilter}
+                                        onValueChange={(val) => { setTypeFilter(val); table.resetPage(); }}
+                                        clearable
+                                        onClear={() => {
+                                            setTypeFilter(undefined);
+                                            table.resetPage();
+                                        }}
+                                        clearAriaLabel={t('hosts.filter.clearAllFilters')}
+                                    >
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectTypePlaceholder')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">{t('orgs.allTypes')}</SelectItem>
                                             <SelectItem value="University">{t('orgs.types.university')}</SelectItem>
                                             <SelectItem value="Hospital">{t('orgs.types.hospital')}</SelectItem>
                                             <SelectItem value="Corporate">{t('orgs.types.corporate')}</SelectItem>
@@ -160,12 +168,20 @@ export default function Orgs() {
                                 </div>
                                 <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterStatus')}</Label>
-                                    <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); table.resetPage(); }}>
+                                    <Select
+                                        value={statusFilter}
+                                        onValueChange={(val) => { setStatusFilter(val as 'Active' | 'Inactive'); table.resetPage(); }}
+                                        clearable
+                                        onClear={() => {
+                                            setStatusFilter(undefined);
+                                            table.resetPage();
+                                        }}
+                                        clearAriaLabel={t('hosts.filter.clearAllFilters')}
+                                    >
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectStatusPlaceholder')} />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="All">{t('orgs.allStatus')}</SelectItem>
                                             <SelectItem value="Active">{t('common.status.active')}</SelectItem>
                                             <SelectItem value="Inactive">{t('common.status.inactive')}</SelectItem>
                                         </SelectContent>
