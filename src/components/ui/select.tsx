@@ -67,8 +67,10 @@ function SelectValue({ placeholder }: { placeholder?: string }) {
 
 const SelectTrigger = React.forwardRef<
     HTMLButtonElement,
-    React.ButtonHTMLAttributes<HTMLButtonElement>
->(({ className, children, ...props }, ref) => {
+    React.ButtonHTMLAttributes<HTMLButtonElement> & {
+        trailing?: React.ReactNode
+    }
+>(({ className, children, trailing, ...props }, ref) => {
     const context = React.useContext(SelectContext)
     return (
         <button
@@ -82,7 +84,7 @@ const SelectTrigger = React.forwardRef<
             {...props}
         >
             {children}
-            <ChevronDown className="h-4 w-4 opacity-50" />
+            {trailing ?? <ChevronDown className="h-4 w-4 opacity-50" />}
         </button>
     )
 })

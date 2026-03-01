@@ -25,6 +25,7 @@ import {
   Plus,
   Search,
   Server,
+  X,
   XCircle,
 } from 'lucide-react';
 
@@ -215,9 +216,9 @@ function KvmStatusIcon({ status }: { status: KvmStatus }) {
 export default function Hosts() {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
-  const [regionFilter, setRegionFilter] = useState('all');
-  const [zoneFilter, setZoneFilter] = useState('all');
-  const [statusFilter, setStatusFilter] = useState('all');
+  const [regionFilter, setRegionFilter] = useState<string | undefined>(undefined);
+  const [zoneFilter, setZoneFilter] = useState<string | undefined>(undefined);
+  const [statusFilter, setStatusFilter] = useState<HostStatus | undefined>(undefined);
 
   const regionOptions = Array.from(new Set(HOSTS.map((host) => host.region)));
   const zoneOptions = Array.from(new Set(HOSTS.map((host) => host.zone)));
@@ -226,9 +227,9 @@ export default function Hosts() {
     const matchSearch =
       host.hostname.toLowerCase().includes(searchTerm.toLowerCase()) ||
       host.ipAddress.includes(searchTerm);
-    const matchRegion = regionFilter === 'all' || host.region === regionFilter;
-    const matchZone = zoneFilter === 'all' || host.zone === zoneFilter;
-    const matchStatus = statusFilter === 'all' || host.status === statusFilter;
+    const matchRegion = !regionFilter || host.region === regionFilter;
+    const matchZone = !zoneFilter || host.zone === zoneFilter;
+    const matchStatus = !statusFilter || host.status === statusFilter;
 
     return matchSearch && matchRegion && matchZone && matchStatus;
   });
@@ -248,9 +249,9 @@ export default function Hosts() {
 
   const clearFilters = () => {
     setSearchTerm('');
-    setRegionFilter('all');
-    setZoneFilter('all');
-    setStatusFilter('all');
+    setRegionFilter(undefined);
+    setZoneFilter(undefined);
+    setStatusFilter(undefined);
     table.resetPage();
   };
 
@@ -299,11 +300,32 @@ export default function Hosts() {
                 table.resetPage();
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                trailing={
+                  regionFilter ? (
+                    <span
+                      role="button"
+                      className="text-muted-foreground hover:text-foreground"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setRegionFilter(undefined);
+                        table.resetPage();
+                      }}
+                      aria-label={t('hosts.filter.clearAllFilters')}
+                    >
+                      <X className="h-4 w-4" />
+                    </span>
+                  ) : undefined
+                }
+              >
                 <SelectValue placeholder={t('hosts.filter.allRegions')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('hosts.filter.allRegions')}</SelectItem>
                 {regionOptions.map((region) => (
                   <SelectItem key={region} value={region}>
                     {region}
@@ -319,11 +341,32 @@ export default function Hosts() {
                 table.resetPage();
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                trailing={
+                  zoneFilter ? (
+                    <span
+                      role="button"
+                      className="text-muted-foreground hover:text-foreground"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setZoneFilter(undefined);
+                        table.resetPage();
+                      }}
+                      aria-label={t('hosts.filter.clearAllFilters')}
+                    >
+                      <X className="h-4 w-4" />
+                    </span>
+                  ) : undefined
+                }
+              >
                 <SelectValue placeholder={t('hosts.filter.allZones')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('hosts.filter.allZones')}</SelectItem>
                 {zoneOptions.map((zone) => (
                   <SelectItem key={zone} value={zone}>
                     {zone}
@@ -335,15 +378,36 @@ export default function Hosts() {
             <Select
               value={statusFilter}
               onValueChange={(value) => {
-                setStatusFilter(value);
+                setStatusFilter(value as HostStatus);
                 table.resetPage();
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                trailing={
+                  statusFilter ? (
+                    <span
+                      role="button"
+                      className="text-muted-foreground hover:text-foreground"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                      onClick={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                        setStatusFilter(undefined);
+                        table.resetPage();
+                      }}
+                      aria-label={t('hosts.filter.clearAllFilters')}
+                    >
+                      <X className="h-4 w-4" />
+                    </span>
+                  ) : undefined
+                }
+              >
                 <SelectValue placeholder={t('hosts.filter.allStatus')} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">{t('hosts.filter.allStatus')}</SelectItem>
                 <SelectItem value="Online">{t('hosts.status.online')}</SelectItem>
                 <SelectItem value="Maintenance">{t('hosts.status.maintenance')}</SelectItem>
                 <SelectItem value="Offline">{t('hosts.status.offline')}</SelectItem>
