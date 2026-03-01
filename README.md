@@ -1,6 +1,6 @@
 <div align="center">
 
-  ![Aero Cloud Admin Template](/doc/img.png)
+  ![Aero Cloud Admin Template](/doc/host.png)
 
   # Aero Cloud Admin Template
 
@@ -37,13 +37,13 @@
 
 ### 仪表板 (Dashboard)
 
-![Dashboard](/doc/img_1.png)
+![Dashboard](/doc/host.png)
 
 提供关键指标概览和交互式状态管理演示。
 
 ### 用户管理 (Users)
 
-![Users](/doc/img_2.png)
+![Users](/doc/host-info.png)
 
 完整的用户列表管理，支持：
 - 🔍 实时搜索过滤
@@ -54,7 +54,7 @@
 
 ### 系统设置 (Settings)
 
-![Settings](/doc/img.png)
+![Settings](/doc/theme.png)
 
 提供：
 - 👤 个人信息管理
@@ -193,9 +193,12 @@ aero-cloud-admin-template/
 │   ├── index.css       # 全局样式
 │   └── main.tsx        # 应用入口
 ├── doc/                # 文档和截图
-│   ├── img.png
-│   ├── img_1.png
-│   └── img_2.png
+│   ├── az.png
+│   ├── host.png
+│   ├── host-info.png
+│   ├── host-info-2.png
+│   ├── quick-search.png
+│   └── theme.png
 ├── .gitignore
 ├── .editorconfig
 ├── .env.example        # 环境变量模板
@@ -391,14 +394,6 @@ export default defineConfig({
 - [shadcn/ui](https://ui.shadcn.com/)
 - [Zustand](https://github.com/pmndrs/zustand)
 - [Lucide](https://lucide.dev/)
-
----
-
-## 📞 联系方式
-
-- 作者: Lin Changkun
-  - 项目链接: [https://github.com/yourusername/aero-cloud-admin-template](https://github.com/yourusername/aero-cloud-admin-template)
-  - 问题反馈: [Issues](https://github.com/yourusername/aero-cloud-admin-template/issues)
 
 ---
 
