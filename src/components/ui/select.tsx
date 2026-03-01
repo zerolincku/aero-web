@@ -71,7 +71,11 @@ SelectGroup.displayName = "SelectGroup"
 
 function SelectValue({ placeholder }: { placeholder?: string }) {
     const context = React.useContext(SelectContext)
-    return <span>{context?.value || placeholder}</span>
+    return (
+        <span className={cn(!context?.value && "text-muted-foreground")}>
+            {context?.value || placeholder}
+        </span>
+    )
 }
 
 const SelectTrigger = React.forwardRef<
