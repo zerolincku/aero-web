@@ -5,6 +5,5 @@ export const APP_CONFIG = {
     zhCN: 'Aero 指令中心',
   },
   defaultThemeColor: 'blue',
-  loginHashPath: '#/login',
 } as const;
 

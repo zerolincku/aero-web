@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
-import { HashRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
@@ -9,6 +9,9 @@ import { useStore } from './store/useStore';
 import { navRoutes, type RouteConfig } from '@/lib/routes';
 import { Toaster } from '@/components/ui/sonner';
 import { APP_CONFIG } from '@/config/app';
+import { AUTH_UNAUTHORIZED_EVENT } from '@/auth/session';
+import { ROUTER_CONFIG } from '@/config/router';
+import AppErrorBoundary from '@/components/AppErrorBoundary';
 import './i18n';
 
 const HostDetailPage = React.lazy(() => import('./pages/HostDetail'));
@@ -16,7 +19,7 @@ const HostDetailPage = React.lazy(() => import('./pages/HostDetail'));
 function ProtectedRoute({ children }: { children?: React.ReactNode }) {
   const { isAuthenticated } = useStore();
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to={ROUTER_CONFIG.loginPath} replace />;
   }
   return <>{children}</>;
 }
@@ -49,37 +52,54 @@ const renderRoutes = (routes: RouteConfig[]): React.ReactNode[] => {
 };
 
 export default function App() {
+  const { syncAuthFromStorage, handleUnauthorized } = useStore();
+  const ActiveRouter = ROUTER_CONFIG.mode === 'hash' ? HashRouter : BrowserRouter;
+
   useEffect(() => {
     document.title = APP_CONFIG.brand;
-  }, []);
+    syncAuthFromStorage();
+  }, [syncAuthFromStorage]);
+
+  useEffect(() => {
+    const onUnauthorized = () => {
+      handleUnauthorized();
+    };
+
+    window.addEventListener(AUTH_UNAUTHORIZED_EVENT, onUnauthorized);
+    return () => {
+      window.removeEventListener(AUTH_UNAUTHORIZED_EVENT, onUnauthorized);
+    };
+  }, [handleUnauthorized]);
 
   return (
-    <Router>
-      <ThemeController />
-      <Routes>
-        <Route path="/login" element={<Login />} />
+    <AppErrorBoundary>
+      <ActiveRouter basename={ROUTER_CONFIG.basename || undefined}>
+        <ThemeController />
+        <Routes>
+          <Route path={ROUTER_CONFIG.loginPath} element={<Login />} />
 
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Layout />
-            </ProtectedRoute>
-          }
-        >
-          {renderRoutes(navRoutes)}
           <Route
-            path="/infrastructure/hosts/:hostId"
+            path="/"
             element={
-              <Suspense fallback={<Loading />}>
-                <HostDetailPage />
-              </Suspense>
+              <ProtectedRoute>
+                <Layout />
+              </ProtectedRoute>
             }
-          />
-          <Route path="*" element={<NotFound />} />
-        </Route>
-      </Routes>
-      <Toaster position="top-center" />
-    </Router>
+          >
+            {renderRoutes(navRoutes)}
+            <Route
+              path="/infrastructure/hosts/:hostId"
+              element={
+                <Suspense fallback={<Loading />}>
+                  <HostDetailPage />
+                </Suspense>
+              }
+            />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+        <Toaster position="top-center" />
+      </ActiveRouter>
+    </AppErrorBoundary>
   );
 }
