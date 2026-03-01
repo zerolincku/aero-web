@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { ChevronRight, Globe } from 'lucide-react';
+import { ChevronRight, Globe, Github } from 'lucide-react';
 import { navRoutes, type RouteConfig } from '../lib/routes';
 import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
@@ -117,7 +117,19 @@ export default function Layout() {
                         ))}
                     </nav>
 
-                    <div className="ml-auto w-10">
+                    <div className="ml-auto flex items-center gap-1">
+                        <a
+                            href="https://github.com/zerolincku/aero-web"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="h-8 w-10 inline-flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors hover:bg-accent/50 rounded-md"
+                            aria-label="Open GitHub repository"
+                            title="GitHub"
+                        >
+                            <Github className="h-5 w-5" />
+                        </a>
+
+                        <div className="w-10">
                         <Select value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
                             <SelectTrigger
                                 className="h-8 w-10 px-0 justify-center border-0 bg-transparent shadow-none ring-0 focus:ring-0 focus:ring-offset-0 hover:bg-accent/50 [&>svg:last-child]:hidden"
@@ -135,6 +147,7 @@ export default function Layout() {
                                 <SelectItem value="zh-CN">{t('common.language.chineseSimplified')}</SelectItem>
                             </SelectContent>
                         </Select>
+                        </div>
                     </div>
                 </header>
 
