@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
-import { ChevronRight, Globe, Github } from 'lucide-react';
+import { ChevronRight, Globe } from 'lucide-react';
 import { navRoutes, type RouteConfig } from '../lib/routes';
 import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
@@ -126,7 +126,14 @@ export default function Layout() {
                             aria-label="Open GitHub repository"
                             title="GitHub"
                         >
-                            <Github className="h-5 w-5" />
+                            <svg
+                                viewBox="0 0 24 24"
+                                className="h-5 w-5"
+                                fill="currentColor"
+                                aria-hidden="true"
+                            >
+                                <path d="M12 .5C5.649.5.5 5.649.5 12c0 5.084 3.292 9.387 7.862 10.91.575.106.786-.25.786-.556 0-.274-.01-1-.016-1.962-3.197.694-3.872-1.54-3.872-1.54-.523-1.329-1.278-1.682-1.278-1.682-1.044-.714.079-.699.079-.699 1.155.081 1.762 1.186 1.762 1.186 1.026 1.759 2.692 1.251 3.348.957.104-.743.402-1.251.731-1.539-2.553-.291-5.238-1.276-5.238-5.679 0-1.255.449-2.281 1.184-3.085-.118-.291-.513-1.462.112-3.049 0 0 .965-.309 3.162 1.179a10.997 10.997 0 0 1 2.878-.387c.976.004 1.96.132 2.879.387 2.195-1.488 3.159-1.179 3.159-1.179.627 1.587.232 2.758.114 3.049.737.804 1.183 1.83 1.183 3.085 0 4.414-2.689 5.384-5.25 5.669.413.355.781 1.059.781 2.135 0 1.541-.014 2.783-.014 3.162 0 .309.207.668.793.554C20.211 21.383 23.5 17.082 23.5 12c0-6.351-5.149-11.5-11.5-11.5z" />
+                            </svg>
                         </a>
 
                         <div className="w-10">
