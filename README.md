@@ -1,28 +1,30 @@
 # Aero Cloud Admin Template
 
-基于 **React 19 + TypeScript + Vite + Tailwind CSS** 的后台管理模板工程，包含认证路由、主题系统、国际化、快捷搜索、分页列表与基础 API 封装。
+English | [简体中文](./README-zh.md)
 
-## 项目定位
+A modern admin template built with **React 19 + TypeScript + Vite + Tailwind CSS**, including auth routing, theme system, i18n, command palette, paginated lists, and a typed API layer.
 
-- 可直接作为中后台前端脚手架使用
-- 默认内置一套完整示例页面（Dashboard / Hosts / Regions & AZs / Users / Orgs / Settings）
-- 保留扩展点，方便替换为真实后端 API
+## Project Scope
 
-## 界面预览
+- Ready-to-use frontend foundation for cloud/admin dashboards
+- Built-in demo pages: Dashboard / Hosts / Regions & AZs / Users / Orgs / Settings
+- Clear extension points for integrating real backend services
 
-### 1. Dashboard 首页
+## Screenshots
+
+### 1. Dashboard Home
 
 ![Dashboard](./doc/dashboard.png)
 
-### 2. Hosts 列表
+### 2. Hosts List
 
 ![Hosts](./doc/host.png)
 
-### 3. Hosts 详情/列表扩展示例
+### 3. Hosts Detail/List Extended View
 
 ![Hosts Info](./doc/host-info.png)
 
-### 4. Host Detail 页面示例
+### 4. Host Detail Page
 
 ![Host Detail](./doc/host-info-2.png)
 
@@ -30,25 +32,26 @@
 
 ![Regions & AZs](./doc/az.png)
 
-### 6. 快捷搜索（Command Palette）
+### 6. Command Palette (Quick Search)
 
 ![Quick Search](./doc/quick-search.png)
 
-### 7. 主题与外观设置
+### 7. Theme & Appearance
 
 ![Theme](./doc/theme.png)
 
-## 核心能力
+## Core Features
 
-- 认证与路由守卫：未登录自动跳转 `/login`，401 自动清理会话并跳转登录
-- API 访问层：统一 axios 实例、错误标准化、分页响应类型
-- 国际化：`en` / `zh-CN`，含开发期 key 差异检查与缺失 key 告警
-- 主题系统：`light / dark / system` + 5 种强调色
-- 快捷搜索：`⌘K` / `Ctrl+K` 打开全局命令面板
-- 列表能力：通用分页 hook，支持搜索/筛选/分页
-- 工程质量：ESLint + TypeScript 严格校验 + Vitest 测试基线
+- Auth guard: unauthenticated users are redirected to `/login`
+- Session handling: auto cleanup + redirect on `401`
+- API layer: shared axios instance, typed errors, pagination models
+- i18n: `en` / `zh-CN` with dev-time key diff and missing-key warning
+- Theme system: `light / dark / system` + 5 accent colors
+- Command palette: `⌘K` / `Ctrl+K`
+- Reusable table pagination/filter hooks
+- Engineering baseline: ESLint + strict TypeScript + Vitest
 
-## 技术栈
+## Tech Stack
 
 - React 19.2
 - TypeScript 5.9
@@ -60,62 +63,62 @@
 - react-i18next / i18next
 - Vitest + Testing Library
 
-## 快速开始
+## Quick Start
 
-### 1. 环境要求
+### 1. Requirements
 
 - Node.js >= 20
 - pnpm >= 8
 
-### 2. 安装与启动
+### 2. Install & Run
 
 ```bash
 pnpm install
 pnpm run dev
 ```
 
-默认访问：`http://localhost:5173`
+Default URL: `http://localhost:5173`
 
-### 3. 常用命令
+### 3. Common Commands
 
 ```bash
-pnpm run dev         # 启动开发环境
-pnpm run build       # 构建产物（tsc + vite build）
-pnpm run preview     # 预览构建结果
-pnpm run lint        # ESLint 检查
-pnpm run test        # Vitest 单测
-pnpm run test:watch  # Vitest 监听模式
-pnpm exec tsc -b     # TypeScript 项目引用构建检查
+pnpm run dev         # start dev server
+pnpm run build       # build production assets (tsc + vite build)
+pnpm run preview     # preview production build
+pnpm run lint        # run ESLint
+pnpm run test        # run Vitest
+pnpm run test:watch  # run Vitest in watch mode
+pnpm exec tsc -b     # TypeScript project build check
 ```
 
-## 环境变量说明
+## Environment Variables
 
-复制模板：
+Copy template:
 
 ```bash
 cp .env.example .env
 ```
 
-变量如下：
+Variables:
 
-- `VITE_API_BASE_URL`：API 基础路径，默认 `/api`
-- `VITE_ROUTER_MODE`：路由模式，`hash` 或 `browser`，默认 `hash`
-- `VITE_APP_BASENAME`：应用部署子路径（如 `/admin`），默认空
-- `VITE_USE_MOCK_AUTH`：是否使用前端 mock 登录，默认 `true`
+- `VITE_API_BASE_URL`: API base path, default `/api`
+- `VITE_ROUTER_MODE`: router mode, `hash` or `browser` (default `hash`)
+- `VITE_APP_BASENAME`: deployment sub-path (for example `/admin`)
+- `VITE_USE_MOCK_AUTH`: whether to use frontend mock login (default `true`)
 
-## 后端接口约定（当前实现）
+## Backend Response Contract
 
-### 成功响应
+### Success Response
 
-- Body 直接返回业务数据
+- Response body directly returns business data
 
-### 错误响应
+### Error Response
 
 ```json
 { "code": 1001, "msg": "error message" }
 ```
 
-### 分页响应
+### Pagination Response
 
 ```json
 {
@@ -126,13 +129,13 @@ cp .env.example .env
 }
 ```
 
-前端已提供：
+Frontend support included:
 
-- `PageResponse<T>` 类型
+- `PageResponse<T>`
 - `apiClient.getPage<T>()`
-- `toPaginatedResult()` 适配函数（将后端分页结构转成前端统一列表模型）
+- `toPaginatedResult()` mapper
 
-## 路由概览
+## Route Overview
 
 - `/login`
 - `/`
@@ -143,14 +146,14 @@ cp .env.example .env
 - `/management/orgs`
 - `/system/settings`
 
-占位路由（目前为 NotFound 页面）：
+Placeholder routes (currently NotFound):
 
 - `/infrastructure/vms`
 - `/infrastructure/storage-pools`
 - `/management/groups`
 - `/system/security`
 
-## 目录结构（关键部分）
+## Key Directory Structure
 
 ```text
 src/
@@ -191,14 +194,14 @@ src/
 └── test/
 ```
 
-## React Compiler 说明
+## React Compiler Notes
 
-项目 `vite.config.ts` 已预留 React Compiler 接入逻辑：
+`vite.config.ts` already includes conditional React Compiler wiring:
 
-- 若安装 `babel-plugin-react-compiler`，将自动启用
-- 若未安装，不会阻塞项目运行
+- If `babel-plugin-react-compiler` is installed, it is enabled automatically
+- If not installed, the app still runs normally
 
-安装命令示例：
+Install example:
 
 ```bash
 pnpm add -D babel-plugin-react-compiler
@@ -206,4 +209,4 @@ pnpm add -D babel-plugin-react-compiler
 
 ## License
 
-MIT License，详见 [LICENSE](./LICENSE)。
+MIT License. See [LICENSE](./LICENSE).
