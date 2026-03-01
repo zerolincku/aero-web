@@ -10,27 +10,31 @@
 
 ## 界面预览
 
-### 1. Hosts 列表
+### 1. Dashboard 首页
+
+![Dashboard](./doc/dashboard.png)
+
+### 2. Hosts 列表
 
 ![Hosts](./doc/host.png)
 
-### 2. Hosts 详情/列表扩展示例
+### 3. Hosts 详情/列表扩展示例
 
 ![Hosts Info](./doc/host-info.png)
 
-### 3. Host Detail 页面示例
+### 4. Host Detail 页面示例
 
 ![Host Detail](./doc/host-info-2.png)
 
-### 4. Regions & AZs
+### 5. Regions & AZs
 
 ![Regions & AZs](./doc/az.png)
 
-### 5. 快捷搜索（Command Palette）
+### 6. 快捷搜索（Command Palette）
 
 ![Quick Search](./doc/quick-search.png)
 
-### 6. 主题与外观设置
+### 7. 主题与外观设置
 
 ![Theme](./doc/theme.png)
 
