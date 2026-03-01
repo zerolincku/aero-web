@@ -269,7 +269,7 @@ export default function RegionsAz() {
                       </span>
                     </div>
                   </div>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground/90">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground/90" aria-label={t('regionsAz.actions.manage')}>
                     <Pencil className="h-4 w-4" />
                   </Button>
                   <Button
@@ -277,6 +277,7 @@ export default function RegionsAz() {
                     size="icon"
                     className="h-8 w-8 text-muted-foreground/90"
                     onClick={() => toggleRegion(region.id)}
+                    aria-label={`${isExpanded ? 'Collapse' : 'Expand'} ${t(region.nameKey)}`}
                   >
                     {isExpanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                   </Button>
@@ -357,7 +358,7 @@ export default function RegionsAz() {
                               >
                                 {t('regionsAz.actions.manage')}
                               </Button>
-                              <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground">
+                              <Button variant="ghost" size="icon" className="h-7 w-7 text-muted-foreground" aria-label={t('regionsAz.table.actions')}>
                                 <Settings className="h-3.5 w-3.5" />
                               </Button>
                             </div>

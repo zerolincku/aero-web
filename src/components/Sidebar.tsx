@@ -23,6 +23,7 @@ import { Button } from './ui/button';
 import { Avatar, AvatarFallback } from './ui/avatar';
 import { useStore } from '../store/useStore';
 import { navRoutes, type RouteConfig } from '../lib/routes';
+import { THEME_COLORS, THEME_SWATCH_COLOR } from '@/theme/palette';
 import {
     Sidebar as SidebarRoot,
     SidebarContent,
@@ -56,7 +57,8 @@ export default function Sidebar() {
     const [selectedIndex, setSelectedIndex] = useState(0);
     const searchInputRef = useRef<HTMLInputElement>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
-    const selectedItemRef = useRef<HTMLDivElement>(null);
+    const selectedItemRef = useRef<HTMLButtonElement>(null);
+    const lastFocusedElementRef = useRef<HTMLElement | null>(null);
 
     const userMenuRef = useRef<HTMLDivElement>(null);
     const themeMenuRef = useRef<HTMLDivElement>(null);
@@ -93,6 +95,7 @@ export default function Sidebar() {
     );
 
     const openSearch = () => {
+        lastFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
         setIsSearchOpen(true);
         setSelectedIndex(0);
     };
@@ -101,6 +104,9 @@ export default function Sidebar() {
         setIsSearchOpen(false);
         setSearchQuery('');
         setSelectedIndex(0);
+        window.setTimeout(() => {
+            lastFocusedElementRef.current?.focus();
+        }, 0);
     };
 
     const handleLogout = () => {
@@ -326,6 +332,7 @@ export default function Sidebar() {
                                                     className="h-8 w-full"
                                                     onClick={() => setTheme(mode)}
                                                     title={t(`common.theme.${mode}`)}
+                                                    aria-label={t(`common.theme.${mode}`)}
                                                 >
                                                     {mode === 'light' && <Sun className="h-4 w-4" />}
                                                     {mode === 'dark' && <Moon className="h-4 w-4" />}
@@ -337,20 +344,18 @@ export default function Sidebar() {
                                     <div className="space-y-1.5">
                                         <label className="text-[10px] font-bold text-muted-foreground uppercase">{t('sidebar.accentColor')}</label>
                                         <div className="grid grid-cols-5 gap-2">
-                                            {(['zinc', 'red', 'blue', 'green', 'orange'] as const).map((color) => (
+                                            {THEME_COLORS.map((color) => (
                                                 <button
                                                     key={color}
+                                                    type="button"
                                                     onClick={() => setThemeColor(color)}
                                                     className={cn(
                                                         'h-6 w-6 rounded-full border shadow-sm transition-transform hover:scale-110 flex items-center justify-center',
                                                         themeColor === color && 'ring-2 ring-primary ring-offset-2',
                                                     )}
-                                                    style={{
-                                                        backgroundColor:
-                                                            color === 'zinc'
-                                                                ? '#18181b'
-                                                                : `hsl(${color === 'red' ? '0 72% 50%' : color === 'blue' ? '221 83% 53%' : color === 'green' ? '142 76% 36%' : '24 95% 53%'})`,
-                                                    }}
+                                                    style={{ backgroundColor: THEME_SWATCH_COLOR[color] }}
+                                                    aria-label={`${t('sidebar.accentColor')} ${color}`}
+                                                    title={color}
                                                 >
                                                     {themeColor === color && <Check className="h-3 w-3 text-white" />}
                                                 </button>
@@ -429,8 +434,16 @@ export default function Sidebar() {
 
             {isSearchOpen && (
                 <div className="fixed inset-0 z-[100] flex items-start justify-center pt-[15vh]">
-                    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm" onClick={closeSearch} />
-                    <div className="relative w-full max-w-xl mx-4 bg-popover rounded-xl border shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+                    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm" onClick={closeSearch} aria-hidden="true" />
+                    <div
+                        role="dialog"
+                        aria-modal="true"
+                        aria-labelledby="command-palette-title"
+                        className="relative w-full max-w-xl mx-4 bg-popover rounded-xl border shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200"
+                    >
+                        <h2 id="command-palette-title" className="sr-only">
+                            {t('sidebar.quickSearch')}
+                        </h2>
                         <div className="flex items-center border-b px-4">
                             <Search className="h-5 w-5 text-muted-foreground" />
                             <input
@@ -438,6 +451,7 @@ export default function Sidebar() {
                                 ref={searchInputRef}
                                 className="h-14 w-full bg-transparent px-3 outline-none text-base font-medium"
                                 placeholder={t('sidebar.searchPlaceholder')}
+                                aria-label={t('sidebar.searchPlaceholder')}
                                 value={searchQuery}
                                 onChange={(e) => {
                                     setSearchQuery(e.target.value);
@@ -464,15 +478,17 @@ export default function Sidebar() {
                         </div>
                         <div className="max-h-[300px] overflow-y-auto p-2" ref={scrollContainerRef}>
                             {filteredItems.map((item, idx) => (
-                                <div
+                                <button
+                                    type="button"
                                     key={item.key}
                                     ref={idx === selectedIndex ? selectedItemRef : null}
                                     onClick={() => {
                                         navigate(item.path);
                                         closeSearch();
                                     }}
+                                    onMouseEnter={() => setSelectedIndex(idx)}
                                     className={cn(
-                                        'flex items-center justify-between px-3 py-3 rounded-lg cursor-pointer transition-colors',
+                                        'flex w-full items-center justify-between px-3 py-3 rounded-lg cursor-pointer transition-colors text-left',
                                         idx === selectedIndex ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/50',
                                     )}
                                 >
@@ -488,7 +504,7 @@ export default function Sidebar() {
                                         </div>
                                     </div>
                                     {idx === selectedIndex && <CornerDownLeft className="h-3.5 w-3.5 opacity-40" />}
-                                </div>
+                                </button>
                             ))}
                             {filteredItems.length === 0 && (
                                 <div className="py-12 text-center text-sm text-muted-foreground">

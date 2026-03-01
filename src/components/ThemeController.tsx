@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { useStore, type ThemeColor } from '@/store/useStore';
+import { useStore } from '@/store/useStore';
+import { THEME_PRIMARY_HSL } from '@/theme/palette';
 
 export default function ThemeController() {
     const { theme, themeColor } = useStore();
@@ -23,15 +24,6 @@ export default function ThemeController() {
     useEffect(() => {
         const root = window.document.documentElement;
 
-        // HSL Color Definitions
-        const colors: Record<ThemeColor, string> = {
-            zinc: "240 5.9% 10%", // Default Shadcn zinc
-            red: "0 72.2% 50.6%",
-            blue: "221.2 83.2% 53.3%",
-            green: "142.1 76.2% 36.3%",
-            orange: "24.6 95% 53.1%",
-        };
-
         if (themeColor === 'zinc') {
             // Reset to default stylesheet values (handles dark/light zinc swap automatically)
             root.style.removeProperty('--primary');
@@ -39,9 +31,9 @@ export default function ThemeController() {
             root.style.removeProperty('--ring');
         } else {
             // Enforce specific color for primary elements
-            root.style.setProperty('--primary', colors[themeColor]);
+            root.style.setProperty('--primary', THEME_PRIMARY_HSL[themeColor]);
             root.style.setProperty('--primary-foreground', '0 0% 100%'); // White text for colored buttons
-            root.style.setProperty('--ring', colors[themeColor]);
+            root.style.setProperty('--ring', THEME_PRIMARY_HSL[themeColor]);
         }
     }, [themeColor]);
 

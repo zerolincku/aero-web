@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -16,6 +16,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination';
 import { cn } from '@/lib/utils';
+import { useDataTable } from '@/hooks/use-data-table';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -217,18 +218,9 @@ export default function Hosts() {
   const [regionFilter, setRegionFilter] = useState('all');
   const [zoneFilter, setZoneFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const pageSize = 5;
-
-  const regionOptions = useMemo(
-    () => Array.from(new Set(HOSTS.map((host) => host.region))),
-    []
-  );
-  const zoneOptions = useMemo(
-    () => Array.from(new Set(HOSTS.map((host) => host.zone))),
-    []
-  );
+  const regionOptions = Array.from(new Set(HOSTS.map((host) => host.region)));
+  const zoneOptions = Array.from(new Set(HOSTS.map((host) => host.zone)));
 
   const filteredHosts = HOSTS.filter((host) => {
     const matchSearch =
@@ -241,95 +233,25 @@ export default function Hosts() {
     return matchSearch && matchRegion && matchZone && matchStatus;
   });
 
-  const totalPages = Math.max(1, Math.ceil(filteredHosts.length / pageSize));
-  const safePage = Math.min(currentPage, totalPages);
-  const startIndex = (safePage - 1) * pageSize;
-  const pagedHosts = filteredHosts.slice(startIndex, startIndex + pageSize);
+  const table = useDataTable({
+    rows: filteredHosts,
+    initialPageSize: 5,
+    pageSizeOptions: [5],
+    maxVisiblePages: 7,
+  });
 
-  const statusStats = useMemo(
-    () => ({
-      online: HOSTS.filter((host) => host.status === 'Online').length,
-      maintenance: HOSTS.filter((host) => host.status === 'Maintenance').length,
-      offline: HOSTS.filter((host) => host.status === 'Offline').length,
-    }),
-    []
-  );
+  const statusStats = {
+    online: HOSTS.filter((host) => host.status === 'Online').length,
+    maintenance: HOSTS.filter((host) => host.status === 'Maintenance').length,
+    offline: HOSTS.filter((host) => host.status === 'Offline').length,
+  };
 
   const clearFilters = () => {
     setSearchTerm('');
     setRegionFilter('all');
     setZoneFilter('all');
     setStatusFilter('all');
-    setCurrentPage(1);
-  };
-
-  const goToPage = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
-
-  const renderPageItems = () => {
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, index) => index + 1).map((page) => (
-        <PaginationItem key={page}>
-          <PaginationLink isActive={safePage === page} onClick={() => goToPage(page)}>
-            {page}
-          </PaginationLink>
-        </PaginationItem>
-      ));
-    }
-
-    const items = [];
-    items.push(
-      <PaginationItem key={1}>
-        <PaginationLink isActive={safePage === 1} onClick={() => goToPage(1)}>
-          1
-        </PaginationLink>
-      </PaginationItem>
-    );
-
-    if (safePage > 3) {
-      items.push(
-        <PaginationItem key="ellipsis-start">
-          <PaginationEllipsis />
-        </PaginationItem>
-      );
-    }
-
-    const start = Math.max(2, safePage - 1);
-    const end = Math.min(totalPages - 1, safePage + 1);
-    const middlePages = Array.from(
-      { length: Math.max(0, end - start + 1) },
-      (_, index) => start + index
-    );
-    items.push(
-      ...middlePages.map((page) => (
-        <PaginationItem key={page}>
-          <PaginationLink isActive={safePage === page} onClick={() => goToPage(page)}>
-            {page}
-          </PaginationLink>
-        </PaginationItem>
-      ))
-    );
-
-    if (safePage < totalPages - 2) {
-      items.push(
-        <PaginationItem key="ellipsis-end">
-          <PaginationEllipsis />
-        </PaginationItem>
-      );
-    }
-
-    items.push(
-      <PaginationItem key={totalPages}>
-        <PaginationLink isActive={safePage === totalPages} onClick={() => goToPage(totalPages)}>
-          {totalPages}
-        </PaginationLink>
-      </PaginationItem>
-    );
-
-    return items;
+    table.resetPage();
   };
 
   return (
@@ -363,7 +285,7 @@ export default function Hosts() {
                 value={searchTerm}
                 onChange={(event) => {
                   setSearchTerm(event.target.value);
-                  setCurrentPage(1);
+                  table.resetPage();
                 }}
                 placeholder={t('hosts.filter.searchPlaceholder')}
                 className="pl-9"
@@ -374,7 +296,7 @@ export default function Hosts() {
               value={regionFilter}
               onValueChange={(value) => {
                 setRegionFilter(value);
-                setCurrentPage(1);
+                table.resetPage();
               }}
             >
               <SelectTrigger>
@@ -394,7 +316,7 @@ export default function Hosts() {
               value={zoneFilter}
               onValueChange={(value) => {
                 setZoneFilter(value);
-                setCurrentPage(1);
+                table.resetPage();
               }}
             >
               <SelectTrigger>
@@ -414,7 +336,7 @@ export default function Hosts() {
               value={statusFilter}
               onValueChange={(value) => {
                 setStatusFilter(value);
-                setCurrentPage(1);
+                table.resetPage();
               }}
             >
               <SelectTrigger>
@@ -433,7 +355,7 @@ export default function Hosts() {
             <div className="flex items-center gap-3">
               <span>
                 {t('hosts.filter.summary', {
-                  shown: filteredHosts.length,
+                  shown: table.totalItems,
                   total: HOSTS.length,
                 })}
               </span>
@@ -478,7 +400,7 @@ export default function Hosts() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {pagedHosts.map((host) => {
+            {table.pagedRows.map((host) => {
               const cpuColor = (host.cpuUsage ?? 0) >= 80 ? 'bg-amber-500' : 'bg-blue-500';
               const storageColor =
                 host.storageUsage === null
@@ -550,7 +472,7 @@ export default function Hosts() {
                     <KvmStatusIcon status={host.kvmStatus} />
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="icon">
+                    <Button variant="ghost" size="icon" aria-label={t('hosts.table.actions')}>
                       <MoreHorizontal className="h-4 w-4" />
                     </Button>
                   </TableCell>
@@ -558,7 +480,7 @@ export default function Hosts() {
               );
             })}
 
-            {pagedHosts.length === 0 && (
+            {table.pagedRows.length === 0 && (
               <TableRow>
                 <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
                   {t('hosts.empty')}
@@ -571,24 +493,36 @@ export default function Hosts() {
         <CardFooter className="flex flex-col gap-3 border-t bg-background px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-muted-foreground">
             {t('hosts.pagination.showing', {
-              start: filteredHosts.length === 0 ? 0 : startIndex + 1,
-              end: Math.min(startIndex + pageSize, filteredHosts.length),
-              total: filteredHosts.length,
+              start: table.startItem,
+              end: table.endItem,
+              total: table.totalItems,
             })}
           </div>
           <Pagination className="mx-0 w-auto justify-end">
             <PaginationContent>
               <PaginationItem>
                 <PaginationPrevious
-                  onClick={() => goToPage(safePage - 1)}
-                  className={safePage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  onClick={() => table.setPage(table.currentPage - 1)}
+                  className={table.currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                 />
               </PaginationItem>
-              {renderPageItems()}
+              {table.paginationTokens.map((token) => (
+                typeof token === 'number' ? (
+                  <PaginationItem key={token}>
+                    <PaginationLink isActive={table.currentPage === token} onClick={() => table.setPage(token)}>
+                      {token}
+                    </PaginationLink>
+                  </PaginationItem>
+                ) : (
+                  <PaginationItem key={token}>
+                    <PaginationEllipsis />
+                  </PaginationItem>
+                )
+              ))}
               <PaginationItem>
                 <PaginationNext
-                  onClick={() => goToPage(safePage + 1)}
-                  className={safePage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                  onClick={() => table.setPage(table.currentPage + 1)}
+                  className={table.currentPage === table.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                 />
               </PaginationItem>
             </PaginationContent>

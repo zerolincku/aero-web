@@ -2,9 +2,29 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
+import { createRequire } from 'node:module'
+
+const require = createRequire(import.meta.url)
+
+const getReactCompilerBabelPlugin = () => {
+  try {
+    require.resolve('babel-plugin-react-compiler')
+    return ['babel-plugin-react-compiler']
+  } catch {
+    return []
+  }
+}
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react({
+      babel: {
+        // Keep React Compiler plugin first in the Babel plugin chain.
+        plugins: getReactCompilerBabelPlugin(),
+      },
+    }),
+    tailwindcss(),
+  ],
   resolve: {
     alias: { "@": path.resolve(__dirname, "./src") },
   },

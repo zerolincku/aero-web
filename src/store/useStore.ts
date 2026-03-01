@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 import { APP_CONFIG } from '@/config/app';
 import type { AuthSession } from '@/api/modules/auth';
 import { clearAccessToken, hasAccessToken, setAccessToken } from '@/auth/session';
+import type { ThemeColor } from '@/theme/palette';
 
 export type User = AuthSession['user'];
 
@@ -15,7 +16,6 @@ export interface Toast {
 }
 
 export type Theme = 'light' | 'dark' | 'system';
-export type ThemeColor = 'zinc' | 'red' | 'blue' | 'green' | 'orange';
 
 interface CounterSlice {
   count: number;

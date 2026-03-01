@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -130,27 +130,24 @@ export default function HostDetail() {
 
   const hostName = decodeURIComponent(hostId);
 
-  const host = useMemo(
-    () => ({
-      name: hostName,
-      ip: '192.168.1.105',
-      uuid: '550e8400-e29b-41d4-a716-446655440000',
-      regionLabel: 'NYC Region',
-      cpuUsed: 12,
-      cpuTotal: 64,
-      cpuPercent: 19,
-      memoryUsed: 128,
-      memoryTotal: 256,
-      memoryPercent: 50,
-      storageUsed: 4.5,
-      storageTotal: 10,
-      storagePercent: 45,
-      vmTotal: 12,
-      vcpuAvailable: 32,
-      vcpuTotal: 64,
-    }),
-    [hostName],
-  );
+  const host = {
+    name: hostName,
+    ip: '192.168.1.105',
+    uuid: '550e8400-e29b-41d4-a716-446655440000',
+    regionLabel: 'NYC Region',
+    cpuUsed: 12,
+    cpuTotal: 64,
+    cpuPercent: 19,
+    memoryUsed: 128,
+    memoryTotal: 256,
+    memoryPercent: 50,
+    storageUsed: 4.5,
+    storageTotal: 10,
+    storagePercent: 45,
+    vmTotal: 12,
+    vcpuAvailable: 32,
+    vcpuTotal: 64,
+  };
 
   const tabItems: Array<{ key: DetailTab; label: string; badge?: string }> = [
     { key: 'overview', label: t('hostDetail.tabs.overview', { defaultValue: 'Overview' }) },
@@ -523,7 +520,7 @@ export default function HostDetail() {
                     </TableCell>
 
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="icon">
+                      <Button variant="ghost" size="icon" aria-label={t('hostDetail.vm.table.actions', { defaultValue: 'Actions' })}>
                         <Settings className="h-4 w-4" />
                       </Button>
                     </TableCell>

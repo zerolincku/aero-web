@@ -24,6 +24,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '../components/ui/select';
+import { useDataTable } from '@/hooks/use-data-table';
 
 const ORG_TYPE_LABEL_KEY: Record<string, string> = {
     University: 'orgs.types.university',
@@ -57,8 +58,6 @@ const allOrgs = [
 export default function Orgs() {
     const { t } = useTranslation();
     const { addToast } = useStore();
-    const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage, setItemsPerPage] = useState('10');
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
     // Filter States
@@ -79,11 +78,12 @@ export default function Orgs() {
         setTypeFilter('All');
         setStatusFilter('All');
         setLocationFilter('');
+        table.resetPage();
     };
 
-    // Advanced Filter Logic
     const filteredData = allOrgs.filter((item) => {
-        const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase()) ||
+        const matchesSearch =
+            item.name.toLowerCase().includes(search.toLowerCase()) ||
             item.head.toLowerCase().includes(search.toLowerCase());
         const matchesType = typeFilter === 'All' || item.type === typeFilter;
         const matchesStatus = statusFilter === 'All' || item.status === statusFilter;
@@ -92,53 +92,11 @@ export default function Orgs() {
         return matchesSearch && matchesType && matchesStatus && matchesLocation;
     });
 
-    // Pagination Logic
-    const pageSize = parseInt(itemsPerPage);
-    const totalPages = Math.ceil(filteredData.length / pageSize);
-    const startIndex = (currentPage - 1) * pageSize;
-    const currentData = filteredData.slice(startIndex, startIndex + pageSize);
-
-    const goToPage = (page: number) => {
-        if (page >= 1 && page <= totalPages) setCurrentPage(page);
-    };
-
-    const renderPageItems = () => {
-        const items = [];
-        const maxVisible = 5;
-        if (totalPages <= maxVisible) {
-            for (let i = 1; i <= totalPages; i++) {
-                items.push(
-                    <PaginationItem key={i}>
-                        <PaginationLink onClick={() => goToPage(i)} isActive={currentPage === i}>{i}</PaginationLink>
-                    </PaginationItem>,
-                );
-            }
-        } else {
-            items.push(
-                <PaginationItem key={1}>
-                    <PaginationLink onClick={() => goToPage(1)} isActive={currentPage === 1}>1</PaginationLink>
-                </PaginationItem>,
-            );
-            if (currentPage > 3) items.push(<PaginationEllipsis key="ellipsis-start" />);
-            const start = Math.max(2, currentPage - 1);
-            const end = Math.min(totalPages - 1, currentPage + 1);
-            for (let i = start; i <= end; i++) {
-                if (i === 1 || i === totalPages) continue;
-                items.push(
-                    <PaginationItem key={i}>
-                        <PaginationLink onClick={() => goToPage(i)} isActive={currentPage === i}>{i}</PaginationLink>
-                    </PaginationItem>,
-                );
-            }
-            if (currentPage < totalPages - 2) items.push(<PaginationEllipsis key="ellipsis-end" />);
-            items.push(
-                <PaginationItem key={totalPages}>
-                    <PaginationLink onClick={() => goToPage(totalPages)} isActive={currentPage === totalPages}>{totalPages}</PaginationLink>
-                </PaginationItem>,
-            );
-        }
-        return items;
-    };
+    const table = useDataTable({
+        rows: filteredData,
+        initialPageSize: 10,
+        pageSizeOptions: [10, 25, 50, 100],
+    });
 
     return (
         <div className="space-y-6">
@@ -164,7 +122,7 @@ export default function Orgs() {
                                     value={search}
                                     onChange={(e) => {
                                         setSearch(e.target.value);
-                                        setCurrentPage(1);
+                                        table.resetPage();
                                     }}
                                 />
                             </div>
@@ -186,7 +144,7 @@ export default function Orgs() {
                             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                                 <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterType')}</Label>
-                                    <Select value={typeFilter} onValueChange={(val) => { setTypeFilter(val); setCurrentPage(1); }}>
+                                    <Select value={typeFilter} onValueChange={(val) => { setTypeFilter(val); table.resetPage(); }}>
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectTypePlaceholder')} />
                                         </SelectTrigger>
@@ -202,7 +160,7 @@ export default function Orgs() {
                                 </div>
                                 <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterStatus')}</Label>
-                                    <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); setCurrentPage(1); }}>
+                                    <Select value={statusFilter} onValueChange={(val) => { setStatusFilter(val); table.resetPage(); }}>
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectStatusPlaceholder')} />
                                         </SelectTrigger>
@@ -219,7 +177,7 @@ export default function Orgs() {
                                         placeholder={t('orgs.locationPlaceholder')}
                                         className="h-9"
                                         value={locationFilter}
-                                        onChange={(e) => { setLocationFilter(e.target.value); setCurrentPage(1); }}
+                                        onChange={(e) => { setLocationFilter(e.target.value); table.resetPage(); }}
                                     />
                                 </div>
                                 <div className="flex items-end gap-2">
@@ -244,8 +202,8 @@ export default function Orgs() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {currentData.length > 0 ? (
-                                currentData.map((item) => (
+                            {table.pagedRows.length > 0 ? (
+                                table.pagedRows.map((item) => (
                                     <TableRow key={item.id}>
                                         <TableCell className="font-semibold">{item.name}</TableCell>
                                         <TableCell>
@@ -266,7 +224,7 @@ export default function Orgs() {
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon" className="h-8 w-8">
+                                            <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={t('orgs.columns.actions')}>
                                                 <MoreHorizontal className="h-4 w-4" />
                                             </Button>
                                         </TableCell>
@@ -288,15 +246,16 @@ export default function Orgs() {
                         <div className="flex items-center gap-2">
                             <span>{t('common.actions.show')}</span>
                             <div className="w-20">
-                                <Select value={itemsPerPage} onValueChange={(val) => { setItemsPerPage(val); setCurrentPage(1); }}>
+                                <Select value={table.pageSizeValue} onValueChange={table.setPageSizeValue}>
                                     <SelectTrigger className="h-8">
                                         <SelectValue placeholder="5" />
                                     </SelectTrigger>
                                     <SelectContent side="top">
-                                        <SelectItem value="10">10</SelectItem>
-                                        <SelectItem value="25">25</SelectItem>
-                                        <SelectItem value="50">50</SelectItem>
-                                        <SelectItem value="100">100</SelectItem>
+                                        {table.pageSizeOptions.map((size) => (
+                                            <SelectItem key={size} value={String(size)}>
+                                                {size}
+                                            </SelectItem>
+                                        ))}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -304,9 +263,9 @@ export default function Orgs() {
                         </div>
                         <span className="opacity-70">
                             {t('orgs.showingRange', {
-                                start: filteredData.length === 0 ? 0 : startIndex + 1,
-                                end: Math.min(startIndex + pageSize, filteredData.length),
-                                total: filteredData.length,
+                                start: table.startItem,
+                                end: table.endItem,
+                                total: table.totalItems,
                             })}
                         </span>
                     </div>
@@ -315,15 +274,25 @@ export default function Orgs() {
                         <PaginationContent>
                             <PaginationItem>
                                 <PaginationPrevious
-                                    onClick={() => goToPage(currentPage - 1)}
-                                    className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                                    onClick={() => table.setPage(table.currentPage - 1)}
+                                    className={table.currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                                 />
                             </PaginationItem>
-                            {renderPageItems()}
+                            {table.paginationTokens.map((token) => (
+                                typeof token === 'number' ? (
+                                    <PaginationItem key={token}>
+                                        <PaginationLink onClick={() => table.setPage(token)} isActive={table.currentPage === token}>{token}</PaginationLink>
+                                    </PaginationItem>
+                                ) : (
+                                    <PaginationItem key={token}>
+                                        <PaginationEllipsis />
+                                    </PaginationItem>
+                                )
+                            ))}
                             <PaginationItem>
                                 <PaginationNext
-                                    onClick={() => goToPage(currentPage + 1)}
-                                    className={currentPage === totalPages || totalPages === 0 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                                    onClick={() => table.setPage(table.currentPage + 1)}
+                                    className={table.currentPage === table.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                                 />
                             </PaginationItem>
                         </PaginationContent>

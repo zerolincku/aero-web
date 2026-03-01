@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { resources } from '@/i18n/resources';
+import { reportLocaleKeyDiff, reportMissingRuntimeKey } from '@/i18n/dev-check';
 
 const LANGUAGE_STORAGE_KEY = 'app_language';
 export const SUPPORTED_LANGUAGES = ['en', 'zh-CN'] as const;
@@ -33,7 +34,13 @@ void i18n
         interpolation: {
             escapeValue: false,
         },
+        parseMissingKeyHandler: (key) => {
+            reportMissingRuntimeKey(key);
+            return key;
+        },
     });
+
+reportLocaleKeyDiff(resources);
 
 i18n.on('languageChanged', (language) => {
     if (typeof window !== 'undefined') {
