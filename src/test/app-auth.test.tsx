@@ -18,9 +18,9 @@ describe('App auth routing', () => {
   });
 
   it('allows authenticated users to access dashboard', async () => {
-    useStore.setState({
-      isAuthenticated: true,
-      currentUser: {
+    useStore.getState().setSession({
+      accessToken: 'test-access-token',
+      user: {
         id: '1',
         name: 'Admin User',
         email: 'admin@example.com',
@@ -32,7 +32,6 @@ describe('App auth routing', () => {
     window.location.hash = '#/';
     render(<App />);
 
-    expect(await screen.findByText('Overview of your application state and metrics.')).toBeInTheDocument();
+    expect(await screen.findByText('Infrastructure Overview')).toBeInTheDocument();
   });
 });
-
