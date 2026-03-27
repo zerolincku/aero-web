@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { buildPaginationTokens, type PaginationToken } from '@/lib/pagination';
 
 type UseDataTableOptions<T> = {
@@ -31,18 +31,42 @@ export function useDataTable<T>({
   maxVisiblePages = 5,
 }: UseDataTableOptions<T>): UseDataTableResult<T> {
   const [currentPage, setCurrentPage] = useState(1);
-  const [pageSizeValue, setPageSizeValue] = useState(String(initialPageSize));
+  const [pageSizeValue, setInternalPageSizeValue] = useState(String(initialPageSize));
 
-  const pageSize = Number.parseInt(pageSizeValue, 10) || initialPageSize;
+  const pageSize = useMemo(
+    () => Number.parseInt(pageSizeValue, 10) || initialPageSize,
+    [initialPageSize, pageSizeValue],
+  );
   const totalItems = rows.length;
-  const totalPages = Math.max(1, Math.ceil(totalItems / pageSize));
+  const totalPages = useMemo(() => Math.max(1, Math.ceil(totalItems / pageSize)), [pageSize, totalItems]);
   const safePage = Math.min(currentPage, totalPages);
   const startIndex = (safePage - 1) * pageSize;
-  const pagedRows = rows.slice(startIndex, startIndex + pageSize);
+  const pagedRows = useMemo(
+    () => rows.slice(startIndex, startIndex + pageSize),
+    [pageSize, rows, startIndex],
+  );
 
-  const paginationTokens = buildPaginationTokens(safePage, totalPages, maxVisiblePages);
+  const paginationTokens = useMemo(
+    () => buildPaginationTokens(safePage, totalPages, maxVisiblePages),
+    [maxVisiblePages, safePage, totalPages],
+  );
 
-  return {
+  const setPage = useCallback((page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  }, [totalPages]);
+
+  const setPageSizeValue = useCallback((value: string) => {
+    setInternalPageSizeValue(value);
+    setCurrentPage(1);
+  }, []);
+
+  const resetPage = useCallback(() => setCurrentPage(1), []);
+  const startItem = totalItems === 0 ? 0 : startIndex + 1;
+  const endItem = Math.min(startIndex + pageSize, totalItems);
+
+  return useMemo(() => ({
     pagedRows,
     totalItems,
     totalPages,
@@ -50,18 +74,25 @@ export function useDataTable<T>({
     pageSize,
     pageSizeValue,
     pageSizeOptions,
-    startItem: totalItems === 0 ? 0 : startIndex + 1,
-    endItem: Math.min(startIndex + pageSize, totalItems),
+    startItem,
+    endItem,
     paginationTokens,
-    setPage: (page) => {
-      if (page >= 1 && page <= totalPages) {
-        setCurrentPage(page);
-      }
-    },
-    setPageSizeValue: (value) => {
-      setPageSizeValue(value);
-      setCurrentPage(1);
-    },
-    resetPage: () => setCurrentPage(1),
-  };
+    setPage,
+    setPageSizeValue,
+    resetPage,
+  }), [
+    endItem,
+    pageSize,
+    pageSizeOptions,
+    pageSizeValue,
+    pagedRows,
+    paginationTokens,
+    resetPage,
+    startItem,
+    safePage,
+    setPage,
+    setPageSizeValue,
+    totalItems,
+    totalPages,
+  ]);
 }
