@@ -1,8 +1,5 @@
 import React, { Suspense, useEffect } from 'react';
 import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
-import Layout from './components/Layout';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
 import ThemeController from './components/ThemeController';
 import Loading from './components/Loading';
 import { useStore } from './store/useStore';
@@ -15,6 +12,9 @@ import { ROUTER_CONFIG } from '@/config/router';
 import AppErrorBoundary from '@/components/AppErrorBoundary';
 import './i18n';
 
+const Layout = React.lazy(() => import('./components/Layout'));
+const LoginPage = React.lazy(() => import('./pages/Login'));
+const NotFoundPage = React.lazy(() => import('./pages/NotFound'));
 const HostDetailPage = React.lazy(() => import('./pages/HostDetail'));
 
 function ProtectedRoute({ children }: { children?: React.ReactNode }) {
@@ -82,13 +82,22 @@ export default function App() {
       <ActiveRouter basename={ROUTER_CONFIG.basename || undefined}>
         <ThemeController />
         <Routes>
-          <Route path={ROUTER_CONFIG.loginPath} element={<Login />} />
+          <Route
+            path={ROUTER_CONFIG.loginPath}
+            element={
+              <Suspense fallback={<Loading />}>
+                <LoginPage />
+              </Suspense>
+            }
+          />
 
           <Route
             path="/"
             element={
               <ProtectedRoute>
-                <Layout />
+                <Suspense fallback={<Loading />}>
+                  <Layout />
+                </Suspense>
               </ProtectedRoute>
             }
           >
@@ -101,7 +110,14 @@ export default function App() {
                 </Suspense>
               }
             />
-            <Route path="*" element={<NotFound />} />
+            <Route
+              path="*"
+              element={
+                <Suspense fallback={<Loading />}>
+                  <NotFoundPage />
+                </Suspense>
+              }
+            />
           </Route>
         </Routes>
         <Toaster position="top-center" />
