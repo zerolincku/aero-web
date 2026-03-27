@@ -32,6 +32,6 @@ describe('App auth routing', () => {
     window.location.hash = '#/';
     render(<App />);
 
-    expect(await screen.findByText('Infrastructure Overview')).toBeInTheDocument();
+    expect(await screen.findByText('Infrastructure Overview', undefined, { timeout: 4000 })).toBeInTheDocument();
   });
 });

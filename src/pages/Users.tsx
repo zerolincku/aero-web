@@ -19,6 +19,7 @@ import {
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useDataTable } from '@/hooks/use-data-table';
 import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 
 const ROLE_LABEL_KEY: Record<string, string> = {
     Admin: 'common.role.admin',
@@ -52,6 +53,7 @@ export default function Users() {
     const { t } = useTranslation();
     const addToast = useStore((state) => state.addToast);
     const [searchTerm, setSearchTerm] = useState('');
+    const debouncedSearchTerm = useDebouncedValue(searchTerm, 180);
 
     const handleAddUser = () => {
         addToast({
@@ -60,7 +62,7 @@ export default function Users() {
         });
     };
 
-    const query = searchTerm.trim().toLowerCase();
+    const query = debouncedSearchTerm.trim().toLowerCase();
     const filteredUsers = allUsers.filter((user) =>
         !query ||
         user.name.toLowerCase().includes(query) ||

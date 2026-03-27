@@ -26,6 +26,7 @@ import {
 } from '../components/ui/select';
 import { useDataTable } from '@/hooks/use-data-table';
 import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 
 const ORG_TYPE_LABEL_KEY: Record<string, string> = {
     University: 'orgs.types.university',
@@ -66,6 +67,8 @@ export default function Orgs() {
     const [typeFilter, setTypeFilter] = useState<string | undefined>(undefined);
     const [statusFilter, setStatusFilter] = useState<'Active' | 'Inactive' | undefined>(undefined);
     const [locationFilter, setLocationFilter] = useState('');
+    const debouncedSearch = useDebouncedValue(search, 180);
+    const debouncedLocation = useDebouncedValue(locationFilter, 180);
 
     const handleAddOrg = () => {
         addToast({
@@ -82,8 +85,8 @@ export default function Orgs() {
         table.resetPage();
     };
 
-    const searchQuery = search.trim().toLowerCase();
-    const locationQuery = locationFilter.trim().toLowerCase();
+    const searchQuery = debouncedSearch.trim().toLowerCase();
+    const locationQuery = debouncedLocation.trim().toLowerCase();
     const filteredData = allOrgs.filter((item) => {
         const matchesSearch =
             !searchQuery ||

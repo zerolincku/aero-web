@@ -17,6 +17,7 @@ import {
 } from '@/components/ui/pagination';
 import { cn } from '@/lib/utils';
 import { useDataTable } from '@/hooks/use-data-table';
+import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import {
   AlertTriangle,
   CheckCircle2,
@@ -231,11 +232,12 @@ function KvmStatusIcon({ status }: { status: KvmStatus }) {
 export default function Hosts() {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
+  const debouncedSearchTerm = useDebouncedValue(searchTerm, 180);
   const [regionFilter, setRegionFilter] = useState<string | undefined>(undefined);
   const [zoneFilter, setZoneFilter] = useState<string | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<HostStatus | undefined>(undefined);
 
-  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const normalizedSearch = debouncedSearchTerm.trim().toLowerCase();
   const filteredHosts = HOSTS.filter((host) => {
     const matchSearch =
       !normalizedSearch ||
