@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../components/ui/table';
-import { Plus, Search, MoreHorizontal, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Search, Filter, X, ChevronDown, ChevronUp } from 'lucide-react';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useStore } from '../store/useStore';
@@ -25,6 +25,7 @@ import {
     SelectValue,
 } from '../components/ui/select';
 import { useDataTable } from '@/hooks/use-data-table';
+import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
 
 const ORG_TYPE_LABEL_KEY: Record<string, string> = {
     University: 'orgs.types.university',
@@ -243,9 +244,21 @@ export default function Orgs() {
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon" className="h-8 w-8" aria-label={t('orgs.columns.actions')}>
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
+                                            <ActionMenu ariaLabel={t('orgs.columns.actions')} contentClassName="w-36 p-1">
+                                                {({ closeMenu }) => (
+                                                    <ActionMenuItem
+                                                        onClick={() => {
+                                                            closeMenu();
+                                                            addToast({
+                                                                title: t('orgs.toast.title'),
+                                                                description: t('orgs.toast.description'),
+                                                            });
+                                                        }}
+                                                    >
+                                                        {t('common.actions.navigate')}
+                                                    </ActionMenuItem>
+                                                )}
+                                            </ActionMenu>
                                         </TableCell>
                                     </TableRow>
                                 ))

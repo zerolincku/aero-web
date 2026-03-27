@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import { Button } from '../components/ui/button';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '../components/ui/table';
 import { Avatar, AvatarFallback } from '../components/ui/avatar';
-import { Plus, Search, MoreHorizontal } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { Input } from '../components/ui/input';
 import { useStore } from '../store/useStore';
 import {
@@ -18,6 +18,7 @@ import {
 } from '../components/ui/pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useDataTable } from '@/hooks/use-data-table';
+import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
 
 const ROLE_LABEL_KEY: Record<string, string> = {
     Admin: 'common.role.admin',
@@ -146,9 +147,21 @@ export default function Users() {
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-right">
-                                            <Button variant="ghost" size="icon" aria-label={t('users.columns.actions')}>
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
+                                            <ActionMenu ariaLabel={t('users.columns.actions')} contentClassName="w-36 p-1">
+                                                {({ closeMenu }) => (
+                                                    <ActionMenuItem
+                                                        onClick={() => {
+                                                            closeMenu();
+                                                            addToast({
+                                                                title: t('users.toast.title'),
+                                                                description: t('users.toast.description'),
+                                                            });
+                                                        }}
+                                                    >
+                                                        {t('common.actions.select')}
+                                                    </ActionMenuItem>
+                                                )}
+                                            </ActionMenu>
                                         </TableCell>
                                     </TableRow>
                                 ))
