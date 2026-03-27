@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { ChevronRight, Globe } from 'lucide-react';
@@ -7,13 +7,32 @@ import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
 
+const findRouteWithParents = (
+    routes: RouteConfig[],
+    targetPath: string,
+    parents: RouteConfig[] = [],
+): { route: RouteConfig; ancestors: RouteConfig[] } | null => {
+    for (const route of routes) {
+        if (route.path === targetPath) {
+            return { route, ancestors: parents };
+        }
+        if (route.children) {
+            const found = findRouteWithParents(route.children, targetPath, [...parents, route]);
+            if (found) {
+                return found;
+            }
+        }
+    }
+    return null;
+};
+
 export default function Layout() {
     const location = useLocation();
     const { t, i18n } = useTranslation();
     const languageValue = i18n.resolvedLanguage === 'zh-CN' ? 'zh-CN' : 'en';
 
     // 深度查找当前路由及其祖先
-    const breadcrumbs = (() => {
+    const breadcrumbs = useMemo(() => {
         if (location.pathname.startsWith('/infrastructure/hosts/')) {
             const rawHostId = location.pathname.replace('/infrastructure/hosts/', '').split('/')[0];
             const hostId = decodeURIComponent(rawHostId || '');
@@ -39,23 +58,6 @@ export default function Layout() {
             ];
         }
 
-        const findRouteWithParents = (
-            routes: RouteConfig[],
-            targetPath: string,
-            parents: RouteConfig[] = []
-        ): { route: RouteConfig, ancestors: RouteConfig[] } | null => {
-            for (const route of routes) {
-                if (route.path === targetPath) {
-                    return { route, ancestors: parents };
-                }
-                if (route.children) {
-                    const found = findRouteWithParents(route.children, targetPath, [...parents, route]);
-                    if (found) return found;
-                }
-            }
-            return null;
-        };
-
         const matchResult = findRouteWithParents(navRoutes, location.pathname);
 
         if (!matchResult) {
@@ -78,7 +80,7 @@ export default function Layout() {
         });
 
         return crumbs;
-    })();
+    }, [location.pathname]);
 
     return (
         <SidebarProvider
