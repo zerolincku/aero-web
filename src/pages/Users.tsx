@@ -49,7 +49,7 @@ const allUsers = [
 
 export default function Users() {
     const { t } = useTranslation();
-    const { addToast } = useStore();
+    const addToast = useStore((state) => state.addToast);
     const [searchTerm, setSearchTerm] = useState('');
 
     const handleAddUser = () => {

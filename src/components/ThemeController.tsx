@@ -1,9 +1,15 @@
 import { useEffect } from 'react';
 import { useStore } from '@/store/useStore';
+import { useShallow } from 'zustand/react/shallow';
 import { THEME_PRIMARY_HSL } from '@/theme/palette';
 
 export default function ThemeController() {
-    const { theme, themeColor } = useStore();
+    const { theme, themeColor } = useStore(
+        useShallow((store) => ({
+            theme: store.theme,
+            themeColor: store.themeColor,
+        })),
+    );
 
     // Handle Light/Dark/System Mode
     useEffect(() => {

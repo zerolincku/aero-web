@@ -8,6 +8,7 @@ import { useStore } from '../store/useStore';
 import { LogOut, Save, User as UserIcon, Languages } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../components/ui/select';
+import { useShallow } from 'zustand/react/shallow';
 
 const ROLE_LABEL_KEY: Record<string, string> = {
     Admin: 'common.role.admin',
@@ -17,7 +18,14 @@ const ROLE_LABEL_KEY: Record<string, string> = {
 };
 
 export default function Settings() {
-    const { currentUser, updateUser, logout, addToast } = useStore();
+    const { currentUser, updateUser, logout, addToast } = useStore(
+        useShallow((state) => ({
+            currentUser: state.currentUser,
+            updateUser: state.updateUser,
+            logout: state.logout,
+            addToast: state.addToast,
+        })),
+    );
     const navigate = useNavigate();
     const { t, i18n } = useTranslation();
 

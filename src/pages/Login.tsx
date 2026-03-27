@@ -9,10 +9,16 @@ import { Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { loginWithPassword } from '@/api/modules/auth';
 import { ApiRequestError } from '@/api/error';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function Login() {
     const navigate = useNavigate();
-    const { setSession, addToast } = useStore();
+    const { setSession, addToast } = useStore(
+        useShallow((state) => ({
+            setSession: state.setSession,
+            addToast: state.addToast,
+        })),
+    );
     const { t } = useTranslation();
     const [email, setEmail] = useState('admin@example.com');
     const [password, setPassword] = useState('password');

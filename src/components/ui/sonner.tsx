@@ -12,7 +12,7 @@ import {
 type ToasterProps = React.ComponentProps<typeof Sonner>
 
 function Toaster({ ...props }: ToasterProps) {
-    const { theme } = useStore()
+    const theme = useStore((state) => state.theme)
 
     return (
         <Sonner

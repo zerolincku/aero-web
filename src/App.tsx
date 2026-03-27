@@ -6,6 +6,7 @@ import NotFound from './pages/NotFound';
 import ThemeController from './components/ThemeController';
 import Loading from './components/Loading';
 import { useStore } from './store/useStore';
+import { useShallow } from 'zustand/react/shallow';
 import { navRoutes, type RouteConfig } from '@/lib/routes';
 import { Toaster } from '@/components/ui/sonner';
 import { APP_CONFIG } from '@/config/app';
@@ -17,7 +18,7 @@ import './i18n';
 const HostDetailPage = React.lazy(() => import('./pages/HostDetail'));
 
 function ProtectedRoute({ children }: { children?: React.ReactNode }) {
-  const { isAuthenticated } = useStore();
+  const isAuthenticated = useStore((state) => state.isAuthenticated);
   if (!isAuthenticated) {
     return <Navigate to={ROUTER_CONFIG.loginPath} replace />;
   }
@@ -52,7 +53,12 @@ const renderRoutes = (routes: RouteConfig[]): React.ReactNode[] => {
 };
 
 export default function App() {
-  const { syncAuthFromStorage, handleUnauthorized } = useStore();
+  const { syncAuthFromStorage, handleUnauthorized } = useStore(
+    useShallow((state) => ({
+      syncAuthFromStorage: state.syncAuthFromStorage,
+      handleUnauthorized: state.handleUnauthorized,
+    })),
+  );
   const ActiveRouter = ROUTER_CONFIG.mode === 'hash' ? HashRouter : BrowserRouter;
 
   useEffect(() => {

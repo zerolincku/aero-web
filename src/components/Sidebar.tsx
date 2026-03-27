@@ -18,6 +18,7 @@ import {
     Box,
     type LucideIcon,
 } from 'lucide-react';
+import { useShallow } from 'zustand/react/shallow';
 import { cn } from '../lib/utils';
 import { Button } from './ui/button';
 import { Avatar, AvatarFallback } from './ui/avatar';
@@ -45,7 +46,16 @@ export default function Sidebar() {
     const { state } = useSidebar();
     const isCollapsed = state === 'collapsed';
 
-    const { currentUser, logout, theme, setTheme, themeColor, setThemeColor } = useStore();
+    const { currentUser, logout, theme, setTheme, themeColor, setThemeColor } = useStore(
+        useShallow((store) => ({
+            currentUser: store.currentUser,
+            logout: store.logout,
+            theme: store.theme,
+            setTheme: store.setTheme,
+            themeColor: store.themeColor,
+            setThemeColor: store.setThemeColor,
+        })),
+    );
 
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
     const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);

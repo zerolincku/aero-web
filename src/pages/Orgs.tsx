@@ -57,7 +57,7 @@ const allOrgs = [
 
 export default function Orgs() {
     const { t } = useTranslation();
-    const { addToast } = useStore();
+    const addToast = useStore((state) => state.addToast);
     const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
 
     // Filter States
