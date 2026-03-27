@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -170,6 +170,22 @@ const HOSTS: Host[] = [
   },
 ];
 
+const HOST_REGION_OPTIONS = Array.from(new Set(HOSTS.map((host) => host.region)));
+const HOST_ZONE_OPTIONS = Array.from(new Set(HOSTS.map((host) => host.zone)));
+const HOST_STATUS_STATS = HOSTS.reduce(
+  (stats, host) => {
+    if (host.status === 'Online') {
+      stats.online += 1;
+    } else if (host.status === 'Maintenance') {
+      stats.maintenance += 1;
+    } else if (host.status === 'Offline') {
+      stats.offline += 1;
+    }
+    return stats;
+  },
+  { online: 0, maintenance: 0, offline: 0 },
+);
+
 function UsageCell({
   value,
   colorClass,
@@ -219,29 +235,18 @@ export default function Hosts() {
   const [zoneFilter, setZoneFilter] = useState<string | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<HostStatus | undefined>(undefined);
 
-  const regionOptions = useMemo(
-    () => Array.from(new Set(HOSTS.map((host) => host.region))),
-    [],
-  );
-  const zoneOptions = useMemo(
-    () => Array.from(new Set(HOSTS.map((host) => host.zone))),
-    [],
-  );
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredHosts = HOSTS.filter((host) => {
+    const matchSearch =
+      !normalizedSearch ||
+      host.hostname.toLowerCase().includes(normalizedSearch) ||
+      host.ipAddress.includes(normalizedSearch);
+    const matchRegion = !regionFilter || host.region === regionFilter;
+    const matchZone = !zoneFilter || host.zone === zoneFilter;
+    const matchStatus = !statusFilter || host.status === statusFilter;
 
-  const filteredHosts = useMemo(() => {
-    const normalizedSearch = searchTerm.trim().toLowerCase();
-    return HOSTS.filter((host) => {
-      const matchSearch =
-        !normalizedSearch ||
-        host.hostname.toLowerCase().includes(normalizedSearch) ||
-        host.ipAddress.includes(normalizedSearch);
-      const matchRegion = !regionFilter || host.region === regionFilter;
-      const matchZone = !zoneFilter || host.zone === zoneFilter;
-      const matchStatus = !statusFilter || host.status === statusFilter;
-
-      return matchSearch && matchRegion && matchZone && matchStatus;
-    });
-  }, [regionFilter, searchTerm, statusFilter, zoneFilter]);
+    return matchSearch && matchRegion && matchZone && matchStatus;
+  });
 
   const table = useDataTable({
     rows: filteredHosts,
@@ -250,19 +255,7 @@ export default function Hosts() {
     maxVisiblePages: 7,
   });
 
-  const statusStats = useMemo(() => {
-    const stats = { online: 0, maintenance: 0, offline: 0 };
-    for (const host of HOSTS) {
-      if (host.status === 'Online') {
-        stats.online += 1;
-      } else if (host.status === 'Maintenance') {
-        stats.maintenance += 1;
-      } else if (host.status === 'Offline') {
-        stats.offline += 1;
-      }
-    }
-    return stats;
-  }, []);
+  const statusStats = HOST_STATUS_STATS;
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -327,7 +320,7 @@ export default function Hosts() {
                 <SelectValue placeholder={t('hosts.filter.allRegions')} />
               </SelectTrigger>
               <SelectContent>
-                {regionOptions.map((region) => (
+                {HOST_REGION_OPTIONS.map((region) => (
                   <SelectItem key={region} value={region}>
                     {region}
                   </SelectItem>
@@ -352,7 +345,7 @@ export default function Hosts() {
                 <SelectValue placeholder={t('hosts.filter.allZones')} />
               </SelectTrigger>
               <SelectContent>
-                {zoneOptions.map((zone) => (
+                {HOST_ZONE_OPTIONS.map((zone) => (
                   <SelectItem key={zone} value={zone}>
                     {zone}
                   </SelectItem>

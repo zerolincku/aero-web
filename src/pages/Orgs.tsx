@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -81,22 +81,19 @@ export default function Orgs() {
         table.resetPage();
     };
 
-    const filteredData = useMemo(() => {
-        const searchQuery = search.trim().toLowerCase();
-        const locationQuery = locationFilter.trim().toLowerCase();
+    const searchQuery = search.trim().toLowerCase();
+    const locationQuery = locationFilter.trim().toLowerCase();
+    const filteredData = allOrgs.filter((item) => {
+        const matchesSearch =
+            !searchQuery ||
+            item.name.toLowerCase().includes(searchQuery) ||
+            item.head.toLowerCase().includes(searchQuery);
+        const matchesType = !typeFilter || item.type === typeFilter;
+        const matchesStatus = !statusFilter || item.status === statusFilter;
+        const matchesLocation = !locationQuery || item.location.toLowerCase().includes(locationQuery);
 
-        return allOrgs.filter((item) => {
-            const matchesSearch =
-                !searchQuery ||
-                item.name.toLowerCase().includes(searchQuery) ||
-                item.head.toLowerCase().includes(searchQuery);
-            const matchesType = !typeFilter || item.type === typeFilter;
-            const matchesStatus = !statusFilter || item.status === statusFilter;
-            const matchesLocation = !locationQuery || item.location.toLowerCase().includes(locationQuery);
-
-            return matchesSearch && matchesType && matchesStatus && matchesLocation;
-        });
-    }, [locationFilter, search, statusFilter, typeFilter]);
+        return matchesSearch && matchesType && matchesStatus && matchesLocation;
+    });
 
     const table = useDataTable({
         rows: filteredData,
