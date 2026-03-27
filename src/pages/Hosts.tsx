@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -219,19 +219,29 @@ export default function Hosts() {
   const [zoneFilter, setZoneFilter] = useState<string | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<HostStatus | undefined>(undefined);
 
-  const regionOptions = Array.from(new Set(HOSTS.map((host) => host.region)));
-  const zoneOptions = Array.from(new Set(HOSTS.map((host) => host.zone)));
+  const regionOptions = useMemo(
+    () => Array.from(new Set(HOSTS.map((host) => host.region))),
+    [],
+  );
+  const zoneOptions = useMemo(
+    () => Array.from(new Set(HOSTS.map((host) => host.zone))),
+    [],
+  );
 
-  const filteredHosts = HOSTS.filter((host) => {
-    const matchSearch =
-      host.hostname.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      host.ipAddress.includes(searchTerm);
-    const matchRegion = !regionFilter || host.region === regionFilter;
-    const matchZone = !zoneFilter || host.zone === zoneFilter;
-    const matchStatus = !statusFilter || host.status === statusFilter;
+  const filteredHosts = useMemo(() => {
+    const normalizedSearch = searchTerm.trim().toLowerCase();
+    return HOSTS.filter((host) => {
+      const matchSearch =
+        !normalizedSearch ||
+        host.hostname.toLowerCase().includes(normalizedSearch) ||
+        host.ipAddress.includes(normalizedSearch);
+      const matchRegion = !regionFilter || host.region === regionFilter;
+      const matchZone = !zoneFilter || host.zone === zoneFilter;
+      const matchStatus = !statusFilter || host.status === statusFilter;
 
-    return matchSearch && matchRegion && matchZone && matchStatus;
-  });
+      return matchSearch && matchRegion && matchZone && matchStatus;
+    });
+  }, [regionFilter, searchTerm, statusFilter, zoneFilter]);
 
   const table = useDataTable({
     rows: filteredHosts,
@@ -240,11 +250,19 @@ export default function Hosts() {
     maxVisiblePages: 7,
   });
 
-  const statusStats = {
-    online: HOSTS.filter((host) => host.status === 'Online').length,
-    maintenance: HOSTS.filter((host) => host.status === 'Maintenance').length,
-    offline: HOSTS.filter((host) => host.status === 'Offline').length,
-  };
+  const statusStats = useMemo(() => {
+    const stats = { online: 0, maintenance: 0, offline: 0 };
+    for (const host of HOSTS) {
+      if (host.status === 'Online') {
+        stats.online += 1;
+      } else if (host.status === 'Maintenance') {
+        stats.maintenance += 1;
+      } else if (host.status === 'Offline') {
+        stats.offline += 1;
+      }
+    }
+    return stats;
+  }, []);
 
   const clearFilters = () => {
     setSearchTerm('');

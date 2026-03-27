@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -59,10 +59,16 @@ export default function Users() {
         });
     };
 
-    const filteredUsers = allUsers.filter((user) =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
+    const filteredUsers = useMemo(() => {
+        const query = searchTerm.trim().toLowerCase();
+        if (!query) {
+            return allUsers;
+        }
+        return allUsers.filter((user) =>
+            user.name.toLowerCase().includes(query) ||
+            user.email.toLowerCase().includes(query),
+        );
+    }, [searchTerm]);
 
     const table = useDataTable({
         rows: filteredUsers,
