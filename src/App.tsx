@@ -5,6 +5,7 @@ import Loading from './components/Loading';
 import { useStore } from './store/useStore';
 import { useShallow } from 'zustand/react/shallow';
 import { navRoutes, type RouteConfig } from '@/lib/routes';
+import { NotFoundPage } from '@/lib/route-components';
 import { Toaster } from '@/components/ui/sonner';
 import { APP_CONFIG } from '@/config/app';
 import { AUTH_UNAUTHORIZED_EVENT } from '@/auth/session';
@@ -14,7 +15,6 @@ import './i18n';
 
 const Layout = React.lazy(() => import('./components/Layout'));
 const LoginPage = React.lazy(() => import('./pages/Login'));
-const NotFoundPage = React.lazy(() => import('./pages/NotFound'));
 const HostDetailPage = React.lazy(() => import('./pages/HostDetail'));
 
 function ProtectedRoute({ children }: { children?: React.ReactNode }) {

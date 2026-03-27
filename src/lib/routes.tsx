@@ -1,4 +1,4 @@
-import React, { lazy } from 'react';
+import React from 'react';
 import {
     LayoutDashboard,
     Server,
@@ -7,15 +7,15 @@ import {
     Circle,
     type LucideIcon
 } from 'lucide-react';
-import NotFound from "@/pages/NotFound.tsx";
-
-// Lazy load pages
-const Dashboard = lazy(() => import('../pages/Dashboard'));
-const HostsPage = lazy(() => import('../pages/Hosts'));
-const RegionsAzPage = lazy(() => import('../pages/RegionsAz'));
-const UsersPage = lazy(() => import('../pages/Users'));
-const OrgsPage = lazy(() => import('../pages/Orgs'));
-const SettingsPage = lazy(() => import('../pages/Settings'));
+import {
+    DashboardPage,
+    HostsPage,
+    NotFoundPage,
+    OrgsPage,
+    RegionsAzPage,
+    SettingsPage,
+    UsersPage,
+} from '@/lib/route-components';
 
 // Type definition for route configuration
 export type RouteConfig = {
@@ -34,7 +34,7 @@ export const navRoutes: RouteConfig[] = [
         label: 'Dashboard',
         labelKey: 'nav.dashboard',
         icon: LayoutDashboard,
-        component: Dashboard,
+        component: DashboardPage,
     },
     {
         path: '/infrastructure',
@@ -61,14 +61,14 @@ export const navRoutes: RouteConfig[] = [
                 label: 'Virtual Machines',
                 labelKey: 'nav.virtualMachines',
                 icon: Circle,
-                component: NotFound
+                component: NotFoundPage
             },
             {
                 path: '/infrastructure/storage-pools',
                 label: 'Storage Pools',
                 labelKey: 'nav.storagePools',
                 icon: Circle,
-                component: NotFound
+                component: NotFoundPage
             },
         ]
     },
@@ -97,7 +97,7 @@ export const navRoutes: RouteConfig[] = [
                 label: 'User Groups',
                 labelKey: 'nav.userGroups',
                 icon: Circle,
-                component: NotFound,
+                component: NotFoundPage,
             },
         ],
     },
@@ -119,7 +119,7 @@ export const navRoutes: RouteConfig[] = [
                 label: 'Security',
                 labelKey: 'nav.security',
                 icon: Circle,
-                component: NotFound
+                component: NotFoundPage
             }
         ]
     }
