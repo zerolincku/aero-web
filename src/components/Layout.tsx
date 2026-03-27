@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { ChevronRight, Globe } from 'lucide-react';
@@ -32,7 +32,7 @@ export default function Layout() {
     const languageValue = i18n.resolvedLanguage === 'zh-CN' ? 'zh-CN' : 'en';
 
     // 深度查找当前路由及其祖先
-    const breadcrumbs = useMemo(() => {
+    const breadcrumbs = (() => {
         if (location.pathname.startsWith('/infrastructure/hosts/')) {
             const rawHostId = location.pathname.replace('/infrastructure/hosts/', '').split('/')[0];
             const hostId = decodeURIComponent(rawHostId || '');
@@ -80,7 +80,7 @@ export default function Layout() {
         });
 
         return crumbs;
-    }, [location.pathname]);
+    })();
 
     return (
         <SidebarProvider

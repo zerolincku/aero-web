@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -73,17 +73,14 @@ export default function Sidebar() {
     const userMenuRef = useRef<HTMLDivElement>(null);
     const themeMenuRef = useRef<HTMLDivElement>(null);
 
-    const getRouteLabel = useCallback(
-        (route: RouteConfig) => t(route.labelKey, { defaultValue: route.label }),
-        [t],
-    );
+    const getRouteLabel = (route: RouteConfig) => t(route.labelKey, { defaultValue: route.label });
 
     const searchItems = useMemo(() => {
         const items: { key: string; displayLabel: string; breadcrumbs: string[]; icon: LucideIcon; path: string }[] = [];
 
         const flattenRoutes = (routes: RouteConfig[], parentLabels: string[] = [], rootIcon?: LucideIcon) => {
             routes.forEach((route) => {
-                const routeLabel = getRouteLabel(route);
+                const routeLabel = t(route.labelKey, { defaultValue: route.label });
                 const currentBreadcrumbs = [...parentLabels, routeLabel];
                 const displayIcon = rootIcon || route.icon || Box;
                 if (route.component) {
@@ -103,18 +100,14 @@ export default function Sidebar() {
 
         flattenRoutes(navRoutes);
         return items;
-    }, [getRouteLabel]);
+    }, [t]);
 
-    const filteredItems = useMemo(() => {
-        const query = searchQuery.trim().toLowerCase();
-        if (!query) {
-            return searchItems;
-        }
-        return searchItems.filter((item) =>
-            item.displayLabel.toLowerCase().includes(query) ||
-            item.breadcrumbs.some((crumb) => crumb.toLowerCase().includes(query)),
-        );
-    }, [searchItems, searchQuery]);
+    const query = searchQuery.trim().toLowerCase();
+    const filteredItems = searchItems.filter((item) =>
+        !query ||
+        item.displayLabel.toLowerCase().includes(query) ||
+        item.breadcrumbs.some((crumb) => crumb.toLowerCase().includes(query)),
+    );
 
     const openSearch = () => {
         lastFocusedElementRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
