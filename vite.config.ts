@@ -1,28 +1,34 @@
 import { defineConfig } from 'vitest/config'
-import react from '@vitejs/plugin-react'
+import react, { reactCompilerPreset } from '@vitejs/plugin-react'
+import babel from '@rolldown/plugin-babel'
 import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
-import { createRequire } from 'node:module'
 
-const require = createRequire(import.meta.url)
-
-const getReactCompilerBabelPlugin = () => {
-  try {
-    require.resolve('babel-plugin-react-compiler')
-    return ['babel-plugin-react-compiler']
-  } catch {
-    return []
-  }
+const manualChunkGroups: Record<string, string[]> = {
+  vendor: [
+    'react',
+    'react-dom',
+    'react-router-dom',
+  ],
+  utils: [
+    'clsx',
+    'tailwind-merge',
+    'class-variance-authority',
+  ],
+  icons: [
+    'lucide-react',
+  ],
 }
+
+const resolveManualChunk = (id: string) =>
+  Object.entries(manualChunkGroups).find(([, packageNames]) =>
+    packageNames.some((packageName) => id.includes(`/node_modules/${packageName}/`)),
+  )?.[0]
 
 export default defineConfig({
   plugins: [
-    react({
-      babel: {
-        // Keep React Compiler plugin first in the Babel plugin chain.
-        plugins: getReactCompilerBabelPlugin(),
-      },
-    }),
+    react(),
+    babel({ presets: [reactCompilerPreset()] }),
     tailwindcss(),
   ],
   resolve: {
@@ -40,24 +46,7 @@ export default defineConfig({
     cssCodeSplit: true,
     rollupOptions: {
       output: {
-        manualChunks: {
-          // 将 React 相关库打包在一起
-          vendor: [
-            'react',
-            'react-dom',
-            'react-router-dom',
-          ],
-          // 将工具库打包在一起
-          utils: [
-            'clsx',
-            'tailwind-merge',
-            'class-variance-authority',
-          ],
-          // 将图标库打包在一起
-          icons: [
-            'lucide-react',
-          ],
-        },
+        manualChunks: resolveManualChunk,
       },
     },
   },
