@@ -16,6 +16,7 @@ import {
     SettingsPage,
     UsersPage,
 } from '@/lib/route-components';
+import { ROUTE_PATHS } from '@/config/paths';
 
 // Type definition for route configuration
 export type RouteConfig = {
@@ -30,41 +31,41 @@ export type RouteConfig = {
 // Main Navigation Routes (Used for Sidebar and App Routing)
 export const navRoutes: RouteConfig[] = [
     {
-        path: '/',
+        path: ROUTE_PATHS.DASHBOARD,
         label: 'Dashboard',
         labelKey: 'nav.dashboard',
         icon: LayoutDashboard,
         component: DashboardPage,
     },
     {
-        path: '/infrastructure',
+        path: ROUTE_PATHS.INFRASTRUCTURE,
         label: 'Infrastructure',
         labelKey: 'nav.infrastructure',
         icon: Server,
         children: [
             {
-                path: '/infrastructure/hosts',
+                path: ROUTE_PATHS.HOST_LIST,
                 label: 'Host List',
                 labelKey: 'nav.hostList',
                 icon: Circle,
                 component: HostsPage
             },
             {
-                path: '/infrastructure/regions-azs',
+                path: ROUTE_PATHS.REGIONS_AZS,
                 label: 'Regions & AZs',
                 labelKey: 'nav.regionsAzs',
                 icon: Circle,
                 component: RegionsAzPage,
             },
             {
-                path: '/infrastructure/vms',
+                path: ROUTE_PATHS.VMS,
                 label: 'Virtual Machines',
                 labelKey: 'nav.virtualMachines',
                 icon: Circle,
                 component: NotFoundPage
             },
             {
-                path: '/infrastructure/storage-pools',
+                path: ROUTE_PATHS.STORAGE_POOLS,
                 label: 'Storage Pools',
                 labelKey: 'nav.storagePools',
                 icon: Circle,
@@ -73,27 +74,27 @@ export const navRoutes: RouteConfig[] = [
         ]
     },
     {
-        path: '/management',
+        path: ROUTE_PATHS.MANAGEMENT,
         label: 'Management',
         labelKey: 'nav.management',
         icon: Users,
         children: [
             {
-                path: '/management/users',
+                path: ROUTE_PATHS.USER_LIST,
                 label: 'User List',
                 labelKey: 'nav.userList',
                 icon: Circle,
                 component: UsersPage,
             },
             {
-                path: '/management/orgs',
+                path: ROUTE_PATHS.ORG_LIST,
                 label: 'Org List',
                 labelKey: 'nav.orgList',
                 icon: Circle,
                 component: OrgsPage,
             },
             {
-                path: '/management/groups',
+                path: ROUTE_PATHS.USER_GROUPS,
                 label: 'User Groups',
                 labelKey: 'nav.userGroups',
                 icon: Circle,
@@ -102,20 +103,20 @@ export const navRoutes: RouteConfig[] = [
         ],
     },
     {
-        path: '/system', // Unique parent path
+        path: ROUTE_PATHS.SYSTEM, // Unique parent path
         label: 'System',
         labelKey: 'nav.system',
         icon: Settings,
         children: [
             {
-                path: '/system/settings',
+                path: ROUTE_PATHS.SETTINGS,
                 label: 'General Settings',
                 labelKey: 'nav.generalSettings',
                 icon: Circle,
                 component: SettingsPage
             },
             {
-                path: '/system/security',
+                path: ROUTE_PATHS.SECURITY,
                 label: 'Security',
                 labelKey: 'nav.security',
                 icon: Circle,

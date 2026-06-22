@@ -7,8 +7,8 @@ import { Label } from '../components/ui/label';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Lock } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { ROUTE_PATHS } from '@/config/paths';
 import { loginWithPassword } from '@/api/modules/auth';
-import { ApiRequestError } from '@/api/error';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function Login() {
@@ -37,7 +37,7 @@ export default function Login() {
                     description: t('login.successDescription'),
                     variant: "success"
                 });
-                navigate('/');
+                navigate(ROUTE_PATHS.DASHBOARD);
             } else {
                 addToast({
                     title: t('login.errorTitle'),
@@ -46,11 +46,7 @@ export default function Login() {
                 });
             }
         } catch (error) {
-            addToast({
-                title: t('login.errorTitle'),
-                description: error instanceof ApiRequestError ? error.message : t('login.errorDescription'),
-                variant: "destructive"
-            });
+            console.error('Login failed:', error);
         } finally {
             setLoading(false);
         }

@@ -10,6 +10,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { APP_CONFIG } from '@/config/app';
 import { AUTH_UNAUTHORIZED_EVENT } from '@/auth/session';
 import { ROUTER_CONFIG } from '@/config/router';
+import { ROUTE_PATHS } from '@/config/paths';
 import AppErrorBoundary from '@/components/AppErrorBoundary';
 import './i18n';
 
@@ -92,7 +93,7 @@ export default function App() {
           />
 
           <Route
-            path="/"
+            path={ROUTE_PATHS.DASHBOARD}
             element={
               <ProtectedRoute>
                 <Suspense fallback={<Loading />}>
@@ -103,7 +104,7 @@ export default function App() {
           >
             {renderRoutes(navRoutes)}
             <Route
-              path="/infrastructure/hosts/:hostId"
+              path={ROUTE_PATHS.HOST_DETAIL}
               element={
                 <Suspense fallback={<Loading />}>
                   <HostDetailPage />
