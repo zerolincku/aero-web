@@ -298,6 +298,7 @@ export default function ComponentsPage() {
         { id: 'select', label: t('components.sections.select') },
         { id: 'card', label: t('components.sections.card') },
         { id: 'stats', label: t('components.sections.stats') },
+        { id: 'sheet', label: t('components.sheetExample.title') },
         { id: 'action-form', label: t('components.sections.actionForm') },
         { id: 'empty-state', label: t('components.sections.emptyState') },
         { id: 'settings', label: t('components.sections.settings') },
@@ -1595,7 +1596,7 @@ import { Separator } from '@/components/ui/separator';
                                 <SheetTrigger asChild>
                                     <Button variant="outline">Open Sheet</Button>
                                 </SheetTrigger>
-                                <SheetContent>
+                                <SheetContent className="sm:max-w-md">
                                     <SheetHeader>
                                         <SheetTitle>Edit profile</SheetTitle>
                                         <SheetDescription>
@@ -1603,31 +1604,25 @@ import { Separator } from '@/components/ui/separator';
                                         </SheetDescription>
                                     </SheetHeader>
                                     <div className="grid gap-4 py-4 px-4">
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label htmlFor="name" className="text-right">
-                                                Name
-                                            </Label>
-                                            <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="name">Name</Label>
+                                            <Input id="name" defaultValue="Pedro Duarte" />
                                         </div>
-                                        <div className="grid grid-cols-4 items-center gap-4">
-                                            <Label htmlFor="role" className="text-right">
-                                                Role
-                                            </Label>
-                                            <div className="col-span-3">
-                                                <Select value="admin">
-                                                    <SelectTrigger>
-                                                        <SelectValue placeholder="Select a role" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectItem value="admin">Admin</SelectItem>
-                                                        <SelectItem value="user">User</SelectItem>
-                                                        <SelectItem value="guest">Guest</SelectItem>
-                                                    </SelectContent>
-                                                </Select>
-                                            </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor="role">Role</Label>
+                                            <Select value="admin">
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select a role" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="admin">Admin</SelectItem>
+                                                    <SelectItem value="user">User</SelectItem>
+                                                    <SelectItem value="guest">Guest</SelectItem>
+                                                </SelectContent>
+                                            </Select>
                                         </div>
                                     </div>
-                                    <SheetFooter className="mt-auto flex justify-end gap-2 px-4 pb-4">
+                                    <SheetFooter className="px-4 pb-4">
                                         <SheetClose asChild>
                                             <Button variant="outline">Cancel</Button>
                                         </SheetClose>
@@ -1642,7 +1637,7 @@ import { Separator } from '@/components/ui/separator';
     <SheetTrigger asChild>
         <Button variant="outline">Open Sheet</Button>
     </SheetTrigger>
-    <SheetContent>
+    <SheetContent className="sm:max-w-md">
         <SheetHeader>
             <SheetTitle>Edit profile</SheetTitle>
             <SheetDescription>
@@ -1650,31 +1645,25 @@ import { Separator } from '@/components/ui/separator';
             </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4 px-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="name" className="text-right">
-                    Name
-                </Label>
-                <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
+            <div className="grid gap-2">
+                <Label htmlFor="name">Name</Label>
+                <Input id="name" defaultValue="Pedro Duarte" />
             </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-                <Label htmlFor="role" className="text-right">
-                    Role
-                </Label>
-                <div className="col-span-3">
-                    <Select value="admin">
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="admin">Admin</SelectItem>
-                            <SelectItem value="user">User</SelectItem>
-                            <SelectItem value="guest">Guest</SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
+            <div className="grid gap-2">
+                <Label htmlFor="role">Role</Label>
+                <Select value="admin">
+                    <SelectTrigger>
+                        <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="admin">Admin</SelectItem>
+                        <SelectItem value="user">User</SelectItem>
+                        <SelectItem value="guest">Guest</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
         </div>
-        <SheetFooter className="mt-auto flex justify-end gap-2 px-4 pb-4">
+        <SheetFooter className="px-4 pb-4">
             <SheetClose asChild>
                 <Button variant="outline">Cancel</Button>
             </SheetClose>

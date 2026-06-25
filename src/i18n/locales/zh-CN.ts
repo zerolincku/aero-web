@@ -23,6 +23,15 @@ export const zhCN = {
             components: '组件库',
         },
         common: {
+            pagination: {
+                previous: '上一页',
+                next: '下一页',
+                more: '更多',
+            },
+            timePicker: {
+                hour: '时',
+                minute: '分',
+            },
             actions: {
                 addUser: '新增用户',
                 addOrg: '新增组织',

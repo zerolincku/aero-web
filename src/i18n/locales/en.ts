@@ -23,6 +23,15 @@ export const en = {
             components: 'Components',
         },
         common: {
+            pagination: {
+                previous: 'Previous',
+                next: 'Next',
+                more: 'More pages',
+            },
+            timePicker: {
+                hour: 'Hour',
+                minute: 'Minute',
+            },
             actions: {
                 addUser: 'Add User',
                 addOrg: 'Add Org',
