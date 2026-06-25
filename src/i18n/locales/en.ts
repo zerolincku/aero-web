@@ -396,6 +396,38 @@ export const en = {
                 title: 'Dialog',
                 description: 'A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.',
             },
+            toastExample: {
+                title: 'Toast (Sonner)',
+                description: 'An opinionated toast component for React.',
+            },
+            sheetExample: {
+                title: 'Sheet',
+                description: 'Extends the Dialog component to display content that complements the main viewport.',
+            },
+            tooltipExample: {
+                title: 'Tooltip',
+                description: 'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+            },
+            hoverCardExample: {
+                title: 'Hover Card',
+                description: 'For sighted users to preview content available behind a link.',
+            },
+            sliderExample: {
+                title: 'Slider',
+                description: 'An input where the user selects a value from within a given range.',
+            },
+            progressExample: {
+                title: 'Progress',
+                description: 'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+            },
+            skeletonExample: {
+                title: 'Skeleton',
+                description: 'Use to show a placeholder while content is loading.',
+            },
+            breadcrumbExample: {
+                title: 'Breadcrumb',
+                description: 'Displays the path to the current resource using a hierarchy of links.',
+            },
             buttonExample: {
                 title: 'Buttons',
                 description: 'Buttons with various variants and sizes.',

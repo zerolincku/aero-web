@@ -436,6 +436,38 @@ export const zhCN = {
                 title: '对话框 (Dialog)',
                 description: '覆盖在主窗口之上的弹窗，要求用户进行交互。',
             },
+            toastExample: {
+                title: '全局提示 (Toast)',
+                description: '在屏幕边缘弹出的消息提示气泡。',
+            },
+            sheetExample: {
+                title: '抽屉 (Sheet)',
+                description: '从屏幕边缘滑出的面板，用于展示详细内容或表单。',
+            },
+            tooltipExample: {
+                title: '文字提示 (Tooltip)',
+                description: '鼠标悬停或聚焦时显示的简短文字提示。',
+            },
+            hoverCardExample: {
+                title: '悬浮卡片 (Hover Card)',
+                description: '鼠标悬停在链接或元素上时，展示更丰富的预览卡片。',
+            },
+            sliderExample: {
+                title: '滑动条 (Slider)',
+                description: '允许用户在给定范围内通过拖拽选择一个数值。',
+            },
+            progressExample: {
+                title: '进度条 (Progress)',
+                description: '展示任务的完成进度或资源的使用情况。',
+            },
+            skeletonExample: {
+                title: '骨架屏 (Skeleton)',
+                description: '内容加载完成前显示的占位块，缓解等待焦虑。',
+            },
+            breadcrumbExample: {
+                title: '面包屑 (Breadcrumb)',
+                description: '显示当前页面的层级路径，点击可快速返回上级。',
+            },
             emptyExample: {
                 title: '暂无可用资源',
                 description: '你当前没有任何处于运行状态的实例，点击下方按钮创建一个新的实例。',
