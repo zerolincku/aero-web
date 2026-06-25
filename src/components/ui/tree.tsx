@@ -12,6 +12,7 @@ export type TreeNode = {
   name: string
   type: "folder" | "file" | "image" | "document"
   children?: TreeNode[]
+  disabled?: boolean
 }
 
 interface TreeProps {
@@ -19,12 +20,13 @@ interface TreeProps {
   selectedId?: string
   onSelect?: (node: TreeNode) => void
   className?: string
+  disabled?: boolean
 }
 
-export function Tree({ data, selectedId, onSelect, className }: TreeProps) {
+export function Tree({ data, selectedId, onSelect, className, disabled = false }: TreeProps) {
   return (
     <div className={cn("w-full overflow-hidden rounded-md border bg-background p-2", className)}>
-      <ul className="space-y-1">
+      <ul role="tree" className="space-y-1">
         {data.map((node) => (
           <TreeNodeItem
             key={node.id}
@@ -32,6 +34,7 @@ export function Tree({ data, selectedId, onSelect, className }: TreeProps) {
             level={0}
             selectedId={selectedId}
             onSelect={onSelect}
+            treeDisabled={disabled}
           />
         ))}
       </ul>
@@ -44,17 +47,53 @@ interface TreeNodeItemProps {
   level: number
   selectedId?: string
   onSelect?: (node: TreeNode) => void
+  treeDisabled?: boolean
 }
 
-function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) {
+function TreeNodeItem({ node, level, selectedId, onSelect, treeDisabled }: TreeNodeItemProps) {
   const [isOpen, setIsOpen] = React.useState(false)
   const hasChildren = node.children && node.children.length > 0
   const isSelected = selectedId === node.id
+  const isDisabled = treeDisabled || node.disabled
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.stopPropagation()
+    if (isDisabled) return
     if (hasChildren) setIsOpen(!isOpen)
     onSelect?.(node)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (isDisabled) return
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        e.preventDefault()
+        handleClick(e)
+        break
+      case 'ArrowRight':
+        e.preventDefault()
+        if (hasChildren && !isOpen) setIsOpen(true)
+        break
+      case 'ArrowLeft':
+        e.preventDefault()
+        if (hasChildren && isOpen) setIsOpen(false)
+        break
+      case 'ArrowDown':
+      case 'ArrowUp':
+        e.preventDefault()
+        const tree = e.currentTarget.closest('[role="tree"]')
+        if (tree) {
+          const items = Array.from(tree.querySelectorAll('[role="treeitem"] > div[tabindex="0"]'))
+          const index = items.indexOf(e.currentTarget as Element)
+          if (e.key === 'ArrowDown' && index < items.length - 1) {
+            (items[index + 1] as HTMLElement).focus()
+          } else if (e.key === 'ArrowUp' && index > 0) {
+            (items[index - 1] as HTMLElement).focus()
+          }
+        }
+        break
+    }
   }
 
   const getIcon = () => {
@@ -71,15 +110,19 @@ function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) 
   }
 
   return (
-    <li className="select-none">
+    <li role="treeitem" aria-expanded={hasChildren ? isOpen : undefined} aria-selected={isSelected} className="select-none outline-none">
       <Collapsible open={isOpen} onOpenChange={setIsOpen}>
         <div
+          role="button"
+          tabIndex={isDisabled ? -1 : 0}
           className={cn(
-            "flex items-center rounded-sm py-1.5 px-2 text-sm font-medium transition-colors cursor-pointer hover:bg-muted/80",
-            isSelected ? "bg-primary/10 text-primary" : "text-foreground",
+            "flex items-center rounded-sm py-1.5 px-2 text-sm font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            isDisabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted/80",
+            isSelected && !isDisabled ? "bg-primary/10 text-primary" : "text-foreground",
             level > 0 && "ml-4"
           )}
           onClick={handleClick}
+          onKeyDown={handleKeyDown}
         >
           {hasChildren ? (
             <CollapsibleTrigger asChild>
@@ -97,7 +140,7 @@ function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) 
 
         {hasChildren && (
           <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down relative before:absolute before:left-[11px] before:top-0 before:bottom-0 before:w-px before:bg-border/50">
-            <ul className="mt-1">
+            <ul role="group" className="mt-1">
               {node.children!.map((childNode) => (
                 <TreeNodeItem
                   key={childNode.id}
@@ -105,6 +148,7 @@ function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) 
                   level={level + 1}
                   selectedId={selectedId}
                   onSelect={onSelect}
+                  treeDisabled={treeDisabled}
                 />
               ))}
             </ul>

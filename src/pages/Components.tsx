@@ -2215,7 +2215,7 @@ import { Separator } from '@/components/ui/separator';
                                             { label: "Svelte", value: "svelte" },
                                             { label: "Solid", value: "solid", disabled: true },
                                         ]}
-                                        selected={multiSelectValues}
+                                        value={multiSelectValues}
                                         onChange={setMultiSelectValues}
                                         placeholder="Select frameworks..."
                                     />
@@ -2228,11 +2228,11 @@ import { Separator } from '@/components/ui/separator';
                                             { label: "Vue", value: "vue" },
                                             { label: "Angular", value: "angular" },
                                         ]}
-                                        selected={multiSelectValues.slice(0, 2)}
+                                        value={multiSelectValues.slice(0, 2)}
                                         onChange={(vals) => setMultiSelectValues(vals)}
                                         placeholder="Max 2 items..."
                                         maxCount={2}
-                                        maxCountText="Maximum 2 items selected"
+                                        maxCountText="Only 2 items selected"
                                     />
                                 </div>
                             </div>
@@ -2242,7 +2242,7 @@ import { Separator } from '@/components/ui/separator';
         { label: "React", value: "react" },
         { label: "Vue", value: "vue" },
     ]}
-    selected={multiSelectValues}
+    value={multiSelectValues}
     onChange={setMultiSelectValues}
     placeholder="Select frameworks..."
 />`}
@@ -2378,7 +2378,7 @@ import { Separator } from '@/components/ui/separator';
                         preview={
                             <Transfer
                                 dataSource={transferData}
-                                targetKeys={transferTargetKeys}
+                                value={transferTargetKeys}
                                 onChange={setTransferTargetKeys}
                                 leftTitle="All Roles"
                                 rightTitle="Assigned Roles"
@@ -2386,7 +2386,7 @@ import { Separator } from '@/components/ui/separator';
                         }
                         code={`<Transfer
     dataSource={transferData}
-    targetKeys={transferTargetKeys}
+    value={transferTargetKeys}
     onChange={setTransferTargetKeys}
     leftTitle="All Roles"
     rightTitle="Assigned Roles"

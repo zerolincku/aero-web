@@ -8,10 +8,13 @@ export interface FileUploadProps extends Omit<React.InputHTMLAttributes<HTMLInpu
   onChange?: (files: File[]) => void
   value?: File[]
   maxFiles?: number
+  maxSizeInMB?: number
+  formatsHint?: string
+  error?: boolean
 }
 
 export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
-  ({ className, onChange, value, maxFiles = 0, ...props }, ref) => {
+  ({ className, onChange, value, maxFiles = 0, maxSizeInMB = 10, formatsHint = "SVG, PNG, JPG or PDF", disabled = false, error = false, ...props }, ref) => {
     const { t } = useTranslation()
     const [dragActive, setDragActive] = React.useState(false)
     const [files, setFiles] = React.useState<File[]>(value || [])
@@ -38,6 +41,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
     const handleDrag = (e: React.DragEvent) => {
       e.preventDefault()
       e.stopPropagation()
+      if (disabled) return
       if (e.type === "dragenter" || e.type === "dragover") {
         setDragActive(true)
       } else if (e.type === "dragleave") {
@@ -48,6 +52,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
     const handleDrop = (e: React.DragEvent) => {
       e.preventDefault()
       e.stopPropagation()
+      if (disabled) return
       setDragActive(false)
       if (e.dataTransfer.files && e.dataTransfer.files[0]) {
         handleFiles(e.dataTransfer.files)
@@ -56,6 +61,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       e.preventDefault()
+      if (disabled) return
       if (e.target.files && e.target.files[0]) {
         handleFiles(e.target.files)
       }
@@ -75,14 +81,16 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
       <div className={cn("w-full", className)}>
         <div
           className={cn(
-            "relative flex flex-col items-center justify-center w-full p-6 border-2 border-dashed rounded-lg transition-colors bg-muted/20 cursor-pointer hover:bg-muted/50",
-            dragActive ? "border-primary bg-primary/5" : "border-muted-foreground/25"
+            "relative flex flex-col items-center justify-center w-full p-6 border-2 border-dashed rounded-lg transition-colors bg-muted/20",
+            disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:bg-muted/50",
+            dragActive && !disabled ? "border-primary bg-primary/5" : "border-muted-foreground/25",
+            error && "border-destructive/60 bg-destructive/5 ring-1 ring-destructive/20"
           )}
           onDragEnter={handleDrag}
           onDragLeave={handleDrag}
           onDragOver={handleDrag}
           onDrop={handleDrop}
-          onClick={() => inputRef.current?.click()}
+          onClick={() => !disabled && inputRef.current?.click()}
         >
           <input
             ref={(e) => {
@@ -98,6 +106,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
             className="hidden"
             onChange={handleChange}
             multiple={maxFiles !== 1}
+            disabled={disabled}
             {...props}
           />
           <UploadCloud className="w-10 h-10 mb-3 text-muted-foreground" />
@@ -105,7 +114,7 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
             <span className="text-primary">{t('common.fileUpload.clickToUpload', 'Click to upload')}</span> {t('common.fileUpload.dragAndDrop', 'or drag and drop')}
           </p>
           <p className="text-xs text-muted-foreground">
-            {t('common.fileUpload.hint', 'SVG, PNG, JPG or PDF (max. 10MB)')}
+            {formatsHint} (max. {maxSizeInMB}MB)
           </p>
         </div>
 
@@ -125,10 +134,11 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
                 <Button
                   variant="ghost"
                   size="icon"
+                  disabled={disabled}
                   className="h-8 w-8 text-muted-foreground hover:text-destructive"
                   onClick={(e) => {
                     e.stopPropagation()
-                    removeFile(idx)
+                    if (!disabled) removeFile(idx)
                   }}
                 >
                   <X className="w-4 h-4" />

@@ -106,6 +106,26 @@ function TableCaption({
   )
 }
 
+function TableEmpty({
+  className,
+  colSpan,
+  children,
+  ...props
+}: React.ComponentProps<"td"> & { colSpan?: number }) {
+  return (
+    <TableRow>
+      <TableCell
+        data-slot="table-empty"
+        colSpan={colSpan || 100}
+        className={cn("h-24 text-center align-middle text-muted-foreground", className)}
+        {...props}
+      >
+        {children || "No results."}
+      </TableCell>
+    </TableRow>
+  )
+}
+
 export {
   Table,
   TableHeader,
@@ -115,4 +135,5 @@ export {
   TableRow,
   TableCell,
   TableCaption,
+  TableEmpty,
 }

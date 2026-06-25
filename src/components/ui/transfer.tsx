@@ -16,11 +16,12 @@ export type TransferItem = {
 
 interface TransferProps {
   dataSource: TransferItem[]
-  targetKeys: string[]
-  onChange: (targetKeys: string[]) => void
+  value?: string[]
+  onChange: (value: string[]) => void
   leftTitle?: string
   rightTitle?: string
   className?: string
+  disabled?: boolean
 }
 
 function ListPanel({
@@ -30,6 +31,7 @@ function ListPanel({
   direction,
   onSelectAll,
   onSelect,
+  disabled,
 }: {
   title: string
   items: TransferItem[]
@@ -37,6 +39,7 @@ function ListPanel({
   direction: "left" | "right"
   onSelectAll: (direction: "left" | "right", checked: boolean) => void
   onSelect: (id: string, checked: boolean) => void
+  disabled?: boolean
 }) {
   const { t } = useTranslation()
   const availableItems = items.filter((i) => !i.disabled)
@@ -55,7 +58,7 @@ function ListPanel({
             <Checkbox
               checked={isAllSelected || (isIndeterminate ? "indeterminate" : false)}
               onCheckedChange={(c) => onSelectAll(direction, c as boolean)}
-              disabled={availableItems.length === 0}
+              disabled={disabled || availableItems.length === 0}
             />
             <CardTitle className="text-sm font-medium">{title}</CardTitle>
           </div>
@@ -64,7 +67,7 @@ function ListPanel({
           </span>
         </div>
       </CardHeader>
-      <CardContent className="p-0 flex-1 h-[250px]">
+      <CardContent className="p-0 flex-1 min-h-[250px] max-h-[400px]">
         <ScrollArea className="h-full">
           {items.length === 0 ? (
             <div className="h-full flex items-center justify-center text-sm text-muted-foreground p-4 text-center">
@@ -77,22 +80,22 @@ function ListPanel({
                   key={item.id}
                   className={cn(
                     "flex items-center space-x-2 p-2 rounded-md transition-colors",
-                    item.disabled
+                    (item.disabled || disabled)
                       ? "opacity-50 cursor-not-allowed"
                       : "cursor-pointer hover:bg-muted/50",
-                    selected.includes(item.id) && !item.disabled && "bg-primary/5"
+                    selected.includes(item.id) && !(item.disabled || disabled) && "bg-primary/5"
                   )}
                   onClick={() => {
-                    if (!item.disabled) {
+                    if (!item.disabled && !disabled) {
                       onSelect(item.id, !selected.includes(item.id))
                     }
                   }}
                 >
                   <Checkbox
                     checked={selected.includes(item.id)}
-                    disabled={item.disabled}
+                    disabled={item.disabled || disabled}
                     onCheckedChange={(c) => {
-                      if (!item.disabled) onSelect(item.id, c as boolean)
+                      if (!item.disabled && !disabled) onSelect(item.id, c as boolean)
                     }}
                   />
                   <span className="text-sm select-none">{item.label}</span>
@@ -108,19 +111,20 @@ function ListPanel({
 
 export function Transfer({
   dataSource,
-  targetKeys,
+  value = [],
   onChange,
   leftTitle,
   rightTitle,
   className,
+  disabled = false,
 }: TransferProps) {
   const { t } = useTranslation()
   const defaultLeftTitle = leftTitle || t('common.transfer.source', 'Source')
   const defaultRightTitle = rightTitle || t('common.transfer.target', 'Target')
   const [selectedKeys, setSelectedKeys] = React.useState<string[]>([])
 
-  const leftDataSource = dataSource.filter((item) => !targetKeys.includes(item.id))
-  const rightDataSource = dataSource.filter((item) => targetKeys.includes(item.id))
+  const leftDataSource = dataSource.filter((item) => !value.includes(item.id))
+  const rightDataSource = dataSource.filter((item) => value.includes(item.id))
 
   const leftSelectedKeys = selectedKeys.filter((key) =>
     leftDataSource.some((item) => item.id === key)
@@ -151,13 +155,13 @@ export function Transfer({
   }
 
   const moveToRight = () => {
-    const newTargetKeys = [...targetKeys, ...leftSelectedKeys]
+    const newTargetKeys = [...value, ...leftSelectedKeys]
     onChange(newTargetKeys)
     setSelectedKeys((prev) => prev.filter((k) => !leftSelectedKeys.includes(k)))
   }
 
   const moveToLeft = () => {
-    const newTargetKeys = targetKeys.filter((k) => !rightSelectedKeys.includes(k))
+    const newTargetKeys = value.filter((k) => !rightSelectedKeys.includes(k))
     onChange(newTargetKeys)
     setSelectedKeys((prev) => prev.filter((k) => !rightSelectedKeys.includes(k)))
   }
@@ -171,6 +175,7 @@ export function Transfer({
         direction="left"
         onSelectAll={handleSelectAll}
         onSelect={handleSelect}
+        disabled={disabled}
       />
 
       <div className="flex sm:flex-col gap-2">
@@ -178,8 +183,9 @@ export function Transfer({
           variant="outline"
           size="icon"
           onClick={moveToRight}
-          disabled={leftSelectedKeys.length === 0}
+          disabled={disabled || leftSelectedKeys.length === 0}
           className="h-8 w-8 rounded-full shadow-sm"
+          aria-label="Move selected to right"
         >
           <ChevronRight className="h-4 w-4" />
         </Button>
@@ -187,8 +193,9 @@ export function Transfer({
           variant="outline"
           size="icon"
           onClick={moveToLeft}
-          disabled={rightSelectedKeys.length === 0}
+          disabled={disabled || rightSelectedKeys.length === 0}
           className="h-8 w-8 rounded-full shadow-sm"
+          aria-label="Move selected to left"
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -201,6 +208,7 @@ export function Transfer({
         direction="right"
         onSelectAll={handleSelectAll}
         onSelect={handleSelect}
+        disabled={disabled}
       />
     </div>
   )

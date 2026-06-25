@@ -1,5 +1,6 @@
 import * as React from "react"
 import { useTranslation } from "react-i18next"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 import { Check, ChevronsUpDown, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -27,46 +28,49 @@ export type Option = {
 
 interface MultiSelectProps {
   options: Option[]
-  selected: string[]
-  onChange: (selected: string[]) => void
+  value?: string[]
+  onChange: (value: string[]) => void
   placeholder?: string
   searchPlaceholder?: string
   emptyText?: string
   className?: string
   disabled?: boolean
+  error?: boolean
   maxCount?: number
   maxCountText?: string
 }
 
 export function MultiSelect({
   options,
-  selected,
+  value = [],
   onChange,
   placeholder,
   searchPlaceholder,
   emptyText,
   className,
   disabled = false,
+  error = false,
   maxCount,
   maxCountText,
 }: MultiSelectProps) {
   const { t } = useTranslation()
   const [open, setOpen] = React.useState(false)
+  const [listRef] = useAutoAnimate<HTMLDivElement>()
 
   const handleUnselect = (item: string) => {
-    onChange(selected.filter((i) => i !== item))
+    onChange(value.filter((i) => i !== item))
   }
 
-  const selectedOptions = options.filter((option) => selected.includes(option.value))
-  const isMaxReached = maxCount !== undefined && selected.length >= maxCount
+  const selectedOptions = options.filter((option) => value.includes(option.value))
+  const isMaxReached = maxCount !== undefined && value.length >= maxCount
 
-  const handleSelect = (value: string) => {
-    const isSelected = selected.includes(value)
+  const handleSelect = (val: string) => {
+    const isSelected = value.includes(val)
     if (isSelected) {
-      onChange(selected.filter((i) => i !== value))
+      onChange(value.filter((i) => i !== val))
     } else {
       if (isMaxReached) return
-      onChange([...selected, value])
+      onChange([...value, val])
     }
   }
 
@@ -80,10 +84,11 @@ export function MultiSelect({
           disabled={disabled}
           className={cn(
             "w-full justify-between h-auto min-h-10 py-1.5 px-3 font-normal",
+            error && "border-destructive ring-1 ring-destructive hover:bg-transparent",
             className
           )}
         >
-          <div className="flex flex-wrap gap-1 flex-1 min-w-0">
+          <div ref={listRef} className="flex flex-wrap gap-1 flex-1 min-w-0">
             {selectedOptions.length === 0 && (
               <span className="text-muted-foreground">{placeholder || t('common.multiSelect.placeholder', 'Select options...')}</span>
             )}
@@ -91,10 +96,18 @@ export function MultiSelect({
               <Badge
                 variant="secondary"
                 key={option.value}
-                className="mr-1 mb-1 hover:bg-secondary/80 font-normal"
+                tabIndex={disabled ? undefined : 0}
+                className={cn("mr-1 mb-1 font-normal", !disabled && "hover:bg-secondary/80 focus:ring-2 focus:ring-ring focus:outline-none")}
                 onClick={(e) => {
                   e.stopPropagation()
                   if (!disabled) handleUnselect(option.value)
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    if (!disabled) handleUnselect(option.value)
+                  }
                 }}
               >
                 {option.label}
@@ -117,7 +130,7 @@ export function MultiSelect({
                 </div>
               )}
               {options.map((option) => {
-                const isSelected = selected.includes(option.value)
+                const isSelected = value.includes(option.value)
                 const isDisabled = option.disabled || (!isSelected && isMaxReached)
                 return (
                   <CommandItem

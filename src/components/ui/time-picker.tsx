@@ -13,9 +13,11 @@ export interface TimePickerProps {
     value?: string;
     onChange?: (v: string) => void;
     className?: string;
+    disabled?: boolean;
+    error?: boolean;
 }
 
-export function TimePicker({ value, onChange, className }: TimePickerProps) {
+export function TimePicker({ value, onChange, className, disabled, error }: TimePickerProps) {
     const { t } = useTranslation();
     const [internalHours, setInternalHours] = useState('12');
     const [internalMinutes, setInternalMinutes] = useState('00');
@@ -36,7 +38,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
     return (
         <div className={cn("flex items-center gap-2", className)}>
             <Select clearable={false} value={hours} onValueChange={handleHoursChange}>
-                <SelectTrigger className="w-[70px]">
+                <SelectTrigger disabled={disabled} aria-label={t('common.timePicker.hour', 'HH')} className={cn("min-w-[70px] flex-1", error && "border-destructive ring-1 ring-destructive hover:bg-transparent")}>
                     <SelectValue placeholder={t('common.timePicker.hour', 'HH')} />
                 </SelectTrigger>
                 <SelectContent side="top" className="max-h-[200px] overflow-y-auto">
@@ -48,7 +50,7 @@ export function TimePicker({ value, onChange, className }: TimePickerProps) {
             </Select>
             <span className="text-muted-foreground">:</span>
             <Select clearable={false} value={minutes} onValueChange={handleMinutesChange}>
-                <SelectTrigger className="w-[70px]">
+                <SelectTrigger disabled={disabled} aria-label={t('common.timePicker.minute', 'MM')} className={cn("min-w-[70px] flex-1", error && "border-destructive ring-1 ring-destructive hover:bg-transparent")}>
                     <SelectValue placeholder={t('common.timePicker.minute', 'MM')} />
                 </SelectTrigger>
                 <SelectContent side="top" className="max-h-[200px] overflow-y-auto">
