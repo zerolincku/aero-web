@@ -139,7 +139,7 @@ export default function Layout() {
                         </a>
 
                         <div className="w-10">
-                        <Select value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
+                        <Select clearable={false} value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
                             <SelectTrigger
                                 className="h-8 w-10 px-0 justify-center border-0 bg-transparent shadow-none ring-0 focus:ring-0 focus:ring-offset-0 hover:bg-accent/50 [&>svg:last-child]:hidden"
                                 aria-label={t('settings.preferences.language')}
