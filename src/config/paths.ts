@@ -16,4 +16,6 @@ export const ROUTE_PATHS = {
   SYSTEM: '/system',
   SETTINGS: '/system/settings',
   SECURITY: '/system/security',
+
+  COMPONENTS: '/components',
 } as const;

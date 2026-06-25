@@ -10,13 +10,15 @@ const SelectContext = React.createContext<{
     clearable?: boolean
     onClear?: () => void
     clearAriaLabel?: string
+    labelMap: Record<string, React.ReactNode>
+    registerLabel: (value: string, label: React.ReactNode) => void
 } | null>(null)
 
 function Select({
                     children,
                     value,
                     onValueChange,
-                    clearable,
+                    clearable = true,
                     onClear,
                     clearAriaLabel,
                 }: {
@@ -29,6 +31,11 @@ function Select({
 }) {
     const [open, setOpen] = React.useState(false)
     const rootRef = React.useRef<HTMLDivElement>(null)
+    const [labelMap, setLabelMap] = React.useState<Record<string, React.ReactNode>>({})
+
+    const registerLabel = React.useCallback((val: string, label: React.ReactNode) => {
+        setLabelMap(prev => prev[val] === label ? prev : { ...prev, [val]: label })
+    }, [])
 
     React.useEffect(() => {
         if (!open) return
@@ -55,7 +62,7 @@ function Select({
     }, [open])
 
     return (
-        <SelectContext.Provider value={{ value, onValueChange, open, setOpen, clearable, onClear, clearAriaLabel }}>
+        <SelectContext.Provider value={{ value, onValueChange, open, setOpen, clearable, onClear, clearAriaLabel, labelMap, registerLabel }}>
             <div ref={rootRef} className="relative w-full">{children}</div>
         </SelectContext.Provider>
     )
@@ -71,9 +78,10 @@ SelectGroup.displayName = "SelectGroup"
 
 function SelectValue({ placeholder }: { placeholder?: string }) {
     const context = React.useContext(SelectContext)
+    const displayValue = context?.value ? context.labelMap[context.value] || context.value : placeholder;
     return (
         <span className={cn(!context?.value && "text-muted-foreground")}>
-            {context?.value || placeholder}
+            {displayValue}
         </span>
     )
 }
@@ -85,7 +93,7 @@ const SelectTrigger = React.forwardRef<
     }
 >(({ className, children, trailing, ...props }, ref) => {
     const context = React.useContext(SelectContext)
-    const shouldShowClear = Boolean(context?.clearable && context?.value && context?.onClear)
+    const shouldShowClear = Boolean(context?.clearable && context?.value)
     return (
         <button
             ref={ref}
@@ -110,7 +118,11 @@ const SelectTrigger = React.forwardRef<
                     onClick={(event) => {
                         event.preventDefault()
                         event.stopPropagation()
-                        context?.onClear?.()
+                        if (context?.onClear) {
+                            context.onClear()
+                        } else if (context?.onValueChange) {
+                            context.onValueChange('')
+                        }
                     }}
                 >
                     <X className="h-4 w-4" />
@@ -157,6 +169,10 @@ const SelectItem = React.forwardRef<
 >(({ className, children, value, ...props }, ref) => {
     const context = React.useContext(SelectContext)
     const isSelected = context?.value === value
+
+    React.useEffect(() => {
+        context?.registerLabel(value, children)
+    }, [value, children, context])
 
     return (
         <div

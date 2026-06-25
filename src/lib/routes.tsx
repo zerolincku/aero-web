@@ -5,6 +5,7 @@ import {
     Users,
     Settings,
     Circle,
+    Component,
     type LucideIcon
 } from 'lucide-react';
 import {
@@ -15,6 +16,7 @@ import {
     RegionsAzPage,
     SettingsPage,
     UsersPage,
+    ComponentsPage,
 } from '@/lib/route-components';
 import { ROUTE_PATHS } from '@/config/paths';
 
@@ -123,5 +125,12 @@ export const navRoutes: RouteConfig[] = [
                 component: NotFoundPage
             }
         ]
+    },
+    {
+        path: ROUTE_PATHS.COMPONENTS,
+        label: 'Components',
+        labelKey: 'nav.components',
+        icon: Component,
+        component: ComponentsPage,
     }
 ];
