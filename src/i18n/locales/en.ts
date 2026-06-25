@@ -276,6 +276,30 @@ export const en = {
             esc: 'ESC',
         },
         components: {
+            multiSelectExample: {
+                title: 'Multi Select',
+                description: 'Custom dropdown menu supporting search and multiple selections.',
+            },
+            fileUploadExample: {
+                title: 'File Upload',
+                description: 'Generic file upload area with drag and drop support.',
+            },
+            imageUploadExample: {
+                title: 'Image Upload',
+                description: 'Specialized for image uploads with instant preview.',
+            },
+            navigationMenuExample: {
+                title: 'Navigation Menu',
+                description: 'Complex navigation menu with sliding animations suitable for site headers.',
+            },
+            treeExample: {
+                title: 'Tree',
+                description: 'Tree view with infinite nesting and icon display.',
+            },
+            transferExample: {
+                title: 'Transfer',
+                description: 'Dual-list selection component used to transfer data between two collections.',
+            },
             title: 'Practical Components',
             subtitle: 'Examples of high-quality preset components commonly used in daily business development.',
             sections: {

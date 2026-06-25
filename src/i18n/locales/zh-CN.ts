@@ -276,6 +276,30 @@ export const zhCN = {
             esc: 'ESC',
         },
         components: {
+            multiSelectExample: {
+                title: '多选下拉框 (Multi Select)',
+                description: '支持搜索和多重选择的自定义下拉菜单。',
+            },
+            fileUploadExample: {
+                title: '文件上传 (File Upload)',
+                description: '支持拖拽的通用文件上传区域。',
+            },
+            imageUploadExample: {
+                title: '图片上传 (Image Upload)',
+                description: '专门用于图片上传，并在选择后即时预览。',
+            },
+            navigationMenuExample: {
+                title: '顶部导航菜单 (Navigation Menu)',
+                description: '适用于站点顶部的带有滑动动画的复杂导航菜单。',
+            },
+            treeExample: {
+                title: '树形控件 (Tree)',
+                description: '带有无限层级折叠和图标展示的树形视图。',
+            },
+            transferExample: {
+                title: '穿梭框 (Transfer)',
+                description: '双向列表选择组件，用于在两个集合之间转移数据。',
+            },
             title: '实用组件',
             subtitle: '在日常业务开发中常用的高质量预设组件示例。',
             sections: {
