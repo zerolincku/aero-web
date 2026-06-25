@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { format } from 'date-fns';
+import { zhCN, enUS } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -122,9 +123,53 @@ function ComponentShowcase({ title, description, id, preview, code, t }: Compone
     );
 }
 
+function CustomTimePicker({ value, onChange }: { value?: string, onChange?: (v: string) => void }) {
+    const [hours, setHours] = useState(value ? value.split(':')[0] : '12');
+    const [minutes, setMinutes] = useState(value ? value.split(':')[1] : '00');
+
+    const handleHoursChange = (v: string) => {
+        setHours(v);
+        onChange?.(`${v}:${minutes}`);
+    };
+
+    const handleMinutesChange = (v: string) => {
+        setMinutes(v);
+        onChange?.(`${hours}:${v}`);
+    };
+
+    return (
+        <div className="flex items-center gap-2">
+            <Select value={hours} onValueChange={handleHoursChange}>
+                <SelectTrigger className="w-[70px]">
+                    <SelectValue placeholder="HH" />
+                </SelectTrigger>
+                <SelectContent>
+                    {Array.from({ length: 24 }).map((_, i) => {
+                        const val = i.toString().padStart(2, '0');
+                        return <SelectItem key={val} value={val}>{val}</SelectItem>;
+                    })}
+                </SelectContent>
+            </Select>
+            <span className="text-muted-foreground">:</span>
+            <Select value={minutes} onValueChange={handleMinutesChange}>
+                <SelectTrigger className="w-[70px]">
+                    <SelectValue placeholder="MM" />
+                </SelectTrigger>
+                <SelectContent>
+                    {Array.from({ length: 60 }).map((_, i) => {
+                        const val = i.toString().padStart(2, '0');
+                        return <SelectItem key={val} value={val}>{val}</SelectItem>;
+                    })}
+                </SelectContent>
+            </Select>
+        </div>
+    );
+}
+
 function DatePickerDemo() {
     const [date, setDate] = useState<Date>();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const locale = i18n.language === 'zh-CN' ? zhCN : enUS;
 
     return (
         <Popover>
@@ -137,7 +182,7 @@ function DatePickerDemo() {
                     )}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>{t('components.datePickerExample.pickDate')}</span>}
+                    {date ? format(date, "PPP", { locale }) : <span>{t('components.datePickerExample.pickDate')}</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -145,6 +190,7 @@ function DatePickerDemo() {
                     mode="single"
                     selected={date}
                     onSelect={setDate}
+                    locale={locale}
                 />
             </PopoverContent>
         </Popover>
@@ -153,7 +199,9 @@ function DatePickerDemo() {
 
 function DateTimePickerDemo() {
     const [date, setDate] = useState<Date>();
-    const { t } = useTranslation();
+    const [time, setTime] = useState('12:00');
+    const { t, i18n } = useTranslation();
+    const locale = i18n.language === 'zh-CN' ? zhCN : enUS;
 
     return (
         <Popover>
@@ -166,7 +214,7 @@ function DateTimePickerDemo() {
                     )}
                 >
                     <CalendarIcon className="mr-2 h-4 w-4" />
-                    {date ? format(date, "PPP") : <span>{t('components.dateTimePickerExample.pickDateTime')}</span>}
+                    {date ? `${format(date, "PPP", { locale })} ${time}` : <span>{t('components.dateTimePickerExample.pickDateTime')}</span>}
                 </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
@@ -174,9 +222,10 @@ function DateTimePickerDemo() {
                     mode="single"
                     selected={date}
                     onSelect={setDate}
+                    locale={locale}
                 />
-                <div className="p-3 border-t border-border">
-                    <Input type="time" className="w-full" />
+                <div className="p-3 border-t border-border flex justify-center">
+                    <CustomTimePicker value={time} onChange={setTime} />
                 </div>
             </PopoverContent>
         </Popover>
@@ -186,7 +235,8 @@ function DateTimePickerDemo() {
 function TimePickerDemo() {
     return (
         <div className="flex items-center gap-2">
-            <Input type="time" className="w-[150px]" defaultValue="12:00" />
+            <Clock className="h-4 w-4 text-muted-foreground" />
+            <CustomTimePicker />
         </div>
     );
 }
