@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useTranslation } from "react-i18next"
 import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { cn } from "@/lib/utils.ts"
@@ -61,9 +62,10 @@ function PaginationLink({
 PaginationLink.displayName = "PaginationLink"
 
 function PaginationPrevious({
-                                className,
-                                ...props
-                            }: React.ComponentProps<typeof PaginationLink>) {
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useTranslation();
   return <PaginationLink
         aria-label="Go to previous page"
         size="default"
@@ -71,38 +73,40 @@ function PaginationPrevious({
         {...props}
     >
         <ChevronLeft className="h-4 w-4" />
-        <span>Previous</span>
+        <span>{t("common.pagination.previous", "Previous")}</span>
     </PaginationLink>
 }
 PaginationPrevious.displayName = "PaginationPrevious"
 
 function PaginationNext({
-                            className,
-                            ...props
-                        }: React.ComponentProps<typeof PaginationLink>) {
+  className,
+  ...props
+}: React.ComponentProps<typeof PaginationLink>) {
+  const { t } = useTranslation();
   return <PaginationLink
         aria-label="Go to next page"
         size="default"
         className={cn("gap-1 pr-2.5", className)}
         {...props}
     >
-        <span>Next</span>
+        <span>{t("common.pagination.next", "Next")}</span>
         <ChevronRight className="h-4 w-4" />
     </PaginationLink>
 }
 PaginationNext.displayName = "PaginationNext"
 
 function PaginationEllipsis({
-                                className,
-                                ...props
-                            }: React.ComponentProps<"span">) {
+  className,
+  ...props
+}: React.ComponentProps<"span">) {
+  const { t } = useTranslation();
   return <span
         aria-hidden
         className={cn("flex h-8 w-8 items-center justify-center", className)}
         {...props}
     >
     <MoreHorizontal className="h-4 w-4" />
-    <span className="sr-only">More pages</span>
+    <span className="sr-only">{t("common.pagination.more", "More pages")}</span>
   </span>
 }
 PaginationEllipsis.displayName = "PaginationEllipsis"

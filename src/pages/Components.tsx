@@ -5,6 +5,7 @@ import { zhCN, enUS } from 'date-fns/locale';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { TimePicker } from '@/components/ui/time-picker';
 import {
     Pagination,
     PaginationContent,
@@ -161,48 +162,6 @@ function ComponentShowcase({ title, description, id, preview, code, t }: Compone
     );
 }
 
-function CustomTimePicker({ value, onChange }: { value?: string, onChange?: (v: string) => void }) {
-    const [hours, setHours] = useState(value ? value.split(':')[0] : '12');
-    const [minutes, setMinutes] = useState(value ? value.split(':')[1] : '00');
-
-    const handleHoursChange = (v: string) => {
-        setHours(v);
-        onChange?.(`${v}:${minutes}`);
-    };
-
-    const handleMinutesChange = (v: string) => {
-        setMinutes(v);
-        onChange?.(`${hours}:${v}`);
-    };
-
-    return (
-        <div className="flex items-center gap-2">
-            <Select value={hours} onValueChange={handleHoursChange} clearable={false}>
-                <SelectTrigger className="w-[70px]">
-                    <SelectValue placeholder="HH" />
-                </SelectTrigger>
-                <SelectContent side="top" className="max-h-[200px] overflow-y-auto">
-                    {Array.from({ length: 24 }).map((_, i) => {
-                        const val = i.toString().padStart(2, '0');
-                        return <SelectItem key={val} value={val}>{val}</SelectItem>;
-                    })}
-                </SelectContent>
-            </Select>
-            <span className="text-muted-foreground">:</span>
-            <Select value={minutes} onValueChange={handleMinutesChange} clearable={false}>
-                <SelectTrigger className="w-[70px]">
-                    <SelectValue placeholder="MM" />
-                </SelectTrigger>
-                <SelectContent side="top" className="max-h-[200px] overflow-y-auto">
-                    {Array.from({ length: 60 }).map((_, i) => {
-                        const val = i.toString().padStart(2, '0');
-                        return <SelectItem key={val} value={val}>{val}</SelectItem>;
-                    })}
-                </SelectContent>
-            </Select>
-        </div>
-    );
-}
 
 function DatePickerDemo() {
     const [date, setDate] = useState<Date>();
@@ -263,7 +222,7 @@ function DateTimePickerDemo() {
                     locale={locale}
                 />
                 <div className="p-3 border-t border-border flex justify-center">
-                    <CustomTimePicker value={time} onChange={setTime} />
+                    <TimePicker value={time} onChange={setTime} />
                 </div>
             </PopoverContent>
         </Popover>
@@ -274,7 +233,7 @@ function TimePickerDemo() {
     return (
         <div className="flex items-center gap-2">
             <Clock className="h-4 w-4 text-muted-foreground" />
-            <CustomTimePicker />
+            <TimePicker />
         </div>
     );
 }
