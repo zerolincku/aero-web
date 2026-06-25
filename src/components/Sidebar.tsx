@@ -236,7 +236,7 @@ export default function Sidebar() {
                                             className="h-10 rounded-lg px-2.5 group-data-[collapsible=icon]:h-10 group-data-[collapsible=icon]:w-10 group-data-[collapsible=icon]:px-0 data-[active=true]:bg-primary/10 data-[active=true]:text-primary data-[active=true]:font-normal"
                                         >
                                             <Icon className={cn('h-[18px] w-[18px] shrink-0', isActiveParent && 'text-primary')} />
-                                            <span>{itemLabel}</span>
+                                            <span className="truncate">{itemLabel}</span>
                                             <ChevronRight className={cn('ml-auto h-4 w-4 transition-transform group-data-[collapsible=icon]:hidden', isExpanded && 'rotate-90', isActiveParent && 'text-primary')} />
                                         </SidebarMenuButton>
 
@@ -260,7 +260,7 @@ export default function Sidebar() {
                                                                             : 'border-sidebar-foreground/45 bg-transparent',
                                                                     )}
                                                                 />
-                                                                <span>{childLabel}</span>
+                                                                <span className="truncate">{childLabel}</span>
                                                             </Link>
                                                         </SidebarMenuSubButton>
                                                     </SidebarMenuSubItem>
@@ -317,7 +317,7 @@ export default function Sidebar() {
                                     >
                                         <Link to={item.path} onClick={() => setCollapsedMenuPath(null)}>
                                             <Icon className={cn('h-[18px] w-[18px] shrink-0', location.pathname === item.path && 'text-primary')} />
-                                            <span>{itemLabel}</span>
+                                            <span className="truncate">{itemLabel}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
