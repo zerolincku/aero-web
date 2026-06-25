@@ -143,7 +143,7 @@ function CustomTimePicker({ value, onChange }: { value?: string, onChange?: (v: 
                 <SelectTrigger className="w-[70px]">
                     <SelectValue placeholder="HH" />
                 </SelectTrigger>
-                <SelectContent className="max-h-[200px] overflow-y-auto">
+                <SelectContent side="top" className="max-h-[200px] overflow-y-auto">
                     {Array.from({ length: 24 }).map((_, i) => {
                         const val = i.toString().padStart(2, '0');
                         return <SelectItem key={val} value={val}>{val}</SelectItem>;
@@ -155,7 +155,7 @@ function CustomTimePicker({ value, onChange }: { value?: string, onChange?: (v: 
                 <SelectTrigger className="w-[70px]">
                     <SelectValue placeholder="MM" />
                 </SelectTrigger>
-                <SelectContent className="max-h-[200px] overflow-y-auto">
+                <SelectContent side="top" className="max-h-[200px] overflow-y-auto">
                     {Array.from({ length: 60 }).map((_, i) => {
                         const val = i.toString().padStart(2, '0');
                         return <SelectItem key={val} value={val}>{val}</SelectItem>;
