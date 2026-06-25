@@ -1,4 +1,5 @@
 import React from "react";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type {LucideIcon} from "lucide-react";
 
@@ -6,6 +7,7 @@ export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElemen
     variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
     size?: "default" | "sm" | "lg" | "icon";
     icon?: LucideIcon;
+    loading?: boolean;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
@@ -39,14 +41,20 @@ export const buttonVariants = ({ variant = "default", size = "default", classNam
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-    ({ className, variant = "default", size = "default", icon: Icon, children, ...props }, ref) => {
+    ({ className, variant = "default", size = "default", icon: Icon, loading = false, children, disabled, ...props }, ref) => {
         return (
             <button
                 ref={ref}
                 className={buttonVariants({ variant, size, className })}
+                disabled={disabled || loading}
+                aria-busy={loading}
                 {...props}
             >
-                {Icon && <Icon className="mr-2 h-4 w-4" />}
+                {loading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                    Icon && <Icon className="mr-2 h-4 w-4" />
+                )}
                 {children}
             </button>
         );

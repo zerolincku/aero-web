@@ -32,6 +32,29 @@ export const zhCN = {
                 hour: '时',
                 minute: '分',
             },
+            fileUpload: {
+                clickToUpload: '点击上传',
+                dragAndDrop: '或拖拽到此处',
+                hint: '支持 SVG、PNG、JPG 或 PDF（最大 10MB）',
+                noData: '暂无数据',
+            },
+            imageUpload: {
+                clickToUpload: '点击上传',
+                dragAndDrop: '或拖拽到此处',
+                hint: '支持 SVG、PNG、JPG 或 GIF（最大 5MB）',
+                removeImage: '移除图片',
+                invalidType: '请上传图片格式文件',
+            },
+            transfer: {
+                noData: '暂无数据',
+                source: '来源',
+                target: '目标',
+            },
+            multiSelect: {
+                placeholder: '请选择...',
+                searchPlaceholder: '搜索...',
+                emptyText: '暂无数据',
+            },
             actions: {
                 addUser: '新增用户',
                 addOrg: '新增组织',

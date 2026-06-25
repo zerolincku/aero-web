@@ -51,8 +51,9 @@ function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) 
   const hasChildren = node.children && node.children.length > 0
   const isSelected = selectedId === node.id
 
-  const handleSelect = (e: React.MouseEvent) => {
+  const handleClick = (e: React.MouseEvent) => {
     e.stopPropagation()
+    if (hasChildren) setIsOpen(!isOpen)
     onSelect?.(node)
   }
 
@@ -78,13 +79,7 @@ function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) 
             isSelected ? "bg-primary/10 text-primary" : "text-foreground",
             level > 0 && "ml-4"
           )}
-          onClick={(e) => {
-            if (hasChildren) {
-              setIsOpen(!isOpen)
-            } else {
-              handleSelect(e)
-            }
-          }}
+          onClick={handleClick}
         >
           {hasChildren ? (
             <CollapsibleTrigger asChild>
@@ -97,7 +92,7 @@ function TreeNodeItem({ node, level, selectedId, onSelect }: TreeNodeItemProps) 
           )}
           
           <div className="mr-2 shrink-0">{getIcon()}</div>
-          <span className="truncate" onClick={handleSelect}>{node.name}</span>
+          <span className="truncate">{node.name}</span>
         </div>
 
         {hasChildren && (

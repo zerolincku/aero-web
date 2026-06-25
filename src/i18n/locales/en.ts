@@ -32,6 +32,29 @@ export const en = {
                 hour: 'Hour',
                 minute: 'Minute',
             },
+            fileUpload: {
+                clickToUpload: 'Click to upload',
+                dragAndDrop: 'or drag and drop',
+                hint: 'SVG, PNG, JPG or PDF (max. 10MB)',
+                noData: 'No data',
+            },
+            imageUpload: {
+                clickToUpload: 'Click to upload',
+                dragAndDrop: 'or drag and drop',
+                hint: 'SVG, PNG, JPG or GIF (max. 5MB)',
+                removeImage: 'Remove Image',
+                invalidType: 'Please upload an image file',
+            },
+            transfer: {
+                noData: 'No data',
+                source: 'Source',
+                target: 'Target',
+            },
+            multiSelect: {
+                placeholder: 'Select options...',
+                searchPlaceholder: 'Search...',
+                emptyText: 'No item found.',
+            },
             actions: {
                 addUser: 'Add User',
                 addOrg: 'Add Org',

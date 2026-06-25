@@ -296,16 +296,40 @@ export default function ComponentsPage() {
         { id: 'button', label: t('components.sections.button') },
         { id: 'input', label: t('components.sections.input') },
         { id: 'select', label: t('components.sections.select') },
+        { id: 'multi-select', label: t('components.multiSelectExample.title') },
+        { id: 'switch', label: t('components.switchExample.title') },
+        { id: 'checkbox', label: t('components.checkboxExample.title') },
+        { id: 'radio-group', label: t('components.radioGroupExample.title') },
+        { id: 'slider', label: t('components.sliderExample.title') },
+        { id: 'tabs', label: t('components.tabsExample.title') },
         { id: 'card', label: t('components.sections.card') },
         { id: 'stats', label: t('components.sections.stats') },
+        { id: 'badge', label: t('components.badgeExample.title') },
+        { id: 'avatar', label: t('components.sections.avatar') },
+        { id: 'table', label: t('components.sections.table') },
+        { id: 'pagination', label: t('components.paginationExample.title') },
+        { id: 'date-picker', label: t('components.datePickerExample.title') },
+        { id: 'time-picker', label: t('components.timePickerExample.title') },
+        { id: 'accordion', label: t('components.accordionExample.title') },
+        { id: 'alert', label: t('components.alertExample.title') },
+        { id: 'dialog', label: t('components.dialogExample.title') },
         { id: 'sheet', label: t('components.sheetExample.title') },
+        { id: 'toast', label: t('components.toastExample.title') },
+        { id: 'tooltip', label: t('components.tooltipExample.title') },
+        { id: 'hover-card', label: t('components.hoverCardExample.title') },
+        { id: 'progress', label: t('components.progressExample.title') },
+        { id: 'skeleton', label: t('components.skeletonExample.title') },
+        { id: 'scroll-area', label: t('components.scrollAreaExample.title') },
+        { id: 'navigation-menu', label: t('components.navigationMenuExample.title') },
+        { id: 'file-upload', label: t('components.fileUploadExample.title') },
+        { id: 'image-upload', label: t('components.imageUploadExample.title') },
+        { id: 'tree', label: t('components.treeExample.title') },
+        { id: 'transfer', label: t('components.transferExample.title') },
         { id: 'action-form', label: t('components.sections.actionForm') },
         { id: 'empty-state', label: t('components.sections.emptyState') },
         { id: 'settings', label: t('components.sections.settings') },
         { id: 'list-item', label: t('components.sections.listItem') },
         { id: 'action-menu', label: t('components.sections.actionMenu') },
-        { id: 'avatar', label: t('components.sections.avatar') },
-        { id: 'table', label: t('components.sections.table') },
     ];
 
     const scrollTo = (id: string) => {
@@ -356,23 +380,29 @@ export default function ComponentsPage() {
                         description={t('components.buttonExample.description')}
                         t={t}
                         preview={
-                            <div className="flex flex-wrap gap-4 items-center">
-                                <Button>{t('components.buttonExample.primary')}</Button>
-                                <Button variant="secondary">{t('components.buttonExample.secondary')}</Button>
-                                <Button variant="destructive">{t('components.buttonExample.destructive')}</Button>
-                                <Button variant="outline">{t('components.buttonExample.outline')}</Button>
-                                <Button variant="ghost">{t('components.buttonExample.ghost')}</Button>
-                                <Button variant="link">{t('components.buttonExample.link')}</Button>
+                            <div className="space-y-4">
+                                <div className="flex flex-wrap gap-3 items-center">
+                                    <Button>{t('components.buttonExample.primary')}</Button>
+                                    <Button variant="secondary">{t('components.buttonExample.secondary')}</Button>
+                                    <Button variant="destructive">{t('components.buttonExample.destructive')}</Button>
+                                    <Button variant="outline">{t('components.buttonExample.outline')}</Button>
+                                    <Button variant="ghost">{t('components.buttonExample.ghost')}</Button>
+                                    <Button variant="link">{t('components.buttonExample.link')}</Button>
+                                </div>
+                                <div className="flex flex-wrap gap-3 items-center">
+                                    <Button size="sm">Small</Button>
+                                    <Button size="default">Default</Button>
+                                    <Button size="lg">Large</Button>
+                                    <Button loading>Loading...</Button>
+                                    <Button disabled>Disabled</Button>
+                                </div>
                             </div>
                         }
-                        code={`import { Button } from '@/components/ui/button';
-
-<Button>Primary</Button>
+                        code={`<Button>Primary</Button>
 <Button variant="secondary">Secondary</Button>
 <Button variant="destructive">Destructive</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="link">Link</Button>`}
+<Button loading>Loading...</Button>
+<Button disabled>Disabled</Button>`}
                     />
 
                     <ComponentShowcase 
@@ -1802,9 +1832,29 @@ import { Separator } from '@/components/ui/separator';
                         description={t('components.progressExample.description')}
                         t={t}
                         preview={
-                            <Progress value={33} className="w-[60%]" />
+                            <div className="w-full max-w-md space-y-5">
+                                <div className="space-y-1.5">
+                                    <p className="text-sm text-muted-foreground">Default (33%)</p>
+                                    <Progress value={33} showValue />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <p className="text-sm text-muted-foreground">Success (68%)</p>
+                                    <Progress value={68} variant="success" showValue />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <p className="text-sm text-muted-foreground">Warning (50%)</p>
+                                    <Progress value={50} variant="warning" showValue />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <p className="text-sm text-muted-foreground">Destructive (25%)</p>
+                                    <Progress value={25} variant="destructive" showValue />
+                                </div>
+                            </div>
                         }
-                        code={`<Progress value={33} className="w-[60%]" />`}
+                        code={`<Progress value={33} showValue />
+<Progress value={68} variant="success" showValue />
+<Progress value={50} variant="warning" showValue />
+<Progress value={25} variant="destructive" showValue />`}
                     />
 
                     <Separator />
@@ -2154,19 +2204,37 @@ import { Separator } from '@/components/ui/separator';
                         description={t('components.multiSelectExample.description')}
                         t={t}
                         preview={
-                            <div className="w-[300px]">
-                                <MultiSelect
-                                    options={[
-                                        { label: "React", value: "react" },
-                                        { label: "Vue", value: "vue" },
-                                        { label: "Angular", value: "angular" },
-                                        { label: "Svelte", value: "svelte" },
-                                        { label: "Solid", value: "solid" },
-                                    ]}
-                                    selected={multiSelectValues}
-                                    onChange={setMultiSelectValues}
-                                    placeholder="Select frameworks..."
-                                />
+                            <div className="w-[320px] space-y-4">
+                                <div className="space-y-1.5">
+                                    <p className="text-sm text-muted-foreground">Basic</p>
+                                    <MultiSelect
+                                        options={[
+                                            { label: "React", value: "react" },
+                                            { label: "Vue", value: "vue" },
+                                            { label: "Angular", value: "angular" },
+                                            { label: "Svelte", value: "svelte" },
+                                            { label: "Solid", value: "solid", disabled: true },
+                                        ]}
+                                        selected={multiSelectValues}
+                                        onChange={setMultiSelectValues}
+                                        placeholder="Select frameworks..."
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <p className="text-sm text-muted-foreground">Max 2 selections</p>
+                                    <MultiSelect
+                                        options={[
+                                            { label: "React", value: "react" },
+                                            { label: "Vue", value: "vue" },
+                                            { label: "Angular", value: "angular" },
+                                        ]}
+                                        selected={multiSelectValues.slice(0, 2)}
+                                        onChange={(vals) => setMultiSelectValues(vals)}
+                                        placeholder="Max 2 items..."
+                                        maxCount={2}
+                                        maxCountText="Maximum 2 items selected"
+                                    />
+                                </div>
                             </div>
                         }
                         code={`<MultiSelect

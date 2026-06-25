@@ -1,10 +1,12 @@
 import * as React from "react"
+import { useTranslation } from "react-i18next"
 import { ChevronRight, ChevronLeft } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import { useAutoAnimate } from "@formkit/auto-animate/react"
 
 export type TransferItem = {
   id: string
@@ -36,11 +38,14 @@ function ListPanel({
   onSelectAll: (direction: "left" | "right", checked: boolean) => void
   onSelect: (id: string, checked: boolean) => void
 }) {
+  const { t } = useTranslation()
   const availableItems = items.filter((i) => !i.disabled)
   const isAllSelected =
     availableItems.length > 0 && selected.length === availableItems.length
   const isIndeterminate =
     selected.length > 0 && selected.length < availableItems.length
+
+  const [listRef] = useAutoAnimate<HTMLDivElement>()
 
   return (
     <Card className="w-full sm:w-[250px] flex flex-col shadow-none">
@@ -63,10 +68,10 @@ function ListPanel({
         <ScrollArea className="h-full">
           {items.length === 0 ? (
             <div className="h-full flex items-center justify-center text-sm text-muted-foreground p-4 text-center">
-              No data
+              {t('common.transfer.noData', 'No data')}
             </div>
           ) : (
-            <div className="p-2 space-y-1">
+            <div className="p-2 space-y-1" ref={listRef}>
               {items.map((item) => (
                 <div
                   key={item.id}
@@ -105,10 +110,13 @@ export function Transfer({
   dataSource,
   targetKeys,
   onChange,
-  leftTitle = "Source",
-  rightTitle = "Target",
+  leftTitle,
+  rightTitle,
   className,
 }: TransferProps) {
+  const { t } = useTranslation()
+  const defaultLeftTitle = leftTitle || t('common.transfer.source', 'Source')
+  const defaultRightTitle = rightTitle || t('common.transfer.target', 'Target')
   const [selectedKeys, setSelectedKeys] = React.useState<string[]>([])
 
   const leftDataSource = dataSource.filter((item) => !targetKeys.includes(item.id))
@@ -157,7 +165,7 @@ export function Transfer({
   return (
     <div className={cn("flex flex-col sm:flex-row items-center gap-4", className)}>
       <ListPanel
-        title={leftTitle}
+        title={defaultLeftTitle}
         items={leftDataSource}
         selected={leftSelectedKeys}
         direction="left"
@@ -187,7 +195,7 @@ export function Transfer({
       </div>
 
       <ListPanel
-        title={rightTitle}
+        title={defaultRightTitle}
         items={rightDataSource}
         selected={rightSelectedKeys}
         direction="right"

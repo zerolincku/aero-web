@@ -1,5 +1,7 @@
 import * as React from "react"
+import { useTranslation } from "react-i18next"
 import { ImagePlus, X } from "lucide-react"
+import { toast } from "sonner"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
@@ -10,6 +12,7 @@ export interface ImageUploadProps extends Omit<React.InputHTMLAttributes<HTMLInp
 
 export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
   ({ className, onChange, value = null, ...props }, ref) => {
+    const { t } = useTranslation()
     const [dragActive, setDragActive] = React.useState(false)
     const [preview, setPreview] = React.useState<string | null>(value)
     const [, setFile] = React.useState<File | null>(null)
@@ -39,8 +42,7 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
       }
 
       if (!newFile.type.startsWith('image/')) {
-        // You might want to trigger a toast here
-        console.error("Please upload an image file")
+        toast.error(t('common.imageUpload.invalidType', 'Please upload an image file'))
         return
       }
 
@@ -115,10 +117,10 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
             />
             <ImagePlus className="w-10 h-10 mb-3 text-muted-foreground" />
             <p className="mb-1 text-sm font-medium">
-              <span className="text-primary">Click to upload</span> or drag and drop
+              <span className="text-primary">{t('common.imageUpload.clickToUpload', 'Click to upload')}</span> {t('common.imageUpload.dragAndDrop', 'or drag and drop')}
             </p>
             <p className="text-xs text-muted-foreground">
-              SVG, PNG, JPG or GIF (max. 5MB)
+              {t('common.imageUpload.hint', 'SVG, PNG, JPG or GIF (max. 5MB)')}
             </p>
           </div>
         ) : (
@@ -136,7 +138,7 @@ export const ImageUpload = React.forwardRef<HTMLInputElement, ImageUploadProps>(
                 className="shadow-lg"
               >
                 <X className="w-4 h-4 mr-2" />
-                Remove Image
+                {t('common.imageUpload.removeImage', 'Remove Image')}
               </Button>
             </div>
           </div>

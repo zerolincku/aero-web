@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useTranslation } from "react-i18next"
 import { UploadCloud, File, X } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -11,6 +12,7 @@ export interface FileUploadProps extends Omit<React.InputHTMLAttributes<HTMLInpu
 
 export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
   ({ className, onChange, value, maxFiles = 0, ...props }, ref) => {
+    const { t } = useTranslation()
     const [dragActive, setDragActive] = React.useState(false)
     const [files, setFiles] = React.useState<File[]>(value || [])
     const inputRef = React.useRef<HTMLInputElement>(null)
@@ -100,10 +102,10 @@ export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
           />
           <UploadCloud className="w-10 h-10 mb-3 text-muted-foreground" />
           <p className="mb-1 text-sm font-medium">
-            <span className="text-primary">Click to upload</span> or drag and drop
+            <span className="text-primary">{t('common.fileUpload.clickToUpload', 'Click to upload')}</span> {t('common.fileUpload.dragAndDrop', 'or drag and drop')}
           </p>
           <p className="text-xs text-muted-foreground">
-            SVG, PNG, JPG or PDF (max. 10MB)
+            {t('common.fileUpload.hint', 'SVG, PNG, JPG or PDF (max. 10MB)')}
           </p>
         </div>
 
