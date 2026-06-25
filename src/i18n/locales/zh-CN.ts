@@ -385,6 +385,25 @@ export const zhCN = {
                 title: '固定后列表格',
                 description: '常用于固定最后一列的操作按钮，在横向滚动时始终保持可操作状态。',
             },
+            paginationExample: {
+                title: '分页组件',
+                description: '用于将大量数据分页展示。',
+            },
+            datePickerExample: {
+                title: '日期选择',
+                description: '用于选择单个日期的组件。',
+                pickDate: '选择日期',
+            },
+            dateTimePickerExample: {
+                title: '日期时间选择',
+                description: '用于选择日期和时间的组合组件。',
+                pickDateTime: '选择日期和时间',
+            },
+            timePickerExample: {
+                title: '时间选择',
+                description: '用于选择时间的组件。',
+                pickTime: '选择时间',
+            },
             emptyExample: {
                 title: '暂无可用资源',
                 description: '你当前没有任何处于运行状态的实例，点击下方按钮创建一个新的实例。',

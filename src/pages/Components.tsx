@@ -1,5 +1,19 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious,
+} from '@/components/ui/pagination';
+import { cn } from '@/lib/utils';
 import {
     Users,
     CreditCard,
@@ -105,6 +119,75 @@ function ComponentShowcase({ title, description, id, preview, code, t }: Compone
                 </div>
             </div>
         </section>
+    );
+}
+
+function DatePickerDemo() {
+    const [date, setDate] = useState<Date>();
+    const { t } = useTranslation();
+
+    return (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button
+                    variant={"outline"}
+                    className={cn(
+                        "w-[280px] justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                    )}
+                >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : <span>{t('components.datePickerExample.pickDate')}</span>}
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                />
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function DateTimePickerDemo() {
+    const [date, setDate] = useState<Date>();
+    const { t } = useTranslation();
+
+    return (
+        <Popover>
+            <PopoverTrigger asChild>
+                <Button
+                    variant={"outline"}
+                    className={cn(
+                        "w-[280px] justify-start text-left font-normal",
+                        !date && "text-muted-foreground"
+                    )}
+                >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {date ? format(date, "PPP") : <span>{t('components.dateTimePickerExample.pickDateTime')}</span>}
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+                <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                />
+                <div className="p-3 border-t border-border">
+                    <Input type="time" className="w-full" />
+                </div>
+            </PopoverContent>
+        </Popover>
+    );
+}
+
+function TimePickerDemo() {
+    return (
+        <div className="flex items-center gap-2">
+            <Input type="time" className="w-[150px]" defaultValue="12:00" />
+        </div>
     );
 }
 
@@ -938,6 +1021,141 @@ import { Separator } from '@/components/ui/separator';
       </TableRow>
     </TableBody>
   </Table>
+</div>`}
+                    />
+
+                    <ComponentShowcase 
+                        id="pagination"
+                        title={t('components.paginationExample.title')}
+                        description={t('components.paginationExample.description')}
+                        t={t}
+                        preview={
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious />
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink>1</PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink isActive>
+                                            2
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationLink>3</PaginationLink>
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationEllipsis />
+                                    </PaginationItem>
+                                    <PaginationItem>
+                                        <PaginationNext />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        }
+                        code={`<Pagination>
+  <PaginationContent>
+    <PaginationItem>
+      <PaginationPrevious href="#" />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">1</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#" isActive>
+        2
+      </PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationLink href="#">3</PaginationLink>
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationEllipsis />
+    </PaginationItem>
+    <PaginationItem>
+      <PaginationNext href="#" />
+    </PaginationItem>
+  </PaginationContent>
+</Pagination>`}
+                    />
+
+                    <ComponentShowcase 
+                        id="date-picker"
+                        title={t('components.datePickerExample.title')}
+                        description={t('components.datePickerExample.description')}
+                        t={t}
+                        preview={<DatePickerDemo />}
+                        code={`const [date, setDate] = useState<Date>()
+
+<Popover>
+  <PopoverTrigger asChild>
+    <Button
+      variant={"outline"}
+      className={cn(
+        "w-[280px] justify-start text-left font-normal",
+        !date && "text-muted-foreground"
+      )}
+    >
+      <CalendarIcon className="mr-2 h-4 w-4" />
+      {date ? format(date, "PPP") : <span>Pick a date</span>}
+    </Button>
+  </PopoverTrigger>
+  <PopoverContent className="w-auto p-0" align="start">
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      initialFocus
+    />
+  </PopoverContent>
+</Popover>`}
+                    />
+
+                    <ComponentShowcase 
+                        id="date-time-picker"
+                        title={t('components.dateTimePickerExample.title')}
+                        description={t('components.dateTimePickerExample.description')}
+                        t={t}
+                        preview={<DateTimePickerDemo />}
+                        code={`const [date, setDate] = useState<Date>()
+
+<Popover>
+  <PopoverTrigger asChild>
+    <Button
+      variant={"outline"}
+      className={cn(
+        "w-[280px] justify-start text-left font-normal",
+        !date && "text-muted-foreground"
+      )}
+    >
+      <CalendarIcon className="mr-2 h-4 w-4" />
+      {date ? format(date, "PPP") : <span>Pick a date & time</span>}
+    </Button>
+  </PopoverTrigger>
+  <PopoverContent className="w-auto p-0" align="start">
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={setDate}
+      initialFocus
+    />
+    <div className="p-3 border-t border-border">
+      <Input type="time" className="w-full" />
+    </div>
+  </PopoverContent>
+</Popover>`}
+                    />
+
+                    <ComponentShowcase 
+                        id="time-picker"
+                        title={t('components.timePickerExample.title')}
+                        description={t('components.timePickerExample.description')}
+                        t={t}
+                        preview={<TimePickerDemo />}
+                        code={`<div className="flex items-center gap-2">
+  <Input type="time" className="w-[150px]" defaultValue="12:00" />
 </div>`}
                     />
 

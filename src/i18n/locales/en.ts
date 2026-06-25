@@ -343,7 +343,26 @@ export const en = {
             },
             tableFixedLastExample: {
                 title: 'Fixed Last Column Table',
-                description: 'Commonly used to fix the last column for action buttons, keeping them accessible while scrolling horizontally.',
+                description: 'Often used to fix the action buttons in the last column, keeping them accessible while scrolling horizontally.',
+            },
+            paginationExample: {
+                title: 'Pagination',
+                description: 'Used to divide large amounts of data into pages.',
+            },
+            datePickerExample: {
+                title: 'Date Picker',
+                description: 'A component used to select a single date.',
+                pickDate: 'Pick a date',
+            },
+            dateTimePickerExample: {
+                title: 'Date Time Picker',
+                description: 'A component used to select both a date and a time.',
+                pickDateTime: 'Pick a date & time',
+            },
+            timePickerExample: {
+                title: 'Time Picker',
+                description: 'A component used to select a time.',
+                pickTime: 'Pick a time',
             },
             buttonExample: {
                 title: 'Buttons',
