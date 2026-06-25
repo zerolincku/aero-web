@@ -139,11 +139,11 @@ function CustomTimePicker({ value, onChange }: { value?: string, onChange?: (v: 
 
     return (
         <div className="flex items-center gap-2">
-            <Select value={hours} onValueChange={handleHoursChange}>
+            <Select value={hours} onValueChange={handleHoursChange} clearable={false}>
                 <SelectTrigger className="w-[70px]">
                     <SelectValue placeholder="HH" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[200px] overflow-y-auto">
                     {Array.from({ length: 24 }).map((_, i) => {
                         const val = i.toString().padStart(2, '0');
                         return <SelectItem key={val} value={val}>{val}</SelectItem>;
@@ -151,11 +151,11 @@ function CustomTimePicker({ value, onChange }: { value?: string, onChange?: (v: 
                 </SelectContent>
             </Select>
             <span className="text-muted-foreground">:</span>
-            <Select value={minutes} onValueChange={handleMinutesChange}>
+            <Select value={minutes} onValueChange={handleMinutesChange} clearable={false}>
                 <SelectTrigger className="w-[70px]">
                     <SelectValue placeholder="MM" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[200px] overflow-y-auto">
                     {Array.from({ length: 60 }).map((_, i) => {
                         const val = i.toString().padStart(2, '0');
                         return <SelectItem key={val} value={val}>{val}</SelectItem>;
