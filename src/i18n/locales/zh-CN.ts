@@ -468,6 +468,26 @@ export const zhCN = {
                 title: '面包屑 (Breadcrumb)',
                 description: '显示当前页面的层级路径，点击可快速返回上级。',
             },
+            carouselExample: {
+                title: '走马灯 (Carousel)',
+                description: '用于循环展示多张图片或卡片的轮播组件。',
+            },
+            scrollAreaExample: {
+                title: '滚动区域 (Scroll Area)',
+                description: '自定义样式的跨浏览器滚动条组件。',
+            },
+            commandExample: {
+                title: '命令面板 (Command)',
+                description: '可通过快捷键唤起的全局搜索或命令执行面板。',
+            },
+            collapsibleExample: {
+                title: '折叠面板 (Collapsible)',
+                description: '一个可以展开和收起面板内容的交互组件。',
+            },
+            resizableExample: {
+                title: '可调整面板 (Resizable)',
+                description: '支持拖拽调整大小的面板组布局。',
+            },
             emptyExample: {
                 title: '暂无可用资源',
                 description: '你当前没有任何处于运行状态的实例，点击下方按钮创建一个新的实例。',

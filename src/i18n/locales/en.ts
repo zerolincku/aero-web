@@ -428,6 +428,26 @@ export const en = {
                 title: 'Breadcrumb',
                 description: 'Displays the path to the current resource using a hierarchy of links.',
             },
+            carouselExample: {
+                title: 'Carousel',
+                description: 'A carousel with motion and swipe built using Embla.',
+            },
+            scrollAreaExample: {
+                title: 'Scroll Area',
+                description: 'Augments native scroll functionality for custom, cross-browser styling.',
+            },
+            commandExample: {
+                title: 'Command',
+                description: 'Fast, composable, unstyled command menu for React.',
+            },
+            collapsibleExample: {
+                title: 'Collapsible',
+                description: 'An interactive component which expands/collapses a panel.',
+            },
+            resizableExample: {
+                title: 'Resizable',
+                description: 'Accessible resizable panel groups and layouts with keyboard support.',
+            },
             buttonExample: {
                 title: 'Buttons',
                 description: 'Buttons with various variants and sizes.',
