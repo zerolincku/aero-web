@@ -364,6 +364,38 @@ export const en = {
                 description: 'A component used to select a time.',
                 pickTime: 'Pick a time',
             },
+            switchExample: {
+                title: 'Switch',
+                description: 'A control that allows the user to toggle between checked and not checked.',
+            },
+            checkboxExample: {
+                title: 'Checkbox',
+                description: 'A control that allows the user to toggle between checked and not checked.',
+            },
+            radioGroupExample: {
+                title: 'Radio Group',
+                description: 'A set of checkable buttons, known as radio buttons, where no more than one of the buttons can be checked at a time.',
+            },
+            tabsExample: {
+                title: 'Tabs',
+                description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
+            },
+            badgeExample: {
+                title: 'Badge',
+                description: 'Displays a badge or a component that looks like a badge.',
+            },
+            accordionExample: {
+                title: 'Accordion',
+                description: 'A vertically stacked set of interactive headings that each reveal an associated section of content.',
+            },
+            alertExample: {
+                title: 'Alert',
+                description: 'Displays a callout for user attention.',
+            },
+            dialogExample: {
+                title: 'Dialog',
+                description: 'A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.',
+            },
             buttonExample: {
                 title: 'Buttons',
                 description: 'Buttons with various variants and sizes.',

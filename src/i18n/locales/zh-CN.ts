@@ -400,9 +400,41 @@ export const zhCN = {
                 pickDateTime: '选择日期和时间',
             },
             timePickerExample: {
-                title: '时间选择',
-                description: '用于选择时间的组件。',
+                title: '时间选择器 (Time Picker)',
+                description: '用于选择一个特定的时间。',
                 pickTime: '选择时间',
+            },
+            switchExample: {
+                title: '开关 (Switch)',
+                description: '允许用户在开启和关闭之间切换状态的控件。',
+            },
+            checkboxExample: {
+                title: '复选框 (Checkbox)',
+                description: '允许用户勾选或取消勾选。',
+            },
+            radioGroupExample: {
+                title: '单选框 (Radio Group)',
+                description: '一组选项，每次只能选中其中一个。',
+            },
+            tabsExample: {
+                title: '标签页 (Tabs)',
+                description: '一组面板，每次仅显示一个面板的内容。',
+            },
+            badgeExample: {
+                title: '徽章 (Badge)',
+                description: '用于展示状态或标记的小组件。',
+            },
+            accordionExample: {
+                title: '手风琴 (Accordion)',
+                description: '垂直堆叠的交互式标题集合，点击可展开相关内容。',
+            },
+            alertExample: {
+                title: '警告提示 (Alert)',
+                description: '用于展示需要用户关注的重要提示信息。',
+            },
+            dialogExample: {
+                title: '对话框 (Dialog)',
+                description: '覆盖在主窗口之上的弹窗，要求用户进行交互。',
             },
             emptyExample: {
                 title: '暂无可用资源',
