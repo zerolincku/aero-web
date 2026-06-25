@@ -30,7 +30,7 @@ import {
     Edit2,
     Trash2,
     Download,
-    MoreHorizontal
+    MoreHorizontal, ChevronDown, Folder
 } from 'lucide-react';
 import {
     Card,
@@ -790,7 +790,7 @@ import { Label } from '@/components/ui/label';
                             </div>
                         }
                         code={`import { ActionMenu, ActionMenuItem, ActionMenuSubmenu } from '@/components/ActionMenu';
-import { Edit2, Copy, Trash2, Download, MoreHorizontal } from 'lucide-react';
+import { Edit2, Copy, Trash2, Download, MoreHorizontal, ChevronDown, Folder } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 <ActionMenu ariaLabel="Action menu">
@@ -802,7 +802,7 @@ import { Separator } from '@/components/ui/separator';
       <ActionMenuItem icon={<Copy className="h-4 w-4" />} onClick={closeMenu}>
         Duplicate
       </ActionMenuItem>
-      <ActionMenuSubmenu icon={<MoreHorizontal className="h-4 w-4" />} label="More actions">
+      <ActionMenuSubmenu icon={<MoreHorizontal, ChevronDown, Folder className="h-4 w-4" />} label="More actions">
         <ActionMenuItem icon={<Download className="h-4 w-4" />} onClick={closeMenu}>
           Export Data
         </ActionMenuItem>
@@ -1964,32 +1964,40 @@ import { Separator } from '@/components/ui/separator';
                         description={t('components.collapsibleExample.description')}
                         t={t}
                         preview={
-                            <Collapsible className="w-[350px] space-y-2">
-                                <div className="flex items-center justify-between space-x-4 px-4">
-                                    <h4 className="text-sm font-semibold">
-                                        @peduarte starred 3 repositories
-                                    </h4>
+                            <Collapsible className="w-[350px] space-y-2 rounded-xl border bg-card p-4 shadow-sm">
+                                <div className="flex items-center justify-between space-x-4">
+                                    <div className="flex items-center space-x-2">
+                                        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
+                                            <Folder className="h-4 w-4 text-primary" />
+                                        </div>
+                                        <h4 className="text-sm font-semibold">
+                                            Project Resources
+                                        </h4>
+                                    </div>
                                     <CollapsibleTrigger asChild>
-                                        <Button variant="ghost" size="sm" className="w-9 p-0">
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 p-0 hover:bg-muted group">
+                                            <ChevronDown className="h-4 w-4 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180" />
                                             <span className="sr-only">Toggle</span>
-                                            <span className="text-xl leading-none">↓</span>
                                         </Button>
                                     </CollapsibleTrigger>
                                 </div>
-                                <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                                    @radix-ui/primitives
+                                <div className="rounded-md border border-border/50 bg-muted/30 px-4 py-3 text-sm flex items-center justify-between transition-colors hover:bg-muted/50 mt-4">
+                                    <span>@radix-ui/primitives</span>
+                                    <Badge variant="secondary" className="font-normal">Core</Badge>
                                 </div>
-                                <CollapsibleContent className="space-y-2">
-                                    <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                                        @radix-ui/colors
+                                <CollapsibleContent className="space-y-2 overflow-hidden transition-all data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
+                                    <div className="rounded-md border border-border/50 bg-muted/30 px-4 py-3 text-sm flex items-center justify-between transition-colors hover:bg-muted/50">
+                                        <span>@radix-ui/colors</span>
+                                        <Badge variant="outline" className="font-normal text-muted-foreground">Styles</Badge>
                                     </div>
-                                    <div className="rounded-md border px-4 py-3 font-mono text-sm">
-                                        @stitches/react
+                                    <div className="rounded-md border border-border/50 bg-muted/30 px-4 py-3 text-sm flex items-center justify-between transition-colors hover:bg-muted/50">
+                                        <span>@stitches/react</span>
+                                        <Badge variant="outline" className="font-normal text-muted-foreground">Legacy</Badge>
                                     </div>
                                 </CollapsibleContent>
                             </Collapsible>
                         }
-                        code={`<Collapsible className="w-[350px] space-y-2">
+                        code={`<Collapsible className="w-[350px] space-y-2 rounded-xl border bg-card p-4 shadow-sm">
     <div className="flex items-center justify-between space-x-4 px-4">
         <h4 className="text-sm font-semibold">
             @peduarte starred 3 repositories
