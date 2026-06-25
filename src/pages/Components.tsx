@@ -61,7 +61,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { toast } from 'sonner';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger, SheetFooter, SheetClose } from '@/components/ui/sheet';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Slider } from '@/components/ui/slider';
@@ -1602,14 +1602,39 @@ import { Separator } from '@/components/ui/separator';
                                             Make changes to your profile here. Click save when you're done.
                                         </SheetDescription>
                                     </SheetHeader>
-                                    <div className="grid gap-4 py-4">
+                                    <div className="grid gap-4 py-4 px-4">
                                         <div className="grid grid-cols-4 items-center gap-4">
                                             <Label htmlFor="name" className="text-right">
                                                 Name
                                             </Label>
                                             <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
                                         </div>
+                                        <div className="grid grid-cols-4 items-center gap-4">
+                                            <Label htmlFor="role" className="text-right">
+                                                Role
+                                            </Label>
+                                            <div className="col-span-3">
+                                                <Select value="admin">
+                                                    <SelectTrigger>
+                                                        <SelectValue placeholder="Select a role" />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        <SelectItem value="admin">Admin</SelectItem>
+                                                        <SelectItem value="user">User</SelectItem>
+                                                        <SelectItem value="guest">Guest</SelectItem>
+                                                    </SelectContent>
+                                                </Select>
+                                            </div>
+                                        </div>
                                     </div>
+                                    <SheetFooter className="mt-auto flex justify-end gap-2 px-4 pb-4">
+                                        <SheetClose asChild>
+                                            <Button variant="outline">Cancel</Button>
+                                        </SheetClose>
+                                        <SheetClose asChild>
+                                            <Button type="submit">Save changes</Button>
+                                        </SheetClose>
+                                    </SheetFooter>
                                 </SheetContent>
                             </Sheet>
                         }
@@ -1624,14 +1649,39 @@ import { Separator } from '@/components/ui/separator';
                 Make changes to your profile here. Click save when you're done.
             </SheetDescription>
         </SheetHeader>
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-4 py-4 px-4">
             <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="name" className="text-right">
                     Name
                 </Label>
                 <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
             </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+                <Label htmlFor="role" className="text-right">
+                    Role
+                </Label>
+                <div className="col-span-3">
+                    <Select value="admin">
+                        <SelectTrigger>
+                            <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="admin">Admin</SelectItem>
+                            <SelectItem value="user">User</SelectItem>
+                            <SelectItem value="guest">Guest</SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
+            </div>
         </div>
+        <SheetFooter className="mt-auto flex justify-end gap-2 px-4 pb-4">
+            <SheetClose asChild>
+                <Button variant="outline">Cancel</Button>
+            </SheetClose>
+            <SheetClose asChild>
+                <Button type="submit">Save changes</Button>
+            </SheetClose>
+        </SheetFooter>
     </SheetContent>
 </Sheet>`}
                     />
