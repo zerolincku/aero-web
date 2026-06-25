@@ -10,14 +10,16 @@ export interface FileUploadProps extends Omit<React.InputHTMLAttributes<HTMLInpu
 }
 
 export const FileUpload = React.forwardRef<HTMLInputElement, FileUploadProps>(
-  ({ className, onChange, value = [], maxFiles = 0, ...props }, ref) => {
+  ({ className, onChange, value, maxFiles = 0, ...props }, ref) => {
     const [dragActive, setDragActive] = React.useState(false)
-    const [files, setFiles] = React.useState<File[]>(value)
+    const [files, setFiles] = React.useState<File[]>(value || [])
     const inputRef = React.useRef<HTMLInputElement>(null)
 
     // Sync external value
     React.useEffect(() => {
-      setFiles(value)
+      if (value !== undefined) {
+        setFiles(value)
+      }
     }, [value])
 
     const handleFiles = (newFiles: FileList | null) => {
