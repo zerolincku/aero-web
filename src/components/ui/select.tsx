@@ -18,7 +18,7 @@ function Select({
                     children,
                     value,
                     onValueChange,
-                    clearable = true,
+                    clearable = false,
                     onClear,
                     clearAriaLabel,
                 }: {
