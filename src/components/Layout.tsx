@@ -33,31 +33,6 @@ export default function Layout() {
 
     // 深度查找当前路由及其祖先
     const breadcrumbs = (() => {
-        if (location.pathname.startsWith('/infrastructure/hosts/')) {
-            const rawHostId = location.pathname.replace('/infrastructure/hosts/', '').split('/')[0];
-            const hostId = decodeURIComponent(rawHostId || '');
-            return [
-                {
-                    label: 'Infrastructure',
-                    labelKey: 'nav.infrastructure',
-                    path: '/infrastructure',
-                    isLink: false
-                },
-                {
-                    label: 'Host List',
-                    labelKey: 'nav.hostList',
-                    path: '/infrastructure/hosts',
-                    isLink: true
-                },
-                {
-                    label: hostId || 'Host Detail',
-                    labelKey: hostId || 'hostDetail.title',
-                    path: location.pathname,
-                    isLink: false
-                },
-            ];
-        }
-
         const matchResult = findRouteWithParents(navRoutes, location.pathname);
 
         if (!matchResult) {
@@ -139,7 +114,7 @@ export default function Layout() {
                         </a>
 
                         <div className="w-10">
-                        <Select clearable={false} value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
+                        <Select value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
                             <SelectTrigger
                                 className="h-8 w-10 px-0 justify-center border-0 bg-transparent shadow-none ring-0 focus:ring-0 focus:ring-offset-0 hover:bg-accent/50 [&>svg:last-child]:hidden"
                                 aria-label={t('settings.preferences.language')}

@@ -80,7 +80,7 @@ function TreeNodeItem({ node, level, selectedId, onSelect, treeDisabled }: TreeN
         if (hasChildren && isOpen) setIsOpen(false)
         break
       case 'ArrowDown':
-      case 'ArrowUp':
+      case 'ArrowUp': {
         e.preventDefault()
         const tree = e.currentTarget.closest('[role="tree"]')
         if (tree) {
@@ -93,6 +93,7 @@ function TreeNodeItem({ node, level, selectedId, onSelect, treeDisabled }: TreeN
           }
         }
         break
+      }
     }
   }
 

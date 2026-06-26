@@ -54,102 +54,102 @@ function Dashboard() {
   const summaryCards: SummaryCard[] = [
     {
       id: 'hosts',
-      title: 'Total Hosts',
+      title: t('dashboard.stats.totalHosts'),
       value: '1,248',
       sub: '+12%',
-      meta: '1,232 Online',
-      metaRight: '16 Offline',
+      meta: t('dashboard.stats.online', { count: '1,232' }),
+      metaRight: t('dashboard.stats.offline', { count: '16' }),
       icon: Server,
       accent: 'blue',
     },
     {
       id: 'vms',
-      title: 'Active VMs',
+      title: t('dashboard.stats.activeVMs'),
       value: '8,421',
       sub: '+4%',
-      meta: '7,902 Running',
-      metaRight: '519 Paused',
+      meta: t('dashboard.stats.running', { count: '7,902' }),
+      metaRight: t('dashboard.stats.paused', { count: '519' }),
       icon: Activity,
       accent: 'indigo',
     },
     {
       id: 'quota',
-      title: 'CPU/RAM Quota',
+      title: t('dashboard.stats.cpuRamQuota'),
       value: '420/612 TB',
-      sub: '68% Capacity',
-      meta: 'Cluster Load',
-      metaRight: 'High Utility',
+      sub: t('dashboard.stats.capacity', { percent: '68' }),
+      meta: t('dashboard.stats.clusterLoad'),
+      metaRight: t('dashboard.stats.highUtility'),
       icon: ShieldPlus,
       accent: 'amber',
     },
     {
       id: 'storage',
-      title: 'Storage Used',
+      title: t('dashboard.stats.storageUsed'),
       value: '1.2 PB',
       sub: 'of 2.0 PB',
-      meta: 'Tier 1 SSD Pool',
-      metaRight: 'Healthy',
+      meta: t('dashboard.stats.tier1Pool'),
+      metaRight: t('dashboard.stats.healthy'),
       icon: Database,
       accent: 'emerald',
     },
   ];
 
   const topHosts: TopHost[] = [
-    { id: '893-X2', name: 'host-prod-012.us-east-1', os: 'Ubuntu 22.04', level: 'Critical', usage: 94.2, color: 'bg-rose-500' },
+    { id: '893-X2', name: 'host-prod-012.us-east-1', os: 'Ubuntu 22.04', level: 'Critical', usage: 94.2, color: 'bg-destructive' },
     { id: '112-D0', name: 'db-replica-2.eu-west-2', os: 'RHEL 9.1', level: 'High', usage: 88.5, color: 'bg-amber-500' },
     { id: '442-A1', name: 'app-node-05.ap-northeast-1', os: 'Ubuntu 22.04', level: 'High', usage: 82.1, color: 'bg-amber-500' },
-    { id: '771-C9', name: 'cache-dist-1.us-west-2', os: 'CentOS Stream', level: 'Normal', usage: 76.8, color: 'bg-blue-500' },
-    { id: '219-G6', name: 'edge-gateway-4.sa-east-1', os: 'Debian 11', level: 'Normal', usage: 71.2, color: 'bg-blue-500' },
+    { id: '771-C9', name: 'cache-dist-1.us-west-2', os: 'CentOS Stream', level: 'Normal', usage: 76.8, color: 'bg-primary' },
+    { id: '219-G6', name: 'edge-gateway-4.sa-east-1', os: 'Debian 11', level: 'Normal', usage: 71.2, color: 'bg-primary' },
   ];
 
   const events: EventItem[] = [
     {
       id: 'event-1',
       icon: ShieldCheck,
-      text: 'System automatically scaled Web-Tier-ASG in us-east-1a.',
-      time: 'Just now',
-      dot: 'border-emerald-400',
-      dotBg: 'bg-emerald-400',
+      text: t('dashboard.events.scaled'),
+      time: t('dashboard.events.justNow'),
+      dot: 'border-emerald-500',
+      dotBg: 'bg-emerald-500',
     },
     {
       id: 'event-2',
       icon: ShieldAlert,
-      text: 'Alert: Host host-prod-012 reported High CPU Usage (94%).',
-      time: '12 minutes ago',
-      dot: 'border-rose-400',
-      dotBg: 'bg-rose-400',
+      text: t('dashboard.events.alertCpu'),
+      time: t('dashboard.events.minsAgo', { count: '12' }),
+      dot: 'border-destructive',
+      dotBg: 'bg-destructive',
     },
     {
       id: 'event-3',
       icon: ShieldPlus,
-      text: 'Admin User created new Virtual Machine dev-stack-01.',
-      time: '45 minutes ago',
-      dot: 'border-blue-400',
-      dotBg: 'bg-blue-400',
+      text: t('dashboard.events.vmCreated'),
+      time: t('dashboard.events.minsAgo', { count: '45' }),
+      dot: 'border-primary',
+      dotBg: 'bg-primary',
     },
     {
       id: 'event-4',
       icon: ShieldMinus,
-      text: 'Scheduled maintenance started for region eu-west-2.',
-      time: '2 hours ago',
-      dot: 'border-amber-400',
-      dotBg: 'bg-amber-400',
+      text: t('dashboard.events.maintenance'),
+      time: t('dashboard.events.hoursAgo', { count: '2' }),
+      dot: 'border-amber-500',
+      dotBg: 'bg-amber-500',
     },
     {
       id: 'event-5',
       icon: ShieldEllipsis,
-      text: 'System daily infrastructure backup completed successfully.',
-      time: '8 hours ago',
+      text: t('dashboard.events.backup'),
+      time: t('dashboard.events.hoursAgo', { count: '8' }),
       dot: 'border-muted-foreground/40',
       dotBg: 'bg-muted-foreground/40',
     },
   ];
 
   const accentClasses: Record<SummaryCard['accent'], string> = {
-    blue: 'bg-blue-50 text-blue-600',
-    indigo: 'bg-indigo-50 text-indigo-600',
-    amber: 'bg-amber-50 text-amber-600',
-    emerald: 'bg-emerald-50 text-emerald-600',
+    blue: 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400',
+    indigo: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400',
+    amber: 'bg-amber-50 text-amber-600 dark:bg-amber-900/20 dark:text-amber-400',
+    emerald: 'bg-emerald-50 text-emerald-600 dark:bg-emerald-900/20 dark:text-emerald-400',
   };
 
   return (
@@ -157,17 +157,17 @@ function Dashboard() {
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{t('dashboard.title')}</h2>
-          <p className="text-muted-foreground">Infrastructure Overview</p>
+          <p className="text-muted-foreground">{t('dashboard.subtitle')}</p>
         </div>
 
         <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <div className="relative w-full sm:w-72">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input className="pl-9" placeholder="Quick search..." />
+            <Input className="pl-9" placeholder={t('dashboard.quickSearch')} />
           </div>
           <Button>
             <Plus className="mr-2 h-4 w-4" />
-            New Resource
+            {t('dashboard.newResource')}
           </Button>
         </div>
       </div>
@@ -190,7 +190,7 @@ function Dashboard() {
                 <p className="text-sm text-muted-foreground">{card.title}</p>
                 <div className="flex items-baseline gap-2">
                   <p className="text-3xl font-bold tracking-tight">{card.value}</p>
-                  <span className={`text-xs font-semibold ${card.accent === 'amber' ? 'text-amber-600' : 'text-emerald-600'}`}>
+                  <span className={`text-xs font-semibold ${card.accent === 'amber' ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                     {card.sub}
                   </span>
                 </div>
@@ -208,14 +208,14 @@ function Dashboard() {
         <Card className="shadow-none">
           <CardHeader className="pb-2">
             <div className="flex items-center justify-between">
-              <CardTitle className="text-xl">Top 5 Hosts by CPU Usage</CardTitle>
+              <CardTitle className="text-xl">{t('dashboard.topHosts')}</CardTitle>
               <Button
                 variant="ghost"
                 size="sm"
                 className="text-primary"
                 onClick={() => navigate('/infrastructure/hosts')}
               >
-                View All Hosts
+                {t('dashboard.viewAllHosts')}
               </Button>
             </div>
           </CardHeader>
@@ -235,7 +235,7 @@ function Dashboard() {
 
                 <div className="w-32 space-y-1 text-right">
                   <div className="flex items-center justify-between text-xs">
-                    <span className={host.level === 'Critical' ? 'text-rose-600' : host.level === 'High' ? 'text-amber-600' : 'text-blue-600'}>{host.level}</span>
+                    <span className={host.level === 'Critical' ? 'text-destructive' : host.level === 'High' ? 'text-amber-600 dark:text-amber-400' : 'text-primary'}>{host.level}</span>
                     <span className="font-semibold">{host.usage}%</span>
                   </div>
                   <div className="h-1.5 overflow-hidden rounded-full bg-muted">
@@ -249,7 +249,7 @@ function Dashboard() {
 
         <Card className="shadow-none">
           <CardHeader>
-            <CardTitle className="text-xl">Recent Events</CardTitle>
+            <CardTitle className="text-xl">{t('dashboard.recentEvents')}</CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-4">
@@ -272,7 +272,7 @@ function Dashboard() {
             })}
 
             <div className="pt-2">
-              <Button variant="ghost" className="w-full">Open Audit Logs</Button>
+              <Button variant="ghost" className="w-full">{t('dashboard.openAuditLogs')}</Button>
             </div>
           </CardContent>
         </Card>

@@ -83,7 +83,7 @@ export function MultiSelect({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-full justify-between h-auto min-h-10 py-1.5 px-3 font-normal",
+            "w-full justify-between h-auto min-h-9 py-1 px-3 font-normal",
             error && "border-destructive ring-1 ring-destructive hover:bg-transparent",
             className
           )}

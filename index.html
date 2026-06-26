@@ -5,6 +5,22 @@
     <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Aero Cloud</title>
+    <script>
+      (function() {
+        try {
+          var store = localStorage.getItem('aero-cloud-admin-store');
+          if (store) {
+            var state = JSON.parse(store).state;
+            var theme = state && state.theme;
+            if (theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+              document.documentElement.classList.add('dark');
+            }
+          } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

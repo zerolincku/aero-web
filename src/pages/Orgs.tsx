@@ -152,19 +152,14 @@ export default function Orgs() {
                                 <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterType')}</Label>
                                     <Select
-                                        value={typeFilter}
-                                        onValueChange={(val) => { setTypeFilter(val); table.resetPage(); }}
-                                        clearable
-                                        onClear={() => {
-                                            setTypeFilter(undefined);
-                                            table.resetPage();
-                                        }}
-                                        clearAriaLabel={t('hosts.filter.clearAllFilters')}
+                                        value={typeFilter || "all"}
+                                        onValueChange={(val) => { setTypeFilter(val === "all" ? undefined : val); table.resetPage(); }}
                                     >
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectTypePlaceholder')} />
                                         </SelectTrigger>
                                         <SelectContent>
+                                            <SelectItem value="all">{t('orgs.allTypes')}</SelectItem>
                                             <SelectItem value="University">{t('orgs.types.university')}</SelectItem>
                                             <SelectItem value="Hospital">{t('orgs.types.hospital')}</SelectItem>
                                             <SelectItem value="Corporate">{t('orgs.types.corporate')}</SelectItem>
@@ -176,19 +171,14 @@ export default function Orgs() {
                                 <div className="space-y-0">
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterStatus')}</Label>
                                     <Select
-                                        value={statusFilter}
-                                        onValueChange={(val) => { setStatusFilter(val as 'Active' | 'Inactive'); table.resetPage(); }}
-                                        clearable
-                                        onClear={() => {
-                                            setStatusFilter(undefined);
-                                            table.resetPage();
-                                        }}
-                                        clearAriaLabel={t('hosts.filter.clearAllFilters')}
+                                        value={statusFilter || "all"}
+                                        onValueChange={(val) => { setStatusFilter(val === "all" ? undefined : val as 'Active' | 'Inactive'); table.resetPage(); }}
                                     >
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectStatusPlaceholder')} />
                                         </SelectTrigger>
                                         <SelectContent>
+                                            <SelectItem value="all">{t('orgs.allStatus')}</SelectItem>
                                             <SelectItem value="Active">{t('common.status.active')}</SelectItem>
                                             <SelectItem value="Inactive">{t('common.status.inactive')}</SelectItem>
                                         </SelectContent>

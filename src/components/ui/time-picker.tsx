@@ -37,7 +37,7 @@ export function TimePicker({ value, onChange, className, disabled, error }: Time
 
     return (
         <div className={cn("flex items-center gap-2", className)}>
-            <Select clearable={false} value={hours} onValueChange={handleHoursChange}>
+            <Select value={hours} onValueChange={handleHoursChange}>
                 <SelectTrigger disabled={disabled} aria-label={t('common.timePicker.hour', 'HH')} className={cn("min-w-[70px] flex-1", error && "border-destructive ring-1 ring-destructive hover:bg-transparent")}>
                     <SelectValue placeholder={t('common.timePicker.hour', 'HH')} />
                 </SelectTrigger>
@@ -49,7 +49,7 @@ export function TimePicker({ value, onChange, className, disabled, error }: Time
                 </SelectContent>
             </Select>
             <span className="text-muted-foreground">:</span>
-            <Select clearable={false} value={minutes} onValueChange={handleMinutesChange}>
+            <Select value={minutes} onValueChange={handleMinutesChange}>
                 <SelectTrigger disabled={disabled} aria-label={t('common.timePicker.minute', 'MM')} className={cn("min-w-[70px] flex-1", error && "border-destructive ring-1 ring-destructive hover:bg-transparent")}>
                     <SelectValue placeholder={t('common.timePicker.minute', 'MM')} />
                 </SelectTrigger>

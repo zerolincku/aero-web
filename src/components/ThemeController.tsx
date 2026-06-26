@@ -14,15 +14,28 @@ export default function ThemeController() {
     // Handle Light/Dark/System Mode
     useEffect(() => {
         const root = window.document.documentElement;
-        root.classList.remove("light", "dark");
+
+        const applyTheme = (isDark: boolean, currentTheme: string) => {
+            root.classList.remove("light", "dark");
+            if (currentTheme === "system") {
+                root.classList.add(isDark ? "dark" : "light");
+            } else {
+                root.classList.add(currentTheme);
+            }
+        };
+
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        const handleChange = (e: MediaQueryListEvent) => {
+            if (theme === "system") {
+                applyTheme(e.matches, theme);
+            }
+        };
+
+        applyTheme(mediaQuery.matches, theme);
 
         if (theme === "system") {
-            const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-                ? "dark"
-                : "light";
-            root.classList.add(systemTheme);
-        } else {
-            root.classList.add(theme);
+            mediaQuery.addEventListener("change", handleChange);
+            return () => mediaQuery.removeEventListener("change", handleChange);
         }
     }, [theme]);
 
@@ -35,11 +48,14 @@ export default function ThemeController() {
             root.style.removeProperty('--primary');
             root.style.removeProperty('--primary-foreground');
             root.style.removeProperty('--ring');
+            root.style.removeProperty('--sidebar-primary');
         } else {
             // Enforce specific color for primary elements
-            root.style.setProperty('--primary', THEME_PRIMARY_HSL[themeColor]);
+            const hsl = THEME_PRIMARY_HSL[themeColor];
+            root.style.setProperty('--primary', hsl);
             root.style.setProperty('--primary-foreground', '0 0% 100%'); // White text for colored buttons
-            root.style.setProperty('--ring', THEME_PRIMARY_HSL[themeColor]);
+            root.style.setProperty('--ring', hsl);
+            root.style.setProperty('--sidebar-primary', hsl);
         }
     }, [themeColor]);
 

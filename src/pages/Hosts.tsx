@@ -306,22 +306,17 @@ export default function Hosts() {
             </div>
 
             <Select
-              value={regionFilter}
+              value={regionFilter || "all"}
               onValueChange={(value) => {
-                setRegionFilter(value);
+                setRegionFilter(value === "all" ? undefined : value);
                 table.resetPage();
               }}
-              clearable
-              onClear={() => {
-                setRegionFilter(undefined);
-                table.resetPage();
-              }}
-              clearAriaLabel={t('hosts.filter.clearAllFilters')}
             >
               <SelectTrigger>
                 <SelectValue placeholder={t('hosts.filter.allRegions')} />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">{t('hosts.filter.allRegions')}</SelectItem>
                 {HOST_REGION_OPTIONS.map((region) => (
                   <SelectItem key={region} value={region}>
                     {region}
@@ -331,22 +326,17 @@ export default function Hosts() {
             </Select>
 
             <Select
-              value={zoneFilter}
+              value={zoneFilter || "all"}
               onValueChange={(value) => {
-                setZoneFilter(value);
+                setZoneFilter(value === "all" ? undefined : value);
                 table.resetPage();
               }}
-              clearable
-              onClear={() => {
-                setZoneFilter(undefined);
-                table.resetPage();
-              }}
-              clearAriaLabel={t('hosts.filter.clearAllFilters')}
             >
               <SelectTrigger>
                 <SelectValue placeholder={t('hosts.filter.allZones')} />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="all">{t('hosts.filter.allZones')}</SelectItem>
                 {HOST_ZONE_OPTIONS.map((zone) => (
                   <SelectItem key={zone} value={zone}>
                     {zone}
@@ -356,17 +346,11 @@ export default function Hosts() {
             </Select>
 
             <Select
-              value={statusFilter}
+              value={statusFilter || "all"}
               onValueChange={(value) => {
-                setStatusFilter(value as HostStatus);
+                setStatusFilter(value === "all" ? undefined : value as HostStatus);
                 table.resetPage();
               }}
-              clearable
-              onClear={() => {
-                setStatusFilter(undefined);
-                table.resetPage();
-              }}
-              clearAriaLabel={t('hosts.filter.clearAllFilters')}
             >
               <SelectTrigger>
                 <SelectValue placeholder={t('hosts.filter.allStatus')} />
