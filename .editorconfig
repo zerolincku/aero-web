@@ -3,11 +3,11 @@
 root = true
 
 # noinspection EditorConfigKeyCorrectness
-[*.{ts,xml,html,http,json}]
+[*.{ts,tsx,js,mjs,cjs,css,md,json,html}]
 charset = utf-8
 indent_style = space
 indent_size = 2
-continuation_indent_size = 8
+continuation_indent_size = 4
 trim_trailing_whitespace = true
 end_of_line = lf
 insert_final_newline = true

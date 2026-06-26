@@ -3,7 +3,7 @@ export const ROUTE_PATHS = {
   
   INFRASTRUCTURE: '/infrastructure',
   HOST_LIST: '/infrastructure/hosts',
-  HOST_DETAIL: '/infrastructure/hosts/:hostId',
+  HOST_DETAIL: '/infrastructure/hosts/:hostname',
   REGIONS_AZS: '/infrastructure/regions-azs',
   VMS: '/infrastructure/vms',
   STORAGE_POOLS: '/infrastructure/storage-pools',

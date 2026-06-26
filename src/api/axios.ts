@@ -1,11 +1,17 @@
 import axios from 'axios';
 import { getAccessToken, handleUnauthorizedSession } from '@/auth/session';
-import { redirectToLogin } from '@/config/router';
 import { toast } from 'sonner';
 import { normalizeApiError } from '@/api/error';
+import { ENV } from '@/config/env';
+
+declare module 'axios' {
+  export interface AxiosRequestConfig {
+    skipGlobalError?: boolean;
+  }
+}
 
 const instance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || '/api',
+  baseURL: ENV.API_BASE_URL,
   timeout: 10000,
 });
 
@@ -26,12 +32,13 @@ instance.interceptors.response.use(
 
     if (error.response?.status === 401) {
       handleUnauthorizedSession();
-      redirectToLogin();
     } else {
-      // Global error toast for all other errors
-      toast.error('Request Failed', {
-        description: normalizedError.message,
-      });
+      // Global error toast for all other errors unless skipGlobalError is true
+      if (!error.config?.skipGlobalError) {
+        toast.error('Request Failed', {
+          description: normalizedError.message,
+        });
+      }
     }
 
     return Promise.reject(normalizedError);

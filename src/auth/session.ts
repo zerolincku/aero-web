@@ -8,7 +8,33 @@ export const getAccessToken = (): string | null => {
   return window.localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
 };
 
-export const hasAccessToken = (): boolean => Boolean(getAccessToken());
+export const isTokenExpired = (token: string): boolean => {
+  try {
+    const parts = token.split('.');
+    if (parts.length !== 3) return false;
+    
+    const payloadBase64 = parts[1];
+    const payloadJson = atob(payloadBase64);
+    const payload = JSON.parse(payloadJson);
+    
+    if (payload.exp) {
+      return Date.now() >= payload.exp * 1000;
+    }
+    return false;
+  } catch {
+    return false;
+  }
+};
+
+export const hasAccessToken = (): boolean => {
+  const token = getAccessToken();
+  if (!token) return false;
+  if (isTokenExpired(token)) {
+    clearAccessToken();
+    return false;
+  }
+  return true;
+};
 
 export const setAccessToken = (token: string): void => {
   if (typeof window === 'undefined') {

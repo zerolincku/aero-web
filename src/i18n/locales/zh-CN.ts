@@ -23,6 +23,7 @@ export const zhCN = {
             components: '组件库',
         },
         common: {
+            error: '发生了一个错误',
             pagination: {
                 previous: '上一页',
                 next: '下一页',
@@ -64,6 +65,7 @@ export const zhCN = {
                 signIn: '登录',
                 signingIn: '登录中...',
                 goHome: '返回首页',
+                retry: '重试',
                 reset: '重置',
                 decrease: '减少',
                 increase: '增加',
@@ -310,6 +312,14 @@ export const zhCN = {
                 logoutDescription: '你已退出当前账号。',
             },
         },
+        error: {
+            boundary: {
+                title: '出现了一些问题',
+                description: '发生了一个意外错误。您可以刷新页面或返回主页。',
+                reload: '重新加载',
+                goHome: '返回主页',
+            },
+        },
         sidebar: {
             quickSearch: '快速搜索',
             quickSearchPlaceholder: '快速搜索...',
@@ -319,6 +329,94 @@ export const zhCN = {
             searchPlaceholder: '搜索页面和管理项...',
             noResults: '没有找到与 "{{query}}" 相关的结果',
             esc: 'ESC',
+        },
+        hostDetail: {
+            tabs: {
+                overview: '概览',
+                vmInstances: '虚拟机实例',
+                systemInfo: '系统信息',
+                network: '网络接口',
+                storage: '存储',
+            },
+            meta: {
+                physicalHost: '物理主机',
+                uuid: 'UUID',
+            },
+            status: {
+                online: '在线',
+                lowLoad: '低负载',
+                stable: '稳定',
+                healthy: '健康',
+                running: '运行中',
+                paused: '已暂停',
+                error: '错误',
+            },
+            actions: {
+                deployVm: '部署虚拟机',
+                sync: '同步',
+                filter: '筛选',
+                refresh: '刷新',
+            },
+            summary: {
+                cpuUsage: 'CPU 使用率',
+                memoryUsage: '内存使用率',
+                storageUsage: '存储使用率',
+                totalInstances: '总实例数',
+                activeVirtualMachines: '活跃虚拟机',
+                vcpuAvailability: 'vCPU 可用性',
+                capacityRemaining: '剩余 {{count}}% 容量',
+                memoryAvailability: '内存可用性',
+            },
+            section: {
+                hardwareKernel: '硬件与内核',
+                agentStatus: 'Aero Agent 状态',
+                activityLog: '活动日志',
+                troubleshoot: '故障排查',
+            },
+            fields: {
+                cpuModel: 'CPU 型号',
+                architecture: '架构',
+                operatingSystem: '操作系统',
+                kernelVersion: '内核版本',
+                uptime: '运行时间',
+                virtualization: '虚拟化',
+                agentVersion: 'Agent 版本',
+                gitCommit: 'Git 提交',
+            },
+            activity: {
+                heartbeatReceived: '收到心跳',
+                vmProvisioned: '虚拟机 web-04 已开通',
+                agentUpdated: 'Agent 已更新至 v2.4.1',
+            },
+            troubleshoot: {
+                viewAgentLogs: '查看 Agent 日志',
+                remoteConsole: '远程控制台 (SSH)',
+                maintenanceMode: '维护模式',
+            },
+            vm: {
+                searchPlaceholder: '按名称、IP 或标签搜索虚拟机...',
+                table: {
+                    vmName: '虚拟机名称',
+                    status: '状态',
+                    internalIp: '内网 IP',
+                    resourceUsage: '资源使用',
+                    actions: '操作',
+                },
+                showing: '显示第 {{start}} 到 {{end}} 条，共 {{total}} 条',
+                previous: '上一页',
+                next: '下一页',
+            },
+            overview: {
+                description: '宿主机资源容量、健康状况及附加工作负载的概览。',
+            },
+            network: {
+                title: '网络接口',
+                description: '跟踪每个接口的网卡状态、MTU 和吞吐量。',
+            },
+            storage: {
+                title: '存储',
+                description: '监控本地存储的磁盘池、延迟和健康检查。',
+            },
         },
         components: {
             multiSelectExample: {

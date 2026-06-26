@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { useFetchData } from '@/hooks/use-fetch-data';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -7,15 +9,7 @@ import { Avatar, AvatarFallback } from '../components/ui/avatar';
 import { Plus, Search } from 'lucide-react';
 import { Input } from '../components/ui/input';
 import { useStore } from '../store/useStore';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '../components/ui/pagination';
+import { DataTablePagination } from '@/components/ui/data-table-pagination';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useDataTable } from '@/hooks/use-data-table';
 import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
@@ -34,7 +28,7 @@ const STATUS_LABEL_KEY: Record<'Active' | 'Inactive', string> = {
 };
 
 // Extended Mock Data for Pagination
-const allUsers = [
+const MOCK_USERS = [
     { id: 1, name: 'Alice Johnson', email: 'alice@example.com', role: 'Admin', status: 'Active' as const },
     { id: 2, name: 'Bob Smith', email: 'bob@example.com', role: 'Editor', status: 'Active' as const },
     { id: 3, name: 'Charlie Brown', email: 'charlie@example.com', role: 'Viewer', status: 'Inactive' as const },
@@ -55,6 +49,11 @@ export default function Users() {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 180);
 
+    const { data: users = [], loading, error, refetch } = useFetchData(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 600));
+        return MOCK_USERS;
+    });
+
     const handleAddUser = () => {
         addToast({
             title: t('users.toast.title'),
@@ -63,7 +62,7 @@ export default function Users() {
     };
 
     const query = debouncedSearchTerm.trim().toLowerCase();
-    const filteredUsers = allUsers.filter((user) =>
+    const filteredUsers = users.filter((user) =>
         !query ||
         user.name.toLowerCase().includes(query) ||
         user.email.toLowerCase().includes(query),
@@ -122,7 +121,25 @@ export default function Users() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {table.pagedRows.length > 0 ? (
+                            {loading ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="h-24 text-center">
+                                        <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+                                    </TableCell>
+                                </TableRow>
+                            ) : error ? (
+                                <TableRow>
+                                    <TableCell colSpan={5} className="h-24 text-center text-destructive">
+                                        <div className="flex flex-col items-center justify-center gap-2">
+                                            <AlertCircle className="h-6 w-6" />
+                                            <span>{error.message || t('common.error')}</span>
+                                            <Button variant="outline" size="sm" onClick={refetch}>
+                                                {t('common.actions.retry', { defaultValue: 'Retry' })}
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ) : table.pagedRows.length > 0 ? (
                                 table.pagedRows.map((user) => (
                                     <TableRow key={user.id}>
                                         <TableCell>
@@ -210,37 +227,7 @@ export default function Users() {
                         </span>
                     </div>
 
-                    <Pagination className="justify-end w-auto mx-0">
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    onClick={() => table.setPage(table.currentPage - 1)}
-                                    className={table.currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                                />
-                            </PaginationItem>
-
-                            {table.paginationTokens.map((token) => (
-                                typeof token === 'number' ? (
-                                    <PaginationItem key={token}>
-                                        <PaginationLink onClick={() => table.setPage(token)} isActive={table.currentPage === token}>
-                                            {token}
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                ) : (
-                                    <PaginationItem key={token}>
-                                        <PaginationEllipsis />
-                                    </PaginationItem>
-                                )
-                            ))}
-
-                            <PaginationItem>
-                                <PaginationNext
-                                    onClick={() => table.setPage(table.currentPage + 1)}
-                                    className={table.currentPage === table.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <DataTablePagination table={table} className="mx-0 w-auto justify-end" />
                 </CardFooter>
             </Card>
         </div>

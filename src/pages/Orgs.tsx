@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { useFetchData } from '@/hooks/use-fetch-data';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/card';
 import { Button } from '../components/ui/button';
@@ -8,15 +10,7 @@ import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
 import { useStore } from '../store/useStore';
 import { cn } from '../lib/utils';
-import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
-} from '../components/ui/pagination';
+import { DataTablePagination } from '@/components/ui/data-table-pagination';
 import {
     Select,
     SelectContent,
@@ -42,7 +36,7 @@ const STATUS_LABEL_KEY: Record<'Active' | 'Inactive', string> = {
 };
 
 // Mock Data for Orgs
-const allOrgs = [
+const MOCK_ORGS = [
     { id: 1, name: 'Global Tech University', type: 'University', location: 'San Francisco, CA', status: 'Active' as const, head: 'Dr. Aris Thorne' },
     { id: 2, name: 'City General Hospital', type: 'Hospital', location: 'New York, NY', status: 'Active' as const, head: 'Sarah Jenkins' },
     { id: 3, name: 'Innovate Corp', type: 'Corporate', location: 'Austin, TX', status: 'Active' as const, head: 'Mark Zuckerberg' },
@@ -70,6 +64,11 @@ export default function Orgs() {
     const debouncedSearch = useDebouncedValue(search, 180);
     const debouncedLocation = useDebouncedValue(locationFilter, 180);
 
+    const { data: orgs = [], loading, error, refetch } = useFetchData(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 600));
+        return MOCK_ORGS;
+    });
+
     const handleAddOrg = () => {
         addToast({
             title: t('orgs.toast.title'),
@@ -87,7 +86,7 @@ export default function Orgs() {
 
     const searchQuery = debouncedSearch.trim().toLowerCase();
     const locationQuery = debouncedLocation.trim().toLowerCase();
-    const filteredData = allOrgs.filter((item) => {
+    const filteredData = orgs.filter((item) => {
         const matchesSearch =
             !searchQuery ||
             item.name.toLowerCase().includes(searchQuery) ||
@@ -153,7 +152,7 @@ export default function Orgs() {
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterType')}</Label>
                                     <Select
                                         value={typeFilter || "all"}
-                                        onValueChange={(val) => { setTypeFilter(val === "all" ? undefined : val); table.resetPage(); }}
+                                        onValueChange={(val: string) => { setTypeFilter(val === "all" ? undefined : val); table.resetPage(); }}
                                     >
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectTypePlaceholder')} />
@@ -172,7 +171,7 @@ export default function Orgs() {
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterStatus')}</Label>
                                     <Select
                                         value={statusFilter || "all"}
-                                        onValueChange={(val) => { setStatusFilter(val === "all" ? undefined : val as 'Active' | 'Inactive'); table.resetPage(); }}
+                                        onValueChange={(val: string) => { setStatusFilter(val === "all" ? undefined : val as 'Active' | 'Inactive'); table.resetPage(); }}
                                     >
                                         <SelectTrigger className="h-9">
                                             <SelectValue placeholder={t('orgs.selectStatusPlaceholder')} />
@@ -215,7 +214,25 @@ export default function Orgs() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {table.pagedRows.length > 0 ? (
+                            {loading ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-24 text-center">
+                                        <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+                                    </TableCell>
+                                </TableRow>
+                            ) : error ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-24 text-center text-destructive">
+                                        <div className="flex flex-col items-center justify-center gap-2">
+                                            <AlertCircle className="h-6 w-6" />
+                                            <span>{error.message || t('common.error')}</span>
+                                            <Button variant="outline" size="sm" onClick={refetch}>
+                                                {t('common.actions.retry', { defaultValue: 'Retry' })}
+                                            </Button>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ) : table.pagedRows.length > 0 ? (
                                 table.pagedRows.map((item) => (
                                     <TableRow key={item.id}>
                                         <TableCell className="font-semibold">{item.name}</TableCell>
@@ -295,33 +312,7 @@ export default function Orgs() {
                         </span>
                     </div>
 
-                    <Pagination className="justify-end w-auto mx-0">
-                        <PaginationContent>
-                            <PaginationItem>
-                                <PaginationPrevious
-                                    onClick={() => table.setPage(table.currentPage - 1)}
-                                    className={table.currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                                />
-                            </PaginationItem>
-                            {table.paginationTokens.map((token) => (
-                                typeof token === 'number' ? (
-                                    <PaginationItem key={token}>
-                                        <PaginationLink onClick={() => table.setPage(token)} isActive={table.currentPage === token}>{token}</PaginationLink>
-                                    </PaginationItem>
-                                ) : (
-                                    <PaginationItem key={token}>
-                                        <PaginationEllipsis />
-                                    </PaginationItem>
-                                )
-                            ))}
-                            <PaginationItem>
-                                <PaginationNext
-                                    onClick={() => table.setPage(table.currentPage + 1)}
-                                    className={table.currentPage === table.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                                />
-                            </PaginationItem>
-                        </PaginationContent>
-                    </Pagination>
+                    <DataTablePagination table={table} className="mx-0 w-auto justify-end" />
                 </CardFooter>
             </Card>
         </div>

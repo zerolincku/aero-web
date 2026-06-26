@@ -8,7 +8,7 @@ type UseDataTableOptions<T> = {
   maxVisiblePages?: number;
 };
 
-type UseDataTableResult<T> = {
+export type UseDataTableResult<T> = {
   pagedRows: T[];
   totalItems: number;
   totalPages: number;

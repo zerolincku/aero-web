@@ -1,4 +1,6 @@
 import { apiClient } from '@/api/client';
+import { ENV } from '@/config/env';
+import { ApiRequestError } from '@/api/error';
 
 export type AuthUser = {
   id: string;
@@ -37,11 +39,10 @@ const mockLogin = async (payload: LoginPayload): Promise<AuthSession> => {
 
 export const loginWithPassword = async (payload: LoginPayload): Promise<AuthSession> => {
   if (!payload.email || !payload.password) {
-    throw new Error('Email and password are required');
+    throw new ApiRequestError({ message: 'Email and password are required', status: 400 });
   }
 
-  const useMockAuth = import.meta.env.VITE_USE_MOCK_AUTH !== 'false';
-  if (useMockAuth) {
+  if (ENV.USE_MOCK_AUTH) {
     return mockLogin(payload);
   }
 

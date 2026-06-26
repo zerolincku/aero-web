@@ -30,6 +30,25 @@ export type RouteConfig = {
     children?: RouteConfig[];
 };
 
+export const findRouteWithParents = (
+    routes: RouteConfig[],
+    targetPath: string,
+    parents: RouteConfig[] = [],
+): { route: RouteConfig; ancestors: RouteConfig[] } | null => {
+    for (const route of routes) {
+        if (route.path === targetPath) {
+            return { route, ancestors: parents };
+        }
+        if (route.children) {
+            const found = findRouteWithParents(route.children, targetPath, [...parents, route]);
+            if (found) {
+                return found;
+            }
+        }
+    }
+    return null;
+};
+
 // Main Navigation Routes (Used for Sidebar and App Routing)
 export const navRoutes: RouteConfig[] = [
     {

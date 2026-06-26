@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
+import { Loader2, AlertCircle } from 'lucide-react';
+import { useFetchData } from '@/hooks/use-fetch-data';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -6,15 +8,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/componen
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import {
-  Pagination,
-  PaginationContent,
-  PaginationEllipsis,
-  PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
-} from '@/components/ui/pagination';
+import { DataTablePagination } from '@/components/ui/data-table-pagination';
 import { cn } from '@/lib/utils';
 import { useDataTable } from '@/hooks/use-data-table';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
@@ -48,7 +42,7 @@ type Host = {
   kvmStatus: KvmStatus;
 };
 
-const HOSTS: Host[] = [
+const MOCK_HOSTS: Host[] = [
   {
     id: 1,
     hostname: 'host-sfo-01',
@@ -171,21 +165,24 @@ const HOSTS: Host[] = [
   },
 ];
 
-const HOST_REGION_OPTIONS = Array.from(new Set(HOSTS.map((host) => host.region)));
-const HOST_ZONE_OPTIONS = Array.from(new Set(HOSTS.map((host) => host.zone)));
-const HOST_STATUS_STATS = HOSTS.reduce(
-  (stats, host) => {
-    if (host.status === 'Online') {
-      stats.online += 1;
-    } else if (host.status === 'Maintenance') {
-      stats.maintenance += 1;
-    } else if (host.status === 'Offline') {
-      stats.offline += 1;
-    }
-    return stats;
-  },
-  { online: 0, maintenance: 0, offline: 0 },
-);
+const HOST_REGION_OPTIONS = Array.from(new Set(MOCK_HOSTS.map((host) => host.region)));
+const HOST_ZONE_OPTIONS = Array.from(new Set(MOCK_HOSTS.map((host) => host.zone)));
+
+function computeStats(hosts: Host[]) {
+  return hosts.reduce(
+    (stats, host) => {
+      if (host.status === 'Online') {
+        stats.online += 1;
+      } else if (host.status === 'Maintenance') {
+        stats.maintenance += 1;
+      } else if (host.status === 'Offline') {
+        stats.offline += 1;
+      }
+      return stats;
+    },
+    { online: 0, maintenance: 0, offline: 0 },
+  );
+}
 
 function UsageCell({
   value,
@@ -237,8 +234,13 @@ export default function Hosts() {
   const [zoneFilter, setZoneFilter] = useState<string | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<HostStatus | undefined>(undefined);
 
+  const { data: hosts = [], loading, error, refetch } = useFetchData(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    return MOCK_HOSTS;
+  });
+
   const normalizedSearch = debouncedSearchTerm.trim().toLowerCase();
-  const filteredHosts = HOSTS.filter((host) => {
+  const filteredHosts = hosts.filter((host) => {
     const matchSearch =
       !normalizedSearch ||
       host.hostname.toLowerCase().includes(normalizedSearch) ||
@@ -257,7 +259,7 @@ export default function Hosts() {
     maxVisiblePages: 7,
   });
 
-  const statusStats = HOST_STATUS_STATS;
+  const statusStats = useMemo(() => computeStats(hosts), [hosts]);
 
   const clearFilters = () => {
     setSearchTerm('');
@@ -307,7 +309,7 @@ export default function Hosts() {
 
             <Select
               value={regionFilter || "all"}
-              onValueChange={(value) => {
+              onValueChange={(value: string) => {
                 setRegionFilter(value === "all" ? undefined : value);
                 table.resetPage();
               }}
@@ -327,7 +329,7 @@ export default function Hosts() {
 
             <Select
               value={zoneFilter || "all"}
-              onValueChange={(value) => {
+              onValueChange={(value: string) => {
                 setZoneFilter(value === "all" ? undefined : value);
                 table.resetPage();
               }}
@@ -347,7 +349,7 @@ export default function Hosts() {
 
             <Select
               value={statusFilter || "all"}
-              onValueChange={(value) => {
+              onValueChange={(value: string) => {
                 setStatusFilter(value === "all" ? undefined : value as HostStatus);
                 table.resetPage();
               }}
@@ -368,7 +370,7 @@ export default function Hosts() {
               <span>
                 {t('hosts.filter.summary', {
                   shown: table.totalItems,
-                  total: HOSTS.length,
+                  total: hosts.length,
                 })}
               </span>
               <button
@@ -412,7 +414,26 @@ export default function Hosts() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {table.pagedRows.map((host) => {
+            {loading ? (
+              <TableRow>
+                <TableCell colSpan={8} className="h-24 text-center">
+                  <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+                </TableCell>
+              </TableRow>
+            ) : error ? (
+              <TableRow>
+                <TableCell colSpan={8} className="h-24 text-center text-destructive">
+                  <div className="flex flex-col items-center justify-center gap-2">
+                    <AlertCircle className="h-6 w-6" />
+                    <span>{error.message || t('common.error')}</span>
+                    <Button variant="outline" size="sm" onClick={refetch}>
+                      {t('common.actions.retry', { defaultValue: 'Retry' })}
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ) : table.pagedRows.length > 0 ? (
+              table.pagedRows.map((host) => {
               const cpuColor = (host.cpuUsage ?? 0) >= 80 ? 'bg-amber-500' : 'bg-blue-500';
               const storageColor =
                 host.storageUsage === null
@@ -490,9 +511,8 @@ export default function Hosts() {
                   </TableCell>
                 </TableRow>
               );
-            })}
-
-            {table.pagedRows.length === 0 && (
+            })
+            ) : (
               <TableRow>
                 <TableCell colSpan={8} className="h-24 text-center text-muted-foreground">
                   {t('hosts.empty')}
@@ -510,35 +530,7 @@ export default function Hosts() {
               total: table.totalItems,
             })}
           </div>
-          <Pagination className="mx-0 w-auto justify-end">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() => table.setPage(table.currentPage - 1)}
-                  className={table.currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                />
-              </PaginationItem>
-              {table.paginationTokens.map((token) => (
-                typeof token === 'number' ? (
-                  <PaginationItem key={token}>
-                    <PaginationLink isActive={table.currentPage === token} onClick={() => table.setPage(token)}>
-                      {token}
-                    </PaginationLink>
-                  </PaginationItem>
-                ) : (
-                  <PaginationItem key={token}>
-                    <PaginationEllipsis />
-                  </PaginationItem>
-                )
-              ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() => table.setPage(table.currentPage + 1)}
-                  className={table.currentPage === table.totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+          <DataTablePagination table={table} className="mx-0 w-auto justify-end" />
         </CardFooter>
       </Card>
     </div>

@@ -8,10 +8,11 @@ import { navRoutes, type RouteConfig } from '@/lib/routes';
 import { NotFoundPage } from '@/lib/route-components';
 import { Toaster } from '@/components/ui/sonner';
 import { APP_CONFIG } from '@/config/app';
-import { AUTH_UNAUTHORIZED_EVENT } from '@/auth/session';
+import { AUTH_UNAUTHORIZED_EVENT, ACCESS_TOKEN_STORAGE_KEY } from '@/auth/session';
 import { ROUTER_CONFIG } from '@/config/router';
 import { ROUTE_PATHS } from '@/config/paths';
 import AppErrorBoundary from '@/components/AppErrorBoundary';
+import { PublicOnlyRoute } from '@/components/PublicOnlyRoute';
 import './i18n';
 
 const Layout = React.lazy(() => import('./components/Layout'));
@@ -71,26 +72,36 @@ export default function App() {
     const onUnauthorized = () => {
       handleUnauthorized();
     };
+    
+    const onStorageChange = (e: StorageEvent) => {
+      if (e.key === ACCESS_TOKEN_STORAGE_KEY) {
+        syncAuthFromStorage();
+      }
+    };
 
     window.addEventListener(AUTH_UNAUTHORIZED_EVENT, onUnauthorized);
+    window.addEventListener('storage', onStorageChange);
     return () => {
       window.removeEventListener(AUTH_UNAUTHORIZED_EVENT, onUnauthorized);
+      window.removeEventListener('storage', onStorageChange);
     };
-  }, [handleUnauthorized]);
+  }, [handleUnauthorized, syncAuthFromStorage]);
 
   return (
     <AppErrorBoundary>
       <ActiveRouter basename={ROUTER_CONFIG.basename || undefined}>
         <ThemeController />
         <Routes>
-          <Route
-            path={ROUTER_CONFIG.loginPath}
-            element={
-              <Suspense fallback={<Loading />}>
-                <LoginPage />
-              </Suspense>
-            }
-          />
+          <Route element={<PublicOnlyRoute />}>
+            <Route
+              path={ROUTER_CONFIG.loginPath}
+              element={
+                <Suspense fallback={<Loading />}>
+                  <LoginPage />
+                </Suspense>
+              }
+            />
+          </Route>
 
           <Route
             path={ROUTE_PATHS.DASHBOARD}

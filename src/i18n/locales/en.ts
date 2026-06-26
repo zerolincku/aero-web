@@ -23,6 +23,7 @@ export const en = {
             components: 'Components',
         },
         common: {
+            error: 'An error occurred',
             pagination: {
                 previous: 'Previous',
                 next: 'Next',
@@ -64,6 +65,7 @@ export const en = {
                 signIn: 'Sign in',
                 signingIn: 'Signing in...',
                 goHome: 'Go Home',
+                retry: 'Retry',
                 reset: 'Reset',
                 decrease: 'Decrease',
                 increase: 'Increase',
@@ -310,6 +312,14 @@ export const en = {
                 logoutDescription: 'You have been logged out.',
             },
         },
+        error: {
+            boundary: {
+                title: 'Something went wrong',
+                description: 'An unexpected error occurred. You can refresh the page or go back to the home route.',
+                reload: 'Reload',
+                goHome: 'Go Home',
+            },
+        },
         sidebar: {
             quickSearch: 'Quick Search',
             quickSearchPlaceholder: 'Quick search...',
@@ -319,6 +329,94 @@ export const en = {
             searchPlaceholder: 'Search pages and management items...',
             noResults: 'No results found for "{{query}}"',
             esc: 'ESC',
+        },
+        hostDetail: {
+            tabs: {
+                overview: 'Overview',
+                vmInstances: 'VM Instances',
+                systemInfo: 'System Info',
+                network: 'Network Interfaces',
+                storage: 'Storage',
+            },
+            meta: {
+                physicalHost: 'Physical Host',
+                uuid: 'UUID',
+            },
+            status: {
+                online: 'Online',
+                lowLoad: 'Low Load',
+                stable: 'Stable',
+                healthy: 'Healthy',
+                running: 'Running',
+                paused: 'Paused',
+                error: 'Error',
+            },
+            actions: {
+                deployVm: 'Deploy VM',
+                sync: 'Sync',
+                filter: 'Filter',
+                refresh: 'Refresh',
+            },
+            summary: {
+                cpuUsage: 'CPU Usage',
+                memoryUsage: 'Memory Usage',
+                storageUsage: 'Storage Usage',
+                totalInstances: 'Total Instances',
+                activeVirtualMachines: 'Active virtual machines',
+                vcpuAvailability: 'vCPU Availability',
+                capacityRemaining: '{{count}}% capacity remaining',
+                memoryAvailability: 'Memory Availability',
+            },
+            section: {
+                hardwareKernel: 'Hardware & Kernel',
+                agentStatus: 'Aero Agent Status',
+                activityLog: 'Activity Log',
+                troubleshoot: 'Troubleshoot',
+            },
+            fields: {
+                cpuModel: 'CPU Model',
+                architecture: 'Architecture',
+                operatingSystem: 'Operating System',
+                kernelVersion: 'Kernel Version',
+                uptime: 'Uptime',
+                virtualization: 'Virtualization',
+                agentVersion: 'Agent Version',
+                gitCommit: 'Git Commit',
+            },
+            activity: {
+                heartbeatReceived: 'Heartbeat received',
+                vmProvisioned: 'VM web-04 provisioned',
+                agentUpdated: 'Agent updated to v2.4.1',
+            },
+            troubleshoot: {
+                viewAgentLogs: 'View Agent Logs',
+                remoteConsole: 'Remote Console (SSH)',
+                maintenanceMode: 'Maintenance Mode',
+            },
+            vm: {
+                searchPlaceholder: 'Search VMs by name, IP, or tag...',
+                table: {
+                    vmName: 'VM Name',
+                    status: 'Status',
+                    internalIp: 'Internal IP',
+                    resourceUsage: 'Resource Usage',
+                    actions: 'Actions',
+                },
+                showing: 'Showing {{start}} to {{end}} of {{total}} results',
+                previous: 'Previous',
+                next: 'Next',
+            },
+            overview: {
+                description: 'Overview of host resource capacity, health and attached workloads.',
+            },
+            network: {
+                title: 'Network Interfaces',
+                description: 'Track NIC status, MTU, and throughput for each interface.',
+            },
+            storage: {
+                title: 'Storage',
+                description: 'Monitor disk pools, latency, and health checks for local storage.',
+            },
         },
         components: {
             multiSelectExample: {

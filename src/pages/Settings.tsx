@@ -130,7 +130,7 @@ export default function Settings() {
                     <CardContent>
                         <div className="space-y-0 max-w-xs">
                             <Label>{t('settings.preferences.language')}</Label>
-                            <Select value={languageValue} onValueChange={(value) => handleLanguageChange(value as 'en' | 'zh-CN')}>
+                            <Select value={languageValue} onValueChange={(value: string) => handleLanguageChange(value as 'en' | 'zh-CN')}>
                                 <SelectTrigger>
                                     <SelectValue />
                                 </SelectTrigger>

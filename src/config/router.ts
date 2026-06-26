@@ -1,3 +1,5 @@
+import { ENV } from '@/config/env';
+
 export type RouterMode = 'hash' | 'browser';
 
 const normalizeBasename = (rawBasename: string | undefined): string => {
@@ -25,11 +27,11 @@ const withBasename = (path: string, basename: string): string => {
   return `${basename}${normalizedPath}`;
 };
 
-const envMode = import.meta.env.VITE_ROUTER_MODE;
+const envMode = ENV.ROUTER_MODE;
 
 export const ROUTER_CONFIG = {
   mode: envMode === 'browser' ? 'browser' : 'hash',
-  basename: normalizeBasename(import.meta.env.VITE_APP_BASENAME),
+  basename: normalizeBasename(ENV.APP_BASENAME),
   loginPath: '/login',
 } as const satisfies {
   mode: RouterMode;
@@ -48,21 +50,4 @@ export const buildLoginLocation = (): string => {
   return toLocation(ROUTER_CONFIG.loginPath);
 };
 
-export const redirectToLogin = (): void => {
-  if (typeof window === 'undefined') {
-    return;
-  }
 
-  if (ROUTER_CONFIG.mode === 'hash') {
-    const nextHash = buildLoginLocation();
-    if (window.location.hash !== nextHash) {
-      window.location.hash = nextHash;
-    }
-    return;
-  }
-
-  const nextPath = buildAppPath(ROUTER_CONFIG.loginPath);
-  if (window.location.pathname !== nextPath) {
-    window.location.assign(nextPath);
-  }
-};

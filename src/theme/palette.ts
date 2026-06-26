@@ -11,7 +11,7 @@ export const THEME_PRIMARY_HSL: Record<ThemeColor, string> = {
 };
 
 export const THEME_SWATCH_COLOR: Record<ThemeColor, string> = {
-  zinc: '#18181b',
+  zinc: 'hsl(240 5.9% 10%)',
   red: 'hsl(0 72.2% 50.6%)',
   blue: 'hsl(221.2 83.2% 53.3%)',
   green: 'hsl(142.1 76.2% 36.3%)',

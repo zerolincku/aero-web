@@ -47,6 +47,11 @@ export default function Login() {
             }
         } catch (error) {
             console.error('Login failed:', error);
+            addToast({
+                title: t('login.errorTitle'),
+                description: error instanceof Error ? error.message : t('login.errorDescription'),
+                variant: "destructive"
+            });
         } finally {
             setLoading(false);
         }

@@ -28,7 +28,10 @@ export const createAuthSlice: StateCreator<AuthSlice, [], [], AuthSlice> = (set)
     clearAccessToken();
     set({ isAuthenticated: false, currentUser: null });
   },
-  handleUnauthorized: () => set({ isAuthenticated: false, currentUser: null }),
+  handleUnauthorized: () => {
+    clearAccessToken();
+    set({ isAuthenticated: false, currentUser: null });
+  },
   syncAuthFromStorage: () => {
     const authenticated = hasAccessToken();
     if (!authenticated) {

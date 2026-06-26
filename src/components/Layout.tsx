@@ -2,29 +2,10 @@ import React from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { ChevronRight, Globe } from 'lucide-react';
-import { navRoutes, type RouteConfig } from '../lib/routes';
+import { navRoutes, findRouteWithParents } from '../lib/routes';
 import { useTranslation } from 'react-i18next';
 import { Select, SelectContent, SelectItem, SelectTrigger } from './ui/select';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from './ui/sidebar';
-
-const findRouteWithParents = (
-    routes: RouteConfig[],
-    targetPath: string,
-    parents: RouteConfig[] = [],
-): { route: RouteConfig; ancestors: RouteConfig[] } | null => {
-    for (const route of routes) {
-        if (route.path === targetPath) {
-            return { route, ancestors: parents };
-        }
-        if (route.children) {
-            const found = findRouteWithParents(route.children, targetPath, [...parents, route]);
-            if (found) {
-                return found;
-            }
-        }
-    }
-    return null;
-};
 
 export default function Layout() {
     const location = useLocation();
@@ -114,7 +95,7 @@ export default function Layout() {
                         </a>
 
                         <div className="w-10">
-                        <Select value={languageValue} onValueChange={(value) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
+                        <Select value={languageValue} onValueChange={(value: string) => { void i18n.changeLanguage(value as 'en' | 'zh-CN'); }}>
                             <SelectTrigger
                                 className="h-8 w-10 px-0 justify-center border-0 bg-transparent shadow-none ring-0 focus:ring-0 focus:ring-offset-0 hover:bg-accent/50 [&>svg:last-child]:hidden"
                                 aria-label={t('settings.preferences.language')}
@@ -135,7 +116,7 @@ export default function Layout() {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto bg-[#f4f6fa] p-6 dark:bg-muted/20">
+                <main className="flex-1 overflow-y-auto bg-muted/20 p-6">
                     <Outlet />
                 </main>
             </SidebarInset>
