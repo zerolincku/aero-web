@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { AlertCircle } from 'lucide-react';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '../components/ui/card';
@@ -16,7 +15,7 @@ import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { TableSkeleton } from '@/components/ui/table-skeleton';
-import { EmptyState } from '@/components/ui/empty-state';
+import { DataTableEmptyRow, DataTableErrorRow } from '@/components/ui/data-table-state';
 
 const ROLE_LABEL_KEY: Record<string, string> = {
     Admin: 'common.role.admin',
@@ -46,16 +45,18 @@ const MOCK_USERS = [
     { id: 12, name: 'Liam Neeson', email: 'liam@example.com', role: 'Admin', status: 'Active' as const },
 ];
 
+async function loadMockUsers() {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    return MOCK_USERS;
+}
+
 export default function Users() {
     const { t } = useTranslation();
     const addToast = useStore((state) => state.addToast);
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = useDebouncedValue(searchTerm, 180);
 
-    const { data: users = [], loading, error, refetch } = useFetchData(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        return MOCK_USERS;
-    });
+    const { data: users = [], loading, error, refetch } = useFetchData(loadMockUsers);
 
     const handleAddUser = () => {
         addToast({
@@ -78,7 +79,7 @@ export default function Users() {
     });
 
     return (
-        <div className="space-y-6">
+        <div className="ui-page-stack">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">{t('users.title')}</h2>
@@ -131,17 +132,12 @@ export default function Users() {
                                     </TableCell>
                                 </TableRow>
                             ) : error ? (
-                                <TableRow>
-                                    <TableCell colSpan={5} className="h-24 text-center text-destructive">
-                                        <div className="flex flex-col items-center justify-center gap-2">
-                                            <AlertCircle className="h-6 w-6" />
-                                            <span>{error.message || t('common.error')}</span>
-                                            <Button variant="outline" size="sm" onClick={refetch}>
-                                                {t('common.actions.retry', { defaultValue: 'Retry' })}
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <DataTableErrorRow
+                                    colSpan={5}
+                                    title={error.message || t('common.error')}
+                                    retryLabel={t('common.actions.retry', { defaultValue: 'Retry' })}
+                                    onRetry={refetch}
+                                />
                             ) : table.pagedRows.length > 0 ? (
                                 table.pagedRows.map((user) => (
                                     <TableRow key={user.id}>
@@ -180,17 +176,13 @@ export default function Users() {
                                     </TableRow>
                                 ))
                             ) : (
-                                <TableRow>
-                                    <TableCell colSpan={5}>
-                                        <EmptyState title={t('users.noResults')} />
-                                    </TableCell>
-                                </TableRow>
+                                <DataTableEmptyRow colSpan={5} title={t('users.noResults')} />
                             )}
                         </TableBody>
                     </Table>
                 </CardContent>
 
-                <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t px-6 py-4">
+                <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t p-[var(--ui-panel-padding)]">
                     <div className="flex flex-col sm:flex-row items-center gap-4 text-xs font-medium text-muted-foreground">
                         <div className="flex items-center gap-2">
                             <span>{t('common.actions.show')}</span>

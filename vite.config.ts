@@ -1,7 +1,6 @@
 import { defineConfig } from 'vitest/config'
 import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import babel from '@rolldown/plugin-babel'
-import path from 'path'
 import tailwindcss from '@tailwindcss/vite'
 
 const manualChunkGroups: Record<string, string[]> = {
@@ -32,7 +31,7 @@ export default defineConfig({
     tailwindcss(),
   ],
   resolve: {
-    alias: { "@": path.resolve(__dirname, "./src") },
+    alias: { "@": import.meta.dirname + "/src" },
   },
   test: {
     globals: true,

@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
     Pagination,
     PaginationContent,
@@ -8,7 +9,7 @@ import {
     PaginationPrevious,
 } from '@/components/ui/pagination';
 import {
-    ChevronDown, Folder
+    ChevronDown, Folder, Home
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -17,6 +18,25 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import {
+    Breadcrumb,
+    BreadcrumbItem,
+    BreadcrumbLink,
+    BreadcrumbList,
+    BreadcrumbPage,
+    BreadcrumbSeparator,
+} from '@/components/ui/breadcrumb';
+import {
+    Menubar,
+    MenubarCheckboxItem,
+    MenubarContent,
+    MenubarItem,
+    MenubarMenu,
+    MenubarSeparator,
+    MenubarShortcut,
+    MenubarTrigger,
+} from '@/components/ui/menubar';
+import { Steps } from '@/components/ui/steps';
 
 import {
   NavigationMenu,
@@ -31,9 +51,13 @@ import {
 
 
 
-import { ComponentShowcase } from './ComponentShowcase';
+import { ComponentShowcase, type ComponentShowcaseProps } from './ComponentShowcase';
 
-export function NavigationDemo({ t,  }: any) {
+interface NavigationDemoProps {
+    t: ComponentShowcaseProps['t'];
+}
+
+export function NavigationDemo({ t }: NavigationDemoProps) {
     return (
         <div className="space-y-12">
                     <ComponentShowcase
@@ -360,7 +384,163 @@ export function NavigationDemo({ t,  }: any) {
     </CollapsibleContent>
 </Collapsible>`}
                     />
+                    <ComponentShowcase
+                        id="breadcrumb"
+                        title={t('components.breadcrumbExample.title')}
+                        description={t('components.breadcrumbExample.description')}
+                        t={t}
+                        preview={
+                            <div className="space-y-4">
+                                <Breadcrumb>
+                                    <BreadcrumbList>
+                                        <BreadcrumbItem>
+                                            <BreadcrumbLink href="#" className="flex items-center gap-1">
+                                                <Home className="h-3.5 w-3.5" />
+                                                <span>Dashboard</span>
+                                            </BreadcrumbLink>
+                                        </BreadcrumbItem>
+                                        <BreadcrumbSeparator />
+                                        <BreadcrumbItem>
+                                            <BreadcrumbLink href="#">Infrastructure</BreadcrumbLink>
+                                        </BreadcrumbItem>
+                                        <BreadcrumbSeparator />
+                                        <BreadcrumbItem>
+                                            <BreadcrumbPage>Compute Instances</BreadcrumbPage>
+                                        </BreadcrumbItem>
+                                    </BreadcrumbList>
+                                </Breadcrumb>
+                            </div>
+                        }
+                        code={`<Breadcrumb>
+  <BreadcrumbList>
+    <BreadcrumbItem>
+      <BreadcrumbLink href="#" className="flex items-center gap-1">
+        <Home className="h-3.5 w-3.5" />
+        <span>Dashboard</span>
+      </BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbLink href="#">Infrastructure</BreadcrumbLink>
+    </BreadcrumbItem>
+    <BreadcrumbSeparator />
+    <BreadcrumbItem>
+      <BreadcrumbPage>Compute Instances</BreadcrumbPage>
+    </BreadcrumbItem>
+  </BreadcrumbList>
+</Breadcrumb>`}
+                    />
+                    <ComponentShowcase
+                        id="steps"
+                        title={t('components.stepsExample.title')}
+                        description={t('components.stepsExample.description')}
+                        t={t}
+                        preview={<StepsDemo />}
+                        code={`function Wizard() {
+  const [current, setCurrent] = useState(1);
+  return (
+    <Steps
+      current={current}
+      onChange={setCurrent}
+      items={[
+        { title: 'Cluster Selection', description: 'Select region and AZ' },
+        { title: 'Node Config', description: 'vCPU and memory sizing' },
+        { title: 'Networking & VPC', description: 'Subnets and security groups' },
+        { title: 'Review & Deploy', description: 'Confirm cluster deployment' },
+      ]}
+    />
+  );
+}`}
+                    />
+                    <ComponentShowcase
+                        id="menubar"
+                        title={t('components.menubarExample.title')}
+                        description={t('components.menubarExample.description')}
+                        t={t}
+                        preview={
+                            <Menubar className="w-fit">
+                                <MenubarMenu>
+                                    <MenubarTrigger>File</MenubarTrigger>
+                                    <MenubarContent>
+                                        <MenubarItem>New Cluster <MenubarShortcut>⌘N</MenubarShortcut></MenubarItem>
+                                        <MenubarItem>Open Topology... <MenubarShortcut>⌘O</MenubarShortcut></MenubarItem>
+                                        <MenubarSeparator />
+                                        <MenubarItem>Export Config <MenubarShortcut>⌘S</MenubarShortcut></MenubarItem>
+                                    </MenubarContent>
+                                </MenubarMenu>
+                                <MenubarMenu>
+                                    <MenubarTrigger>Edit</MenubarTrigger>
+                                    <MenubarContent>
+                                        <MenubarItem>Undo <MenubarShortcut>⌘Z</MenubarShortcut></MenubarItem>
+                                        <MenubarItem>Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut></MenubarItem>
+                                        <MenubarSeparator />
+                                        <MenubarItem>Cut</MenubarItem>
+                                        <MenubarItem>Copy</MenubarItem>
+                                        <MenubarItem>Paste</MenubarItem>
+                                    </MenubarContent>
+                                </MenubarMenu>
+                                <MenubarMenu>
+                                    <MenubarTrigger>View</MenubarTrigger>
+                                    <MenubarContent>
+                                        <MenubarCheckboxItem checked>Show Metrics Sidebar</MenubarCheckboxItem>
+                                        <MenubarCheckboxItem>Show Audit Dock</MenubarCheckboxItem>
+                                        <MenubarSeparator />
+                                        <MenubarItem>Reload Telemetry <MenubarShortcut>⌘R</MenubarShortcut></MenubarItem>
+                                    </MenubarContent>
+                                </MenubarMenu>
+                            </Menubar>
+                        }
+                        code={`<Menubar>
+  <MenubarMenu>
+    <MenubarTrigger>File</MenubarTrigger>
+    <MenubarContent>
+      <MenubarItem>New Cluster <MenubarShortcut>⌘N</MenubarShortcut></MenubarItem>
+      <MenubarItem>Open Topology <MenubarShortcut>⌘O</MenubarShortcut></MenubarItem>
+    </MenubarContent>
+  </MenubarMenu>
+  <MenubarMenu>
+    <MenubarTrigger>View</MenubarTrigger>
+    <MenubarContent>
+      <MenubarCheckboxItem checked>Show Metrics Sidebar</MenubarCheckboxItem>
+    </MenubarContent>
+  </MenubarMenu>
+</Menubar>`}
+                    />
         </div>
     );
 }
 
+function StepsDemo() {
+    const [current, setCurrent] = useState(1);
+    return (
+        <div className="space-y-6 w-full max-w-2xl">
+            <Steps
+                current={current}
+                onChange={setCurrent}
+                items={[
+                    { title: 'Cluster Selection', description: 'Select region and AZ' },
+                    { title: 'Node Config', description: 'vCPU and memory sizing' },
+                    { title: 'Networking & VPC', description: 'Subnets and security groups' },
+                    { title: 'Review & Deploy', description: 'Confirm cluster deployment' },
+                ]}
+            />
+            <div className="flex items-center gap-2 pt-2">
+                <Button
+                    variant="outline"
+                    size="sm"
+                    disabled={current <= 0}
+                    onClick={() => setCurrent((c) => Math.max(0, c - 1))}
+                >
+                    Previous Step
+                </Button>
+                <Button
+                    size="sm"
+                    disabled={current >= 3}
+                    onClick={() => setCurrent((c) => Math.min(3, c + 1))}
+                >
+                    Next Step
+                </Button>
+            </div>
+        </div>
+    );
+}

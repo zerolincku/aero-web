@@ -26,24 +26,36 @@ function getStatusVariant(status: string): StatusVariant {
   return STATUS_VARIANT_MAP[status.toLowerCase()] ?? 'neutral';
 }
 
-interface StatusBadgeProps {
+export interface StatusBadgeProps {
   status: string;
   label?: string;
+  dot?: boolean;
   className?: string;
 }
 
-export function StatusBadge({ status, label, className }: StatusBadgeProps) {
+export function StatusBadge({ status, label, dot = false, className }: StatusBadgeProps) {
   const variant = getStatusVariant(status);
   const displayText = label ?? status;
 
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium',
+        'inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium',
         VARIANT_CLASSES[variant],
         className,
       )}
     >
+      {dot && (
+        <span
+          className={cn(
+            'h-1.5 w-1.5 rounded-full',
+            variant === 'success' && 'bg-emerald-500',
+            variant === 'warning' && 'bg-amber-500',
+            variant === 'danger' && 'bg-red-500',
+            variant === 'neutral' && 'bg-muted-foreground'
+          )}
+        />
+      )}
       {displayText}
     </span>
   );

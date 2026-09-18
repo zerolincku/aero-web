@@ -48,15 +48,16 @@ A modern admin template built with **React 19 + TypeScript + Vite + Tailwind CSS
 - i18n: `en` / `zh-CN` with dev-time key diff and missing-key warning
 - Theme system: `light / dark / system` + 5 accent colors
 - Command palette: `⌘K` / `Ctrl+K`
-- Reusable table pagination/filter hooks
+- Async data lifecycle: stale-response protection, retry, and refresh state
+- Reusable local/server table pagination with consistent loading, empty, and error rows
 - Engineering baseline: ESLint + strict TypeScript + Vitest
 
 ## Tech Stack
 
 - React 19.2
-- TypeScript 5.9
-- Vite 7.3
-- Tailwind CSS 4
+- TypeScript 6.0
+- Vite 8.2
+- Tailwind CSS 4.3
 - React Router DOM 7
 - Zustand 5
 - Axios
@@ -67,7 +68,7 @@ A modern admin template built with **React 19 + TypeScript + Vite + Tailwind CSS
 
 ### 1. Requirements
 
-- Node.js >= 20
+- Node.js >= 20.19.0
 - pnpm >= 8
 
 ### 2. Install & Run
@@ -134,6 +135,28 @@ Frontend support included:
 - `PageResponse<T>`
 - `apiClient.getPage<T>()`
 - `toPaginatedResult()` mapper
+- `useDataTable()` local and server pagination modes
+
+Keep `loadPage` stable (declare it at module scope or wrap it in `useCallback`).
+Change `queryKey` whenever filters or sorting change so the table reloads page one.
+
+```tsx
+const loadItemsPage = useCallback(
+  async (page: number, pageSize: number) => toPaginatedResult(
+    await apiClient.getPage<Item[]>('/items', {
+      page_num: page,
+      page_size: pageSize,
+      status: filters.status,
+    }),
+  ),
+  [filters.status],
+);
+
+const table = useDataTable<Item>({
+  loadPage: loadItemsPage,
+  queryKey: filters.status,
+});
+```
 
 ## Route Overview
 
@@ -172,11 +195,13 @@ src/
 │   ├── Sidebar.tsx
 │   ├── ThemeController.tsx
 │   └── ui/
+│       └── data-table-state.tsx
 ├── config/
 │   ├── app.ts
 │   └── router.ts
 ├── hooks/
 │   ├── use-data-table.ts
+│   ├── use-fetch-data.ts
 │   └── use-mobile.ts
 ├── i18n/
 │   ├── index.ts
@@ -196,16 +221,9 @@ src/
 
 ## React Compiler Notes
 
-`vite.config.ts` already includes conditional React Compiler wiring:
-
-- If `babel-plugin-react-compiler` is installed, it is enabled automatically
-- If not installed, the app still runs normally
-
-Install example:
-
-```bash
-pnpm add -D babel-plugin-react-compiler
-```
+React Compiler is enabled in `vite.config.ts` through
+`reactCompilerPreset()` and `@rolldown/plugin-babel`. No additional compiler
+package is required for the default setup.
 
 ## License
 

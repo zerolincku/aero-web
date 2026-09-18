@@ -161,53 +161,53 @@ export const navRoutes: RouteConfig[] = [
     },
     {
         path: ROUTE_PATHS.PAGE_TEMPLATES,
-        label: 'Page Templates',
+        label: 'Services & Workflows',
         labelKey: 'nav.pageTemplates',
         icon: PanelsTopLeft,
         component: PageTemplateListPage,
         children: [
             {
                 path: ROUTE_PATHS.PAGE_TEMPLATE_LIST,
-                label: 'List Page',
+                label: 'Microservices',
                 labelKey: 'nav.pageTemplateList',
                 icon: Circle,
                 component: PageTemplateListPage,
             },
             {
                 path: ROUTE_PATHS.PAGE_TEMPLATE_DETAIL,
-                label: 'Detail Page',
+                label: 'Service Detail',
                 labelKey: 'nav.pageTemplateDetail',
                 icon: Circle,
                 component: PageTemplateDetailPage,
             },
             {
                 path: ROUTE_PATHS.PAGE_TEMPLATE_CREATE,
-                label: 'Create Page',
+                label: 'Create Service',
                 labelKey: 'nav.pageTemplateCreate',
                 icon: Circle,
                 component: PageTemplateCreatePage,
             },
             {
                 path: ROUTE_PATHS.PAGE_TEMPLATE_SHEET,
-                label: 'Drawer Page',
+                label: 'Change Queue',
                 labelKey: 'nav.pageTemplateSheet',
                 icon: Circle,
                 component: PageTemplateSheetPage,
             },
             {
                 path: ROUTE_PATHS.PAGE_TEMPLATE_DIALOG,
-                label: 'Modal Page',
+                label: 'Security Ops',
                 labelKey: 'nav.pageTemplateDialog',
                 icon: Circle,
                 component: PageTemplateDialogPage,
             },
             {
                 path: ROUTE_PATHS.PAGE_TEMPLATE_STATS,
-                label: 'Analytics Page',
+                label: 'Fleet Analytics',
                 labelKey: 'nav.pageTemplateStats',
                 icon: Circle,
                 component: PageTemplateStatsPage,
             },
-        ],
+        ]
     }
 ];

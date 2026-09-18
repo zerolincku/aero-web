@@ -63,13 +63,13 @@ export default function Settings() {
     const languageValue = i18n.resolvedLanguage === 'zh-CN' ? 'zh-CN' : 'en';
 
     return (
-        <div className="space-y-6">
+        <div className="ui-page-stack">
             <div>
                 <h2 className="text-3xl font-bold tracking-tight">{t('settings.title')}</h2>
                 <p className="text-muted-foreground">{t('settings.subtitle')}</p>
             </div>
 
-            <div className="grid gap-6">
+            <div className="grid gap-[var(--ui-section-gap)]">
                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2">
@@ -110,7 +110,7 @@ export default function Settings() {
                             </div>
                         </div>
                     </CardContent>
-                    <CardFooter className="flex justify-between border-t p-6">
+                    <CardFooter className="flex justify-between border-t p-[var(--ui-panel-padding)]">
                         <p className="text-sm text-muted-foreground">
                             {t('settings.profile.lastUpdated', { time: t('settings.profile.justNow') })}
                         </p>

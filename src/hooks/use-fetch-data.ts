@@ -1,30 +1,62 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+
+type FetchDataRequestKey = string | number | boolean | null | undefined;
+
+type UseFetchDataOptions = {
+  requestKey?: FetchDataRequestKey;
+};
+
+const toError = (error: unknown): Error =>
+  error instanceof Error ? error : new Error(String(error));
 
 export function useFetchData<T>(
   fetcher: () => Promise<T>,
-  deps: any[] = []
+  options: UseFetchDataOptions = {},
 ) {
+  const { requestKey } = options;
+  const requestSequence = useRef(0);
   const [data, setData] = useState<T>();
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
   const execute = useCallback(async () => {
+    const sequence = ++requestSequence.current;
     setLoading(true);
     setError(null);
+
     try {
       const result = await fetcher();
-      setData(result);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error(String(err)));
+      if (sequence === requestSequence.current) {
+        setData(result);
+      }
+    } catch (fetchError) {
+      if (sequence === requestSequence.current) {
+        setError(toError(fetchError));
+      }
     } finally {
-      setLoading(false);
+      if (sequence === requestSequence.current) {
+        setLoading(false);
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, deps);
+  }, [fetcher]);
 
   useEffect(() => {
-    execute();
-  }, [execute]);
+    let active = true;
+    queueMicrotask(() => {
+      if (active) void execute();
+    });
 
-  return { data, loading, error, refetch: execute };
+    return () => {
+      active = false;
+      requestSequence.current += 1;
+    };
+  }, [execute, requestKey]);
+
+  return {
+    data,
+    loading,
+    isRefreshing: loading && data !== undefined,
+    error,
+    refetch: execute,
+  };
 }

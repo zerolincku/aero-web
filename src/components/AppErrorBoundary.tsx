@@ -1,5 +1,6 @@
 import React from 'react';
 import { toLocation } from '@/config/router';
+import { Button } from '@/components/ui/button';
 import { type WithTranslation, withTranslation } from 'react-i18next';
 
 type AppErrorBoundaryProps = WithTranslation & {
@@ -10,7 +11,7 @@ type AppErrorBoundaryState = {
   hasError: boolean;
 };
 
-class AppErrorBoundary extends React.Component<
+export class AppErrorBoundary extends React.Component<
   AppErrorBoundaryProps,
   AppErrorBoundaryState
 > {
@@ -27,6 +28,19 @@ class AppErrorBoundary extends React.Component<
     console.error('Unhandled application error:', error, errorInfo);
   }
 
+  private handleGoHome = (): void => {
+    const target = toLocation('/');
+
+    if (target.startsWith('#')) {
+      window.location.hash = target;
+    } else {
+      window.history.pushState(null, '', target);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    }
+
+    this.setState({ hasError: false });
+  };
+
   public render(): React.ReactNode {
     if (!this.state.hasError) {
       return this.props.children;
@@ -42,19 +56,15 @@ class AppErrorBoundary extends React.Component<
             {t('error.boundary.description', { defaultValue: 'An unexpected error occurred. You can refresh the page or go back to the home route.' })}
           </p>
           <div className="mt-4 flex gap-2">
-            <button
+            <Button
               type="button"
-              className="rounded-md bg-primary px-3 py-2 text-sm font-medium text-primary-foreground"
               onClick={() => window.location.reload()}
             >
               {t('error.boundary.reload', { defaultValue: 'Reload' })}
-            </button>
-            <a
-              className="rounded-md border px-3 py-2 text-sm font-medium"
-              href={toLocation('/')}
-            >
+            </Button>
+            <Button type="button" variant="outline" onClick={this.handleGoHome}>
               {t('error.boundary.goHome', { defaultValue: 'Go Home' })}
-            </a>
+            </Button>
           </div>
         </div>
       </div>
@@ -62,4 +72,5 @@ class AppErrorBoundary extends React.Component<
   }
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export default withTranslation()(AppErrorBoundary);

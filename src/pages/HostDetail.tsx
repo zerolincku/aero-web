@@ -162,7 +162,7 @@ export default function HostDetail() {
   ];
 
   return (
-    <div className="space-y-5">
+    <div className="ui-page-stack">
       <div className="space-y-2">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
           <div>
@@ -236,7 +236,7 @@ export default function HostDetail() {
       {activeTab !== 'vmInstances' && (
         <div className="grid gap-4 lg:grid-cols-3">
           <Card className="shadow-none">
-            <div className="flex items-center justify-between p-5">
+            <div className="flex items-center justify-between p-[var(--ui-panel-padding)]">
               <div>
                 <p className="text-sm text-muted-foreground">{t('hostDetail.summary.cpuUsage')}</p>
                 <p className="mt-2 text-4xl font-semibold tracking-tight">
@@ -249,7 +249,7 @@ export default function HostDetail() {
           </Card>
 
           <Card className="shadow-none">
-            <div className="flex items-center justify-between p-5">
+            <div className="flex items-center justify-between p-[var(--ui-panel-padding)]">
               <div>
                 <p className="text-sm text-muted-foreground">{t('hostDetail.summary.memoryUsage')}</p>
                 <p className="mt-2 text-4xl font-semibold tracking-tight">
@@ -262,7 +262,7 @@ export default function HostDetail() {
           </Card>
 
           <Card className="shadow-none">
-            <div className="flex items-center justify-between p-5">
+            <div className="flex items-center justify-between p-[var(--ui-panel-padding)]">
               <div>
                 <p className="text-sm text-muted-foreground">{t('hostDetail.summary.storageUsage')}</p>
                 <p className="mt-2 text-4xl font-semibold tracking-tight">
@@ -282,11 +282,11 @@ export default function HostDetail() {
       {activeTab === 'systemInfo' && (
         <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
           <Card className="overflow-hidden">
-            <div className="border-b px-5 py-4 text-lg font-semibold">
+            <div className="border-b p-[var(--ui-panel-padding)] text-lg font-semibold">
               {t('hostDetail.section.hardwareKernel')}
             </div>
 
-            <div className="grid gap-x-12 gap-y-8 px-5 py-5 md:grid-cols-2">
+            <div className="grid gap-x-12 gap-y-8 p-[var(--ui-panel-padding)] md:grid-cols-2">
               <div className="space-y-1.5">
                 <div className="text-xs uppercase tracking-wide text-muted-foreground">{t('hostDetail.fields.cpuModel')}</div>
                 <div className="flex items-center gap-2 text-sm font-medium">
@@ -333,11 +333,11 @@ export default function HostDetail() {
               </div>
             </div>
 
-            <div className="border-t px-5 py-4 text-lg font-semibold">
+            <div className="border-t p-[var(--ui-panel-padding)] text-lg font-semibold">
               {t('hostDetail.section.agentStatus')}
             </div>
 
-            <div className="grid gap-x-12 gap-y-8 px-5 py-5 md:grid-cols-2">
+            <div className="grid gap-x-12 gap-y-8 p-[var(--ui-panel-padding)] md:grid-cols-2">
               <div className="space-y-1.5">
                 <div className="text-xs uppercase tracking-wide text-muted-foreground">{t('hostDetail.fields.agentVersion')}</div>
                 <span className="inline-flex items-center rounded-md bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700">
@@ -413,7 +413,7 @@ export default function HostDetail() {
         <div className="space-y-4">
           <div className="grid gap-4 lg:grid-cols-3">
             <Card className="shadow-none">
-              <div className="flex items-start justify-between p-5">
+              <div className="flex items-start justify-between p-[var(--ui-panel-padding)]">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('hostDetail.summary.totalInstances')}</p>
                   <p className="mt-3 text-4xl font-semibold">{host.vmTotal}</p>
@@ -426,7 +426,7 @@ export default function HostDetail() {
             </Card>
 
             <Card className="shadow-none">
-              <div className="flex items-center justify-between p-5">
+              <div className="flex items-center justify-between p-[var(--ui-panel-padding)]">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('hostDetail.summary.vcpuAvailability')}</p>
                   <p className="mt-3 text-4xl font-semibold tracking-tight">
@@ -439,7 +439,7 @@ export default function HostDetail() {
             </Card>
 
             <Card className="shadow-none">
-              <div className="flex items-center justify-between p-5">
+              <div className="flex items-center justify-between p-[var(--ui-panel-padding)]">
                 <div>
                   <p className="text-sm text-muted-foreground">{t('hostDetail.summary.memoryAvailability')}</p>
                   <p className="mt-3 text-4xl font-semibold tracking-tight">
@@ -529,7 +529,7 @@ export default function HostDetail() {
               </TableBody>
             </Table>
 
-            <div className="flex items-center justify-between border-t px-5 py-4 text-sm text-muted-foreground">
+            <div className="flex items-center justify-between border-t p-[var(--ui-panel-padding)] text-sm text-muted-foreground">
               <span>{t('hostDetail.vm.showing', { start: 1, end: 4, total: 12, defaultValue: 'Showing 1 to 4 of 12 results' })}</span>
               <div className="flex items-center gap-6">
                 <span className="opacity-50">{t('hostDetail.vm.previous')}</span>
@@ -542,7 +542,7 @@ export default function HostDetail() {
 
       {activeTab === 'overview' && (
         <Card className="shadow-none">
-          <div className="p-6">
+          <div className="p-[var(--ui-panel-padding)]">
             <p className="text-sm text-muted-foreground mb-6">{t('hostDetail.overview.description')}</p>
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="flex items-center gap-4 rounded-lg border p-4">
@@ -573,7 +573,7 @@ export default function HostDetail() {
 
       {activeTab === 'network' && (
         <Card className="shadow-none">
-          <div className="space-y-2 p-6">
+          <div className="space-y-2 p-[var(--ui-panel-padding)]">
             <p className="text-lg font-semibold">{t('hostDetail.network.title')}</p>
             <p className="text-sm text-muted-foreground">{t('hostDetail.network.description')}</p>
             <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
@@ -586,7 +586,7 @@ export default function HostDetail() {
 
       {activeTab === 'storage' && (
         <Card className="shadow-none">
-          <div className="space-y-2 p-6">
+          <div className="space-y-2 p-[var(--ui-panel-padding)]">
             <p className="text-lg font-semibold">{t('hostDetail.storage.title')}</p>
             <p className="text-sm text-muted-foreground">{t('hostDetail.storage.description')}</p>
             <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">

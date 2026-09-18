@@ -27,15 +27,38 @@ import { Slider } from '@/components/ui/slider';
 import { MultiSelect } from "@/components/ui/multi-select";
 import { FileUpload } from "@/components/ui/file-upload";
 import { ImageUpload } from "@/components/ui/image-upload";
-import { Transfer } from "@/components/ui/transfer";
+import { Transfer, type TransferItem } from "@/components/ui/transfer";
+import { Toggle } from "@/components/ui/toggle";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from 'lucide-react';
 
 
 
 
 
-import { ComponentShowcase } from './ComponentShowcase';
+import { ComponentShowcase, type ComponentShowcaseProps } from './ComponentShowcase';
 
-export function FormComponentsDemo({ t, fruitValue, setFruitValue, multiSelectValues, setMultiSelectValues, transferTargetKeys, setTransferTargetKeys, transferData,  }: any) {
+interface FormComponentsDemoProps {
+    t: ComponentShowcaseProps['t'];
+    fruitValue?: string;
+    setFruitValue: (value: string) => void;
+    multiSelectValues: string[];
+    setMultiSelectValues: (value: string[]) => void;
+    transferTargetKeys: string[];
+    setTransferTargetKeys: (value: string[]) => void;
+    transferData: TransferItem[];
+}
+
+export function FormComponentsDemo({
+    t,
+    fruitValue,
+    setFruitValue,
+    multiSelectValues,
+    setMultiSelectValues,
+    transferTargetKeys,
+    setTransferTargetKeys,
+    transferData,
+}: FormComponentsDemoProps) {
     return (
         <div className="space-y-12">
                     <ComponentShowcase 
@@ -402,6 +425,61 @@ import { Label } from '@/components/ui/label';
     rightTitle="Assigned Roles"
 />`}
                     />
+                    <ComponentShowcase
+                        id="toggle"
+                        title={t('components.toggleExample.title')}
+                        description={t('components.toggleExample.description')}
+                        t={t}
+                        preview={
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-2">
+                                    <Toggle aria-label="Toggle bold">
+                                        <Bold className="h-4 w-4" />
+                                    </Toggle>
+                                    <Toggle aria-label="Toggle italic" variant="outline">
+                                        <Italic className="h-4 w-4" />
+                                    </Toggle>
+                                    <Toggle aria-label="Toggle underline" variant="outline">
+                                        <Underline className="h-4 w-4" />
+                                    </Toggle>
+                                </div>
+                                <div className="space-y-2">
+                                    <p className="text-xs text-muted-foreground">Toggle Group (Multiple Selection)</p>
+                                    <ToggleGroup type="multiple" variant="outline">
+                                        <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                                            <Bold className="h-4 w-4" />
+                                        </ToggleGroupItem>
+                                        <ToggleGroupItem value="italic" aria-label="Toggle italic">
+                                            <Italic className="h-4 w-4" />
+                                        </ToggleGroupItem>
+                                        <ToggleGroupItem value="underline" aria-label="Toggle underline">
+                                            <Underline className="h-4 w-4" />
+                                        </ToggleGroupItem>
+                                    </ToggleGroup>
+                                </div>
+                                <div className="space-y-2">
+                                    <p className="text-xs text-muted-foreground">Toggle Group (Single Alignment)</p>
+                                    <ToggleGroup type="single" defaultValue="left" variant="outline">
+                                        <ToggleGroupItem value="left" aria-label="Align left">
+                                            <AlignLeft className="h-4 w-4" />
+                                        </ToggleGroupItem>
+                                        <ToggleGroupItem value="center" aria-label="Align center">
+                                            <AlignCenter className="h-4 w-4" />
+                                        </ToggleGroupItem>
+                                        <ToggleGroupItem value="right" aria-label="Align right">
+                                            <AlignRight className="h-4 w-4" />
+                                        </ToggleGroupItem>
+                                    </ToggleGroup>
+                                </div>
+                            </div>
+                        }
+                        code={`<Toggle aria-label="Toggle bold"><Bold className="h-4 w-4" /></Toggle>
+
+<ToggleGroup type="multiple" variant="outline">
+  <ToggleGroupItem value="bold"><Bold className="h-4 w-4" /></ToggleGroupItem>
+  <ToggleGroupItem value="italic"><Italic className="h-4 w-4" /></ToggleGroupItem>
+</ToggleGroup>`}
+                    />
         </div>
     );
 }
@@ -480,4 +558,3 @@ function TimePickerDemo() {
         </div>
     );
 }
-

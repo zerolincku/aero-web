@@ -38,9 +38,27 @@ import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/componen
 import { ActionMenu, ActionMenuItem, ActionMenuSubmenu } from '@/components/ActionMenu';
 
 
-import { ComponentShowcase } from './ComponentShowcase';
+import { ComponentShowcase, type ComponentShowcaseProps } from './ComponentShowcase';
 
-export function AdvancedDemo({ t, roleValue, setRoleValue, emailEnabled, setEmailEnabled, smsEnabled, setSmsEnabled,  }: any) {
+interface AdvancedDemoProps {
+    t: ComponentShowcaseProps['t'];
+    roleValue: string;
+    setRoleValue: (value: string) => void;
+    emailEnabled: boolean;
+    setEmailEnabled: (value: boolean) => void;
+    smsEnabled: boolean;
+    setSmsEnabled: (value: boolean) => void;
+}
+
+export function AdvancedDemo({
+    t,
+    roleValue,
+    setRoleValue,
+    emailEnabled,
+    setEmailEnabled,
+    smsEnabled,
+    setSmsEnabled,
+}: AdvancedDemoProps) {
     return (
         <div className="space-y-12">
                     <ComponentShowcase
@@ -392,4 +410,3 @@ import { Separator } from '@/components/ui/separator';
         </div>
     );
 }
-

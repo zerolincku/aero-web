@@ -67,7 +67,20 @@
         --border: 240 5.9% 90%;
         --input: 240 5.9% 90%;
         --ring: 240 5.9% 10%;
-        --radius: 0.25rem;
+        --radius: 0.375rem;
+        --ui-radius: 0.375rem;
+        --ui-page-padding: 1.5rem;
+        --ui-page-padding-mobile: 1rem;
+        --ui-section-gap: 1rem;
+        --ui-panel-padding: 1rem;
+        --ui-field-gap: 0.375rem;
+        --ui-control-height-sm: 2rem;
+        --ui-control-height: 2.25rem;
+        --ui-control-height-lg: 2.5rem;
+        --ui-table-header-height: 2.5rem;
+        --ui-table-row-height: 3rem;
+        --ui-shadow-card: 0 1px 2px rgb(0 0 0 / 0.04);
+        --ui-shadow-overlay: 0 8px 24px rgb(0 0 0 / 0.14);
     }
 
     .dark {
@@ -101,12 +114,16 @@
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     }
 
-    :root {
-        --form-field-gap: 0.5rem;
-    }
-
     .ui-form-label + * {
-        margin-top: var(--form-field-gap);
+        margin-top: var(--ui-field-gap);
+    }
+}
+
+@layer components {
+    .ui-page-stack {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ui-section-gap);
     }
 }
 

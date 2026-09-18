@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import { AlertCircle } from 'lucide-react';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -24,7 +23,7 @@ import {
 } from 'lucide-react';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { TableSkeleton } from '@/components/ui/table-skeleton';
-import { EmptyState } from '@/components/ui/empty-state';
+import { DataTableEmptyRow, DataTableErrorRow } from '@/components/ui/data-table-state';
 
 type HostStatus = 'Online' | 'Maintenance' | 'Offline';
 type KvmStatus = 'Healthy' | 'Warning' | 'Down';
@@ -229,6 +228,11 @@ function KvmStatusIcon({ status }: { status: KvmStatus }) {
   return <XCircle className="h-4 w-4 text-red-500" />;
 }
 
+async function loadMockHosts() {
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  return MOCK_HOSTS;
+}
+
 export default function Hosts() {
   const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
@@ -237,10 +241,7 @@ export default function Hosts() {
   const [zoneFilter, setZoneFilter] = useState<string | undefined>(undefined);
   const [statusFilter, setStatusFilter] = useState<HostStatus | undefined>(undefined);
 
-  const { data: hosts = [], loading, error, refetch } = useFetchData(async () => {
-    await new Promise((resolve) => setTimeout(resolve, 600));
-    return MOCK_HOSTS;
-  });
+  const { data: hosts = [], loading, error, refetch } = useFetchData(loadMockHosts);
 
   const normalizedSearch = debouncedSearchTerm.trim().toLowerCase();
   const filteredHosts = hosts.filter((host) => {
@@ -273,7 +274,7 @@ export default function Hosts() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="ui-page-stack">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{t('hosts.title')}</h2>
@@ -424,17 +425,12 @@ export default function Hosts() {
                 </TableCell>
               </TableRow>
             ) : error ? (
-              <TableRow>
-                <TableCell colSpan={8} className="h-24 text-center text-destructive">
-                  <div className="flex flex-col items-center justify-center gap-2">
-                    <AlertCircle className="h-6 w-6" />
-                    <span>{error.message || t('common.error')}</span>
-                    <Button variant="outline" size="sm" onClick={refetch}>
-                      {t('common.actions.retry', { defaultValue: 'Retry' })}
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
+              <DataTableErrorRow
+                colSpan={8}
+                title={error.message || t('common.error')}
+                retryLabel={t('common.actions.retry', { defaultValue: 'Retry' })}
+                onRetry={refetch}
+              />
             ) : table.pagedRows.length > 0 ? (
               table.pagedRows.map((host) => {
               const cpuColor = (host.cpuUsage ?? 0) >= 80 ? 'bg-amber-500' : 'bg-blue-500';
@@ -509,16 +505,12 @@ export default function Hosts() {
               );
             })
             ) : (
-              <TableRow>
-                <TableCell colSpan={8}>
-                  <EmptyState title={t('hosts.empty')} />
-                </TableCell>
-              </TableRow>
+              <DataTableEmptyRow colSpan={8} title={t('hosts.empty')} />
             )}
           </TableBody>
         </Table>
 
-        <CardFooter className="flex flex-col gap-3 border-t bg-background px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <CardFooter className="flex flex-col gap-3 border-t bg-background p-[var(--ui-panel-padding)] sm:flex-row sm:items-center sm:justify-between">
           <div className="text-sm text-muted-foreground">
             {t('hosts.pagination.showing', {
               start: table.startItem,

@@ -20,6 +20,21 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/comp
 import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
 import { Progress } from '@/components/ui/progress';
 import { Skeleton } from '@/components/ui/skeleton';
+import {
+    ContextMenu,
+    ContextMenuCheckboxItem,
+    ContextMenuContent,
+    ContextMenuItem,
+    ContextMenuLabel,
+    ContextMenuRadioGroup,
+    ContextMenuRadioItem,
+    ContextMenuSeparator,
+    ContextMenuShortcut,
+    ContextMenuSub,
+    ContextMenuSubContent,
+    ContextMenuSubTrigger,
+    ContextMenuTrigger,
+} from '@/components/ui/context-menu';
 
 
 
@@ -27,9 +42,13 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 
-import { ComponentShowcase } from './ComponentShowcase';
+import { ComponentShowcase, type ComponentShowcaseProps } from './ComponentShowcase';
 
-export function FeedbackDemo({ t,  }: any) {
+interface FeedbackDemoProps {
+    t: ComponentShowcaseProps['t'];
+}
+
+export function FeedbackDemo({ t }: FeedbackDemoProps) {
     return (
         <div className="space-y-12">
                     <ComponentShowcase
@@ -305,7 +324,7 @@ export function FeedbackDemo({ t,  }: any) {
                                 <HoverCardContent className="w-80">
                                     <div className="flex justify-between space-x-4">
                                         <Avatar>
-                                            <AvatarImage src="https://github.com/vercel.png" />
+                                            <AvatarImage src="/icon.svg" alt="Aero Cloud" />
                                             <AvatarFallback>VC</AvatarFallback>
                                         </Avatar>
                                         <div className="space-y-1">
@@ -331,7 +350,7 @@ export function FeedbackDemo({ t,  }: any) {
     <HoverCardContent className="w-80">
         <div className="flex justify-between space-x-4">
             <Avatar>
-                <AvatarImage src="https://github.com/vercel.png" />
+                <AvatarImage src="/icon.svg" alt="Aero Cloud" />
                 <AvatarFallback>VC</AvatarFallback>
             </Avatar>
             <div className="space-y-1">
@@ -402,7 +421,66 @@ export function FeedbackDemo({ t,  }: any) {
     </div>
 </div>`}
                     />
+                    <ComponentShowcase
+                        id="context-menu"
+                        title={t('components.contextMenuExample.title')}
+                        description={t('components.contextMenuExample.description')}
+                        t={t}
+                        preview={
+                            <ContextMenu>
+                                <ContextMenuTrigger className="flex h-[150px] w-full max-w-md items-center justify-center rounded-md border border-dashed text-sm text-muted-foreground select-none hover:bg-muted/40 transition-colors">
+                                    Right click inside this area to inspect context menu
+                                </ContextMenuTrigger>
+                                <ContextMenuContent className="w-64">
+                                    <ContextMenuItem inset>
+                                        Back
+                                        <ContextMenuShortcut>⌘[</ContextMenuShortcut>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem inset disabled>
+                                        Forward
+                                        <ContextMenuShortcut>⌘]</ContextMenuShortcut>
+                                    </ContextMenuItem>
+                                    <ContextMenuItem inset>
+                                        Reload
+                                        <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+                                    </ContextMenuItem>
+                                    <ContextMenuSub>
+                                        <ContextMenuSubTrigger inset>More Tools</ContextMenuSubTrigger>
+                                        <ContextMenuSubContent className="w-48">
+                                            <ContextMenuItem>Save Page As...</ContextMenuItem>
+                                            <ContextMenuItem>Create Shortcut...</ContextMenuItem>
+                                            <ContextMenuSeparator />
+                                            <ContextMenuItem>Developer Tools</ContextMenuItem>
+                                        </ContextMenuSubContent>
+                                    </ContextMenuSub>
+                                    <ContextMenuSeparator />
+                                    <ContextMenuCheckboxItem checked>
+                                        Show Bookmarks Bar
+                                        <ContextMenuShortcut>⌘⇧B</ContextMenuShortcut>
+                                    </ContextMenuCheckboxItem>
+                                    <ContextMenuCheckboxItem>Show Full URLs</ContextMenuCheckboxItem>
+                                    <ContextMenuSeparator />
+                                    <ContextMenuRadioGroup value="pedro">
+                                        <ContextMenuLabel inset>People</ContextMenuLabel>
+                                        <ContextMenuSeparator />
+                                        <ContextMenuRadioItem value="pedro">Pedro Duarte</ContextMenuRadioItem>
+                                        <ContextMenuRadioItem value="colm">Colm Tuite</ContextMenuRadioItem>
+                                    </ContextMenuRadioGroup>
+                                </ContextMenuContent>
+                            </ContextMenu>
+                        }
+                        code={`<ContextMenu>
+  <ContextMenuTrigger className="flex h-[150px] w-full items-center justify-center border border-dashed">
+    Right click inside this area
+  </ContextMenuTrigger>
+  <ContextMenuContent className="w-64">
+    <ContextMenuItem inset>Back <ContextMenuShortcut>⌘[</ContextMenuShortcut></ContextMenuItem>
+    <ContextMenuItem inset>Reload <ContextMenuShortcut>⌘R</ContextMenuShortcut></ContextMenuItem>
+    <ContextMenuSeparator />
+    <ContextMenuCheckboxItem checked>Show Bookmarks Bar</ContextMenuCheckboxItem>
+  </ContextMenuContent>
+</ContextMenu>`}
+                    />
         </div>
     );
 }
-

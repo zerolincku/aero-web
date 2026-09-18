@@ -47,15 +47,16 @@
 - 国际化：`en` / `zh-CN`，含开发期 key 差异检查与缺失 key 告警
 - 主题系统：`light / dark / system` + 5 种强调色
 - 快捷搜索：`⌘K` / `Ctrl+K` 打开全局命令面板
-- 列表能力：通用分页 hook，支持搜索/筛选/分页
+- 异步数据：防止旧请求覆盖新结果，支持重试与刷新状态
+- 列表能力：本地/服务端统一分页，以及一致的加载、空数据和错误行
 - 工程质量：ESLint + TypeScript 严格校验 + Vitest 测试基线
 
 ## 技术栈
 
 - React 19.2
-- TypeScript 5.9
-- Vite 7.3
-- Tailwind CSS 4
+- TypeScript 6.0
+- Vite 8.2
+- Tailwind CSS 4.3
 - React Router DOM 7
 - Zustand 5
 - Axios
@@ -66,7 +67,7 @@
 
 ### 1. 环境要求
 
-- Node.js >= 20
+- Node.js >= 20.19.0
 - pnpm >= 8
 
 ### 2. 安装与启动
@@ -133,6 +134,27 @@ cp .env.example .env
 - `PageResponse<T>` 类型
 - `apiClient.getPage<T>()`
 - `toPaginatedResult()` 适配函数（将后端分页结构转成前端统一列表模型）
+- `useDataTable()` 本地与服务端分页模式
+
+`loadPage` 应保持稳定引用（定义在模块级，或使用 `useCallback`）。筛选或排序条件变化时更新 `queryKey`，表格会自动回到第一页并重新加载。
+
+```tsx
+const loadItemsPage = useCallback(
+  async (page: number, pageSize: number) => toPaginatedResult(
+    await apiClient.getPage<Item[]>('/items', {
+      page_num: page,
+      page_size: pageSize,
+      status: filters.status,
+    }),
+  ),
+  [filters.status],
+);
+
+const table = useDataTable<Item>({
+  loadPage: loadItemsPage,
+  queryKey: filters.status,
+});
+```
 
 ## 路由概览
 
@@ -171,11 +193,13 @@ src/
 │   ├── Sidebar.tsx
 │   ├── ThemeController.tsx
 │   └── ui/
+│       └── data-table-state.tsx
 ├── config/
 │   ├── app.ts
 │   └── router.ts
 ├── hooks/
 │   ├── use-data-table.ts
+│   ├── use-fetch-data.ts
 │   └── use-mobile.ts
 ├── i18n/
 │   ├── index.ts
@@ -195,16 +219,8 @@ src/
 
 ## React Compiler 说明
 
-项目 `vite.config.ts` 已预留 React Compiler 接入逻辑：
-
-- 若安装 `babel-plugin-react-compiler`，将自动启用
-- 若未安装，不会阻塞项目运行
-
-安装命令示例：
-
-```bash
-pnpm add -D babel-plugin-react-compiler
-```
+项目已在 `vite.config.ts` 中通过 `reactCompilerPreset()` 与
+`@rolldown/plugin-babel` 启用 React Compiler，默认配置无需额外安装编译器包。
 
 ## License
 

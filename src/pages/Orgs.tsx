@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { AlertCircle } from 'lucide-react';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { useTranslation } from 'react-i18next';
 import { Card, CardHeader, CardContent, CardFooter } from '../components/ui/card';
@@ -23,7 +22,7 @@ import { ActionMenu, ActionMenuItem } from '@/components/ActionMenu';
 import { useDebouncedValue } from '@/hooks/use-debounced-value';
 import { StatusBadge } from '@/components/ui/status-badge';
 import { TableSkeleton } from '@/components/ui/table-skeleton';
-import { EmptyState } from '@/components/ui/empty-state';
+import { DataTableEmptyRow, DataTableErrorRow } from '@/components/ui/data-table-state';
 
 const ORG_TYPE_LABEL_KEY: Record<string, string> = {
     University: 'orgs.types.university',
@@ -54,6 +53,11 @@ const MOCK_ORGS = [
     { id: 12, name: 'East Coast Medical', type: 'Hospital', location: 'Philadelphia, PA', status: 'Active' as const, head: 'Gregory House' },
 ];
 
+async function loadMockOrgs() {
+    await new Promise((resolve) => setTimeout(resolve, 600));
+    return MOCK_ORGS;
+}
+
 export default function Orgs() {
     const { t } = useTranslation();
     const addToast = useStore((state) => state.addToast);
@@ -67,10 +71,7 @@ export default function Orgs() {
     const debouncedSearch = useDebouncedValue(search, 180);
     const debouncedLocation = useDebouncedValue(locationFilter, 180);
 
-    const { data: orgs = [], loading, error, refetch } = useFetchData(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 600));
-        return MOCK_ORGS;
-    });
+    const { data: orgs = [], loading, error, refetch } = useFetchData(loadMockOrgs);
 
     const handleAddOrg = () => {
         addToast({
@@ -108,7 +109,7 @@ export default function Orgs() {
     });
 
     return (
-        <div className="space-y-6">
+        <div className="ui-page-stack">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 className="text-3xl font-bold tracking-tight">{t('orgs.title')}</h2>
@@ -138,7 +139,7 @@ export default function Orgs() {
                             <Button
                                 variant="outline"
                                 size="sm"
-                                className={cn('h-10 gap-2 font-medium', showAdvancedFilters && 'bg-accent')}
+                                className={cn('gap-2 font-medium', showAdvancedFilters && 'bg-accent')}
                                 onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
                             >
                                 <Filter className="h-4 w-4" />
@@ -157,7 +158,7 @@ export default function Orgs() {
                                         value={typeFilter || "all"}
                                         onValueChange={(val: string) => { setTypeFilter(val === "all" ? undefined : val); table.resetPage(); }}
                                     >
-                                        <SelectTrigger className="h-9">
+                                        <SelectTrigger>
                                             <SelectValue placeholder={t('orgs.selectTypePlaceholder')} />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -176,7 +177,7 @@ export default function Orgs() {
                                         value={statusFilter || "all"}
                                         onValueChange={(val: string) => { setStatusFilter(val === "all" ? undefined : val as 'Active' | 'Inactive'); table.resetPage(); }}
                                     >
-                                        <SelectTrigger className="h-9">
+                                        <SelectTrigger>
                                             <SelectValue placeholder={t('orgs.selectStatusPlaceholder')} />
                                         </SelectTrigger>
                                         <SelectContent>
@@ -190,13 +191,12 @@ export default function Orgs() {
                                     <Label className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t('orgs.filterLocation')}</Label>
                                     <Input
                                         placeholder={t('orgs.locationPlaceholder')}
-                                        className="h-9"
                                         value={locationFilter}
                                         onChange={(e) => { setLocationFilter(e.target.value); table.resetPage(); }}
                                     />
                                 </div>
                                 <div className="flex items-end gap-2">
-                                    <Button variant="ghost" size="sm" className="h-9 w-full text-xs font-semibold" onClick={resetFilters}>
+                                    <Button variant="ghost" size="sm" className="w-full text-xs font-semibold" onClick={resetFilters}>
                                         <X className="mr-2 h-3 w-3" /> {t('common.actions.reset')}
                                     </Button>
                                 </div>
@@ -224,17 +224,12 @@ export default function Orgs() {
                                     </TableCell>
                                 </TableRow>
                             ) : error ? (
-                                <TableRow>
-                                    <TableCell colSpan={6} className="h-24 text-center text-destructive">
-                                        <div className="flex flex-col items-center justify-center gap-2">
-                                            <AlertCircle className="h-6 w-6" />
-                                            <span>{error.message || t('common.error')}</span>
-                                            <Button variant="outline" size="sm" onClick={refetch}>
-                                                {t('common.actions.retry', { defaultValue: 'Retry' })}
-                                            </Button>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
+                                <DataTableErrorRow
+                                    colSpan={6}
+                                    title={error.message || t('common.error')}
+                                    retryLabel={t('common.actions.retry', { defaultValue: 'Retry' })}
+                                    onRetry={refetch}
+                                />
                             ) : table.pagedRows.length > 0 ? (
                                 table.pagedRows.map((item) => (
                                     <TableRow key={item.id}>
@@ -269,17 +264,13 @@ export default function Orgs() {
                                     </TableRow>
                                 ))
                             ) : (
-                                <TableRow>
-                                    <TableCell colSpan={6}>
-                                        <EmptyState title={t('orgs.noResults')} />
-                                    </TableCell>
-                                </TableRow>
+                                <DataTableEmptyRow colSpan={6} title={t('orgs.noResults')} />
                             )}
                         </TableBody>
                     </Table>
                 </CardContent>
 
-                <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t px-6 py-4">
+                <CardFooter className="flex flex-col sm:flex-row items-center justify-between gap-4 border-t p-[var(--ui-panel-padding)]">
                     <div className="flex flex-col sm:flex-row items-center gap-4 text-xs font-medium text-muted-foreground">
                         <div className="flex items-center gap-2">
                             <span>{t('common.actions.show')}</span>

@@ -116,7 +116,7 @@ export default function Layout() {
                     </div>
                 </header>
 
-                <main className="flex-1 overflow-y-auto bg-muted/20 p-6">
+                <main className="flex-1 overflow-y-auto bg-muted/20 p-[var(--ui-page-padding-mobile)] sm:p-[var(--ui-page-padding)]">
                     <Outlet />
                 </main>
             </SidebarInset>

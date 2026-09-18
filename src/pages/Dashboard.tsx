@@ -153,7 +153,7 @@ function Dashboard() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="ui-page-stack">
       <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight">{t('dashboard.title')}</h2>
