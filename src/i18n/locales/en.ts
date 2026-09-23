@@ -30,6 +30,7 @@ export const en = {
             pageTemplateStats: 'Fleet Analytics',
         },
         common: {
+            guest: 'Guest',
             error: 'An error occurred',
             pagination: {
                 previous: 'Previous',

@@ -27,6 +27,9 @@ export function UserMenu({ isCollapsed }: UserMenuProps) {
         })),
     );
 
+    const displayName = currentUser?.name?.trim() || t('common.guest');
+    const email = currentUser?.email?.trim();
+
     useClickOutside(menuRef, () => setIsOpen(false));
     useKeyboardShortcut('Escape', () => setIsOpen(false));
 
@@ -46,8 +49,8 @@ export function UserMenu({ isCollapsed }: UserMenuProps) {
                 >
                     <div className="p-1">
                         <div className="px-3 py-2 border-b mb-1">
-                            <p className="text-sm font-bold truncate">{currentUser?.name}</p>
-                            <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{currentUser?.email}</p>
+                            <p className="text-sm font-bold truncate">{displayName}</p>
+                            {email && <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{email}</p>}
                         </div>
                         <button
                             onClick={handleLogout}
@@ -72,13 +75,13 @@ export function UserMenu({ isCollapsed }: UserMenuProps) {
                 <div className={cn('flex items-center min-w-0', isCollapsed ? 'justify-center' : 'gap-3 flex-1 text-left')}>
                     <Avatar className="rounded-full shrink-0 h-7 w-7">
                         <AvatarFallback className="rounded-full bg-primary text-primary-foreground font-bold text-xs uppercase">
-                            {currentUser?.name?.charAt(0) || 'U'}
+                            {displayName.charAt(0)}
                         </AvatarFallback>
                     </Avatar>
                     {!isCollapsed && (
                         <div className="min-w-0">
-                            <span className="block text-sm font-bold truncate">{currentUser?.name}</span>
-                            <span className="block text-[11px] text-muted-foreground truncate">{currentUser?.email}</span>
+                            <span className="block text-sm font-bold truncate">{displayName}</span>
+                            {email && <span className="block text-[11px] text-muted-foreground truncate">{email}</span>}
                         </div>
                     )}
                 </div>

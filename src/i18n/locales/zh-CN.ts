@@ -30,6 +30,7 @@ export const zhCN = {
             pageTemplateStats: '态势分析',
         },
         common: {
+            guest: 'Guest',
             error: '发生了一个错误',
             pagination: {
                 previous: '上一页',
